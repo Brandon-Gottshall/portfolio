@@ -11,7 +11,8 @@
     "react-dom": "^16.13.0",
     "react-google-font-loader": "^1.1.0",
     "react-icons": "^3.9.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "react-transition-group": "^4.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

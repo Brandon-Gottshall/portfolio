@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { red } from './services/colorPallete'
 import { FaBrain } from 'react-icons/fa'
 import jump from 'jump.js'
+import { Transition } from 'react-transition-group'
 
 export default function App() {
     const styles = {
@@ -55,11 +56,19 @@ export default function App() {
                 textAlign: 'left',
                 border: 'none',
                 borderLeft: '.2vw solid red',
+                transition: `padding-left 300ms ease-in-out`,
                 paddingLeft: '1.5vw',
                 backgroundColor: 'rgba(0,0,0,0)'
             }
+        }
+        const transitionStyles = {
+          entering: { paddingLeft: 1.5 },
+          entered:  { paddingLeft: 1.5 },
+          exiting:  { paddingLeft: 0 },
+          exited:   { paddingLeft: 0 },
+        }
+        const duration = 300
 
-    }
     const [activeButton, setActiveButton] = useState(1)
     const [ style1, setStyle1 ] = useState(styles.buttonActive)
     const [ style2, setStyle2 ] = useState(styles.button)
@@ -105,9 +114,15 @@ export default function App() {
             <h1 style={{...styles.nameText, ...styles.first}}>Brandon</h1>
             <h1 style={{...styles.nameText, ...styles.last}}>Gottshall</h1>
             <br/>
-            <button style={style1} onClick={aboutMeHelper}>About Me</button>
-            <button style={style2} onClick={resumeHelper}>Resume</button>
-            <button style={style3} onClick={contactMeHelper}>Contact Me</button>
+            <Transition in={activeButton==1} timeout={duration}>
+                <button style={style1} onClick={aboutMeHelper}>About Me</button>
+            </Transition>
+            <Transition in={activeButton==2} timeout={duration}>
+                <button style={style2} onClick={resumeHelper}>Resume</button>
+            </Transition>
+            <Transition in={activeButton==3} timeout={duration}>
+                <button style={style3} onClick={contactMeHelper}>Contact Me</button>
+            </Transition>
         </nav>
         <div style={styles.scrollBox}>
             <FaBrain size={'10vw'}/>
