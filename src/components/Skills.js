@@ -50,19 +50,35 @@ export default function Skills() {
             switch (activeId) {
                 case 1:
                     return (
-                        <p>Growth</p>
+                        <>
+                            <p>Growth</p>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                        </>
                     )
                 case 2:
                     return (
-                        <p>Responsibility</p>
+                        <>
+                            <p>Responsibility</p>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                        </>
                     )
                 case 3:
                     return (
-                        <p>Teamwork</p>
+                        <>
+                            <p>Teamwork</p>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                        </>
                     )
                 case 4:
                     return (
-                        <p>Profesionalism</p>
+                        <>
+                            <p>Profesionalism</p>
+                        
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                        </>
                     )
                 default:
                     return (

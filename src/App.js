@@ -13,6 +13,7 @@ export default function App() {
     const styles = {
         container: {
             display: 'flex',
+            justifyContent: 'space-between',
             borderTop: `2vh solid ${red}`,
             position: 'fixed',
             width: '100vw',
@@ -22,8 +23,8 @@ export default function App() {
         scrollBox: {
             display: 'block',
             alignItems: 'center',
-            margin: '1vw 0 0 10vw',
-            height: '90vh',
+            margin: '0',
+            height: '100vh',
             width: '80vw',
             overflowY: 'scroll',
             overflowX: 'hidden'
@@ -33,13 +34,13 @@ export default function App() {
         <div style={styles.container}>
             <Nav/>
             <div style={styles.scrollBox}>
+                <br/>
                 <Profile/>
                 <Divider text='Skills' />
                 <Skills/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
-
                 <Divider text='Languages' />
                 <Languages/>
+            <br/>
             </div>
         </div>
     )

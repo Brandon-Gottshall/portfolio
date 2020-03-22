@@ -15,7 +15,8 @@ const styles = {
     },
         nameText: {
             fontFamily: 'Bebas Neue',
-            fontSize: '4vw'
+            fontSize: '4vw',
+            backgroundColor: 'white'
         },
             first: {
                 margin: '1.5vh 0 0 2vw'

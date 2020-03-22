@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Transition } from 'react-transition-group'
+import ProjectRender from './ProjectRender'
 //Color Imports
 import { red } from '../services/colorPallete'
 //Icon imports
@@ -12,8 +13,6 @@ import { ReactIcon,
          PostgreIcon,
          CSSIcon,
          HTMLIcon     } from '../services/svgHelper'
-import { FaBrain, FaHandshake, FaPeopleCarry } from 'react-icons/fa'
-import { IoIosBowtie } from "react-icons/io"
 
 export default function Skills() {
     const [ reactIcon, setReactIcon ] = useState(false)
@@ -38,12 +37,7 @@ export default function Skills() {
     const fillHelper =(state, id) => (state ? red : (activeId === id) ? red : 'black')
     const clickHelper = id => (id == activeId) ? setActiveId(0) : setActiveId(id)
 
-    const render = () => (
-        <div>
-            <p>Filtered List of Projects</p>
-        <h3>{activeId}</h3>
-        </div>
-)
+    const render = () => (<ProjectRender id={activeId}/>)
     const styles = {
         languageBox: {
             display: 'flex',
@@ -170,7 +164,7 @@ export default function Skills() {
                 </Transition>
             </div>
             <div style={styles.renderContainer}>
-            {render()}
+            <ProjectRender id={activeId} />
             </div>
         </div>
     )
