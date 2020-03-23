@@ -5,6 +5,9 @@ import React from 'react'
 import { red } from '../services/colorPallete'
 // Image imports
 import me from '../images/me.png'
+// Icon imports
+import { GithubIcon, LinkedInIcon } from '../services/svgHelper'
+
 
 export default function Profile() {
     const profile = {
@@ -18,7 +21,13 @@ export default function Profile() {
         <div style={profile}>
             <img style={{maxWidth: '10vw', borderRadius: '50%', border: `.1vw solid black`, marginRight: '0', marginLeft: '5vw'}} src={me} />
 
-        <p style={{maxWidth: '45vw', marginBelow: '5vh', marginLeft: '5vw'}}>A motivated Software Engineer with a highly adaptable skill set acquired through the Marine Corps. Comfortable taking root, and finding success in uncomfortable and difficult situations. Extremely passionate about the tech industry, and always ready to embrace failure, growth, and to demand success.</p>
+        <p style={{maxWidth: '45vw', marginBelow: '5vh', marginLeft: '5vw'}}>A motivated Software Engineer with a highly adaptable skill set acquired through the Marine Corps. Comfortable taking root, and finding success in uncomfortable and difficult situations. Extremely passionate about the tech industry, and always ready to embrace failure, growth, and to demand success.
+        <br />
+        <div style={{display: 'flex'}}>
+        <a href='https://github.com/Brandon-Gottshall'><GithubIcon style={{height:'3vw', width: '3vw'}}/></a>
+        <a href='https://www.linkedin.com/in/brandon-gottshall/'><LinkedInIcon style={{height:'3vw', width: '3vw'}}/></a>
+        </div>
+        </p>
 
         </div>
 

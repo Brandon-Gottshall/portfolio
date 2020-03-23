@@ -1,9 +1,12 @@
 
-import React from 'react'
+import React, { useState } from 'react'
+//My component imports
+import Preview from './Preview'
 //Color Imports
 import { red } from '../services/colorPallete'
 //Image Imports
 import crimeNY from '../images/crime-ny.png'
+import question from '../images/sei-trivia/question.png'
 //Icon imports
 import { ReactIcon,
          ReactNativeIcon,
@@ -16,13 +19,15 @@ import { ReactIcon,
          HTMLIcon     } from '../services/svgHelper'
 
 export default function ProjectRender({id}) {
+    const [ previewName, setPreviewName ] = useState(null)
     const styles = {
         galleryView: {
             display: 'grid',
             gridTemplateColumns: '33% 33% 33%',
             gridTemplateRows: '50% 50%',
             height: '40vw',
-            width: '100%'
+            width: '100%',
+            margin: '2vw'
         },
         galleryViewNone: {
             display: 'none'
@@ -57,12 +62,20 @@ export default function ProjectRender({id}) {
         languageIcon: {
             width: '2vw',
             height: '2vw'
+        },
+        preview: {
+            width: '80vw',
+            height: '40vh',
+            backgroundColor: 'blue'
+        },
+        previewNone: {
+            display: 'none'
         }
     }
     const projects = [
         {
             name:'Crime NY',
-            id: 0,
+            id: 1,
             description: '',
             languageIds: [1, 3, 5, 7, 8, 9],
             gitHub: '',
@@ -70,15 +83,15 @@ export default function ProjectRender({id}) {
         },
         {
             name:'SEI Trivia',
-            id: 1,
+            id: 2,
             description: '',
             languageIds: [1, 2, 4, 5, 6, 7, 8, 9],
             gitHub: '',
-            preview: ''
+            preview: question
         },
         {
             name:'Simple Macro Tracker',
-            id: 2,
+            id: 3,
             description: '',
             languageIds: [7, 8, 9],
             gitHub: '',
@@ -100,16 +113,18 @@ export default function ProjectRender({id}) {
     ]
 
     const styleHelper = () => (id==0) ? styles.galleryViewNone:styles.galleryView
+
     return (
         <>
             <h4>{
                 languages[id]
             }</h4>
+            <Preview name={previewName} setPreviewId={setPreviewName} />
         <div style={styleHelper()}>
                 {projects.map(({name, languageIds, preview}) => {
                     return (
                         languageIds.includes(id) ?
-                            <div style={styles.container} key={id}>
+                            <div style={styles.container} key={id} onClick={()=>setPreviewName(name)}>
                                 <div style={styles.project}>
                                     <img stlye={{width: '100%', height: '100%'}} src={preview} />
                                 </div>
