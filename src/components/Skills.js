@@ -24,7 +24,6 @@ export default function Skills() {
             color: red
         },
         renderContainer: {
-            border: `.3vw solid ${red}`,
             textAlign: 'center'
         }
     }
@@ -51,7 +50,7 @@ export default function Skills() {
                 case 1:
                     return (
                         <>
-                            <p>Growth</p>
+                            <h4>Growth</h4>
 
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
                         </>
@@ -59,7 +58,7 @@ export default function Skills() {
                 case 2:
                     return (
                         <>
-                            <p>Responsibility</p>
+                            <h4>Responsibility</h4>
 
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
                         </>
@@ -67,7 +66,7 @@ export default function Skills() {
                 case 3:
                     return (
                         <>
-                            <p>Teamwork</p>
+                            <h4>Teamwork</h4>
 
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
                         </>
@@ -75,14 +74,14 @@ export default function Skills() {
                 case 4:
                     return (
                         <>
-                            <p>Profesionalism</p>
-                        
+                            <h4>Profesionalism</h4>
+
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
                         </>
                     )
                 default:
                     return (
-                        <p>Nothing is selected.</p>
+                        <h4>Pick an icon explore my skills.</h4>
                     )
 
             }

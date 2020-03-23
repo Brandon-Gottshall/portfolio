@@ -13,7 +13,7 @@ export default function Divider({text}) {
     const lineStyle = {
         flex: '1',
         marginLeft: '2vw',
-        height: '3vh',
+        height: '1vh',
         backgroundColor: red
     }
     const textStyle = {

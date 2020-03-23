@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Transition } from 'react-transition-group'
-
+//Color Imports
+import { red } from '../services/colorPallete'
 
 export default function Nav() {
 const styles = {
@@ -38,7 +39,7 @@ const styles = {
             margin: '0 2vw 0 2vw',
             textAlign: 'left',
             border: 'none',
-            borderLeft: '.2vw solid red',
+            borderLeft: `.3vw solid ${red}`,
             transition: 'padding-left 300ms ease-in-out',
             paddingLeft: '1.5vw',
             backgroundColor: 'rgba(0,0,0,0)'
