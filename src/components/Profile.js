@@ -17,7 +17,37 @@ export default function Profile() {
         flexWrap: 'wrap',
         marginBottom: '1vh'
     }
+    const styles = {
+        nameContaniner: {
+            width: '100vw',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        nameText: {
+            fontFamily: 'Bebas Neue',
+            fontSize: '10vw',
+            backgroundColor: 'white'
+        },
+            first: {
+                marginRight: '2vw'
+            },
+            last: {
+                margin: '0'
+            },
+    }
     return(
+        <>
+        {(window.innerWidth > 620) ? (null) : (
+            <div style={styles.nameContaniner}>
+            <h1
+            style={{...styles.nameText, ...styles.first}}
+            >Brandon</h1>
+            <h1
+            style={{...styles.nameText, ...styles.last}}
+            >Gottshall</h1>
+            </div>
+        )}
         <div style={profile}>
             <img style={{maxWidth: '10vw', borderRadius: '50%', border: `.1vw solid black`, marginRight: '0', marginLeft: '5vw'}} src={me} />
 
@@ -30,7 +60,7 @@ export default function Profile() {
         </p>
 
         </div>
-
+        </>
     )
 }
 

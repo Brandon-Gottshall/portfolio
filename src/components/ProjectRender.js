@@ -1,145 +1,103 @@
-
-import React, { useState } from 'react'
-//My component imports
-import Preview from './Preview'
+import React from 'react'
 //Color Imports
 import { red } from '../services/colorPallete'
 //Image Imports
 import crimeNY from '../images/crime-ny.png'
+import mactrack from '../images/mactrack.png'
 import question from '../images/sei-trivia/question.png'
 //Icon imports
-import { ReactIcon,
-         ReactNativeIcon,
-         ExpressIcon,
-         JSIcon,
-         RubyIcon,
-         RailsIcon,
-         PostgreIcon,
-         CSSIcon,
-         HTMLIcon     } from '../services/svgHelper'
+import { GithubIcon} from '../services/svgHelper'
 
-export default function ProjectRender({id}) {
-    const [ previewName, setPreviewName ] = useState(null)
-    const styles = {
+export default function ProjectRender() {
+    const styles= {
         galleryView: {
             display: 'grid',
-            gridTemplateColumns: '33% 33% 33%',
+            gridTemplateColumns: '50% 50%',
             gridTemplateRows: '50% 50%',
-            height: '40vw',
             width: '100%',
-            margin: '2vw'
-        },
-        galleryViewNone: {
-            display: 'none'
-        },
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: 'auto',
-            width: '15vw',
-            height: '20vw'
+            margin: '20px'
         },
         project: {
             display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            margin: 'auto',
-            width: '14vw',
-            height: '14vw',
-            border: `.1vw solid ${red}`
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            margin: '6vw',
+            width: '35vh',
+            height: '35vh',
         },
-        title: {
-            fontSize: '1.2vw',
-            fontWeight: '600'
-        },
-        languageContainer: {
+        linkContainer: {
             display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start'
+            alignItems: 'center',
+            width: '80px',
+         },
+        link: {
+            width: '40px',
+            margin: '0',
+            marginBelow: '2vh',
+            color: red
         },
-        languageIcon: {
-            width: '2vw',
-            height: '2vw'
-        },
-        preview: {
-            width: '80vw',
-            height: '40vh',
-            backgroundColor: 'blue'
-        },
-        previewNone: {
-            display: 'none'
+        iconStyle: {
+            height:'30px',
+             width:'40px'
         }
     }
-    const projects = [
-        {
-            name:'Crime NY',
-            id: 1,
-            description: '',
-            languageIds: [1, 3, 5, 7, 8, 9],
-            gitHub: '',
-            preview: crimeNY
-        },
-        {
-            name:'SEI Trivia',
-            id: 2,
-            description: '',
-            languageIds: [1, 2, 4, 5, 6, 7, 8, 9],
-            gitHub: '',
-            preview: question
-        },
-        {
-            name:'Simple Macro Tracker',
-            id: 3,
-            description: '',
-            languageIds: [7, 8, 9],
-            gitHub: '',
-            preview: ''
-        }
-    ]
-
-    const languages = ['Pick an icon to see projects I\'ve written in that language.', 'React', 'React Native', 'JavaScript', 'Express', 'Ruby', 'Ruby on Rails', 'Postgre SQL', 'HTML', 'CSS']
-    const icons = [
-        <ReactIcon          style={styles.languageIcon}/>,
-        <ReactNativeIcon    style={styles.languageIcon}/>,
-        <ExpressIcon        style={styles.languageIcon}/>,
-        <RailsIcon          style={styles.languageIcon}/>,
-        <PostgreIcon        style={styles.languageIcon}/>,
-        <RubyIcon           style={styles.languageIcon}/>,
-        <JSIcon             style={styles.languageIcon}/>,
-        <HTMLIcon           style={styles.languageIcon}/>,
-        <CSSIcon            style={styles.languageIcon}/>,
-    ]
-
-    const styleHelper = () => (id==0) ? styles.galleryViewNone:styles.galleryView
-
-    return (
-        <>
-            <h4>{
-                languages[id]
-            }</h4>
-            <Preview name={previewName} setPreviewId={setPreviewName} />
-        <div style={styleHelper()}>
-                {projects.map(({name, languageIds, preview}) => {
-                    return (
-                        languageIds.includes(id) ?
-                            <div style={styles.container} key={id} onClick={()=>setPreviewName(name)}>
-                                <div style={styles.project}>
-                                    <img stlye={{width: '100%', height: '100%'}} src={preview} />
-                                </div>
-                                <h3 style={styles.title}>{name}</h3>
-                            <div style={styles.languageContainer}>
-                                {
-                                    languageIds.map(language => {
-                                        return icons[language-1]
-                                    })
-                                }
-                            </div>
-                            </div>
-                            : null
-                    )})}
+    return(
+        <div style={styles.galleryView}>
+            <div style={styles.project}>
+                <h4>Crime NY</h4>
+                <img src={crimeNY}/>
+                <p>A visual experiment showing the everchanging fingerprint of NYC crime.
+                </p>
+                    <div style={styles.linkContainer}>
+                        <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                    <a href='http://www.crime-ny.surge.sh' style={styles.link}>Preview</a>
+                    </div>
             </div>
-        </>
+            <div style={styles.project}>
+                <h4>SEI Trivia</h4>
+                <img src={question}/>
+                <p>A mobile trivia game built to aid students at General Assembly.</p>
+                <div style={styles.linkContainer}>
+                    <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                    <a style={styles.link}>Preview</a>
+                </div>
+            </div>
+            <div style={styles.project}>
+                <h4>Simple Macro Tracker</h4>
+                <img src={mactrack}/>
+                <p>An application created to help users track their daily consumed food and work towards macro-nutrient goals.</p>
+                <div style={styles.linkContainer}>
+                    <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                    <a href='https://gottshall.dev/smt/index.html' style={styles.link}>Preview</a>
+                </div>
+            </div>
+        </div>
     )
 }
+const projects = [
+    {
+        name:'Crime NY',
+        id: 1,
+        description: '',
+        languageIds: [1, 3, 5, 7, 8, 9],
+        gitHub: '',
+        preview: crimeNY
+    },
+    {
+        name:'SEI Trivia',
+        id: 2,
+        description: '',
+        languageIds: [1, 2, 4, 5, 6, 7, 8, 9],
+        gitHub: '',
+        preview: question
+    },
+    {
+        name:'Simple Macro Tracker',
+        id: 3,
+        description: '',
+        languageIds: [7, 8, 9],
+        gitHub: '',
+        preview: ''
+    }
+]

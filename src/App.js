@@ -13,6 +13,9 @@ import { red } from './services/colorPallete'
 import resume from './images/Resume.png'
 
 export default function App() {
+    const widthSetter = (window.innerWidth > 620) ? ('80vw') : ('100vw')
+    const resumeWidthSetter = (window.innerWidth > 620) ? ('60vw') : ('100vw')
+    const resumeMarginSetter = (window.innerWidth > 620) ? ('20vw') : ('-9vw')
     const styles = {
         container: {
             display: 'flex',
@@ -28,14 +31,14 @@ export default function App() {
             alignItems: 'center',
             margin: '0',
             height: '100vh',
-            width: '80vw',
+            width: widthSetter,
             overflowY: 'scroll',
             overflowX: 'hidden'
         }
     }
     return (
         <div style={styles.container}>
-            <Nav/>
+        {(window.innerWidth > 620) ? (<Nav/>) : (null)}
             <div style={styles.scrollBox}>
                 <br/>
                 <Profile/>
@@ -47,7 +50,7 @@ export default function App() {
                 <Divider text='Resume' />
                 <br/>
             <a style={{display: 'flex', justifyContent: 'flex-end', width: '90vw'}} href='https://www.gottshall.dev/Resume.pdf'>
-                    <img style={{marginRight: '20vw', width: '60vw'}} src={resume}/>
+                    <img style={{marginRight: resumeMarginSetter, width: resumeWidthSetter}} src={resume}/>
                 </a>
                 <Divider text='Contact Me' />
                 <br/>
