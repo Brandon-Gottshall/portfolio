@@ -50,7 +50,7 @@ export default function ProjectRender() {
                 <p>A visual experiment showing the everchanging fingerprint of NYC crime.
                 </p>
                     <div style={styles.linkContainer}>
-                        <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                        <a href='https://github.com/Brandon-Gottshall/Crime-NY' style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
                     <a href='http://www.crime-ny.surge.sh' style={styles.link}>Preview</a>
                     </div>
             </div>
@@ -59,7 +59,7 @@ export default function ProjectRender() {
                 <img src={question}/>
                 <p>A mobile trivia game built to aid students at General Assembly.</p>
                 <div style={styles.linkContainer}>
-                    <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                    <a href='https://github.com/Brandon-Gottshall/SEI-Trivia' style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
                     <a style={styles.link}>Preview</a>
                 </div>
             </div>
@@ -68,7 +68,7 @@ export default function ProjectRender() {
                 <img src={mactrack}/>
                 <p>An application created to help users track their daily consumed food and work towards macro-nutrient goals.</p>
                 <div style={styles.linkContainer}>
-                    <a style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
+                    <a href='https://github.com/Brandon-Gottshall/Simple-Macro-Tracker' style={styles.link}><GithubIcon style={styles.iconStyle} /></a>
                     <a href='https://gottshall.dev/smt/index.html' style={styles.link}>Preview</a>
                 </div>
             </div>
