@@ -17,7 +17,7 @@ export default function App() {
     const resumeWidthSetter = (window.innerWidth > 620) ? ('60vw') : ('100vw')
     const resumeMarginSetter = (window.innerWidth > 620) ? ('20vw') : ('-9vw')
     const styles = {
-        container: {
+        appContainer: {
             display: 'flex',
             justifyContent: 'space-between',
             borderTop: `2vh solid ${red}`,
@@ -26,7 +26,7 @@ export default function App() {
             top: '0',
             left: '0'
         },
-        scrollBox: {
+        contentScrollBox: {
             display: 'block',
             alignItems: 'center',
             margin: '0',
@@ -37,9 +37,9 @@ export default function App() {
         }
     }
     return (
-        <div style={styles.container}>
+        <div style={styles.appContainer}>
         {(window.innerWidth > 620) ? (<Nav/>) : (null)}
-            <div style={styles.scrollBox}>
+            <div style={styles.contentScrollBox}>
                 <br/>
                 <Profile/>
                 <Divider text='Skills' />
