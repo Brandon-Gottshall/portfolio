@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { Document, Page, pdfjs } from 'react-pdf'
 import jump from 'jump.js'
 //My Component Imports
 import Divider from './components/shared/Divider'
@@ -11,10 +12,12 @@ import Form from './components/Form.js'
 import './styles/styles.css'
 import { red } from './services/colorPallete'
 //Image Imports
-import resume from './images/Resume.png'
+import resume from './resume.pdf'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 export default function App() {
-
+    const [numPages, setNumPages] = useState(null)
+    const onDocumentLoadSuccess = ({numPages}) => setNumPages(numPages)
     return (
         <div className='appContainer'>
             <Nav/>
@@ -28,9 +31,22 @@ export default function App() {
                 <br/>
                 <Divider text='Resume' />
                 <br/>
-                <a href='https://www.gottshall.dev/Resume.pdf'>
-                        
-                    </a>
+                <a
+                    className='resumeContainer'
+                    target='_blank'
+                    href='https://www.gottshall.dev/Resume.pdf'>
+
+                    <Document
+                        className='pdf'
+                        file={resume}
+                        onLoadError={console.error}
+                        onLoadSuccess={console.log('success')}>
+
+                        <Page pageNumber={1} />
+
+                    </Document>
+
+                </a>
                     <Divider text='Contact Me' />
                     <br/>
                     <Form/>

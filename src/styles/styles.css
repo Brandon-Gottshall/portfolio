@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap");
 nav {
   postition: fixed;
-  display: flex;
   flex-direction: column;
   margin: 0 3vw 0 3vw;
-  width: 30vw;
-  align-items: flex-end; }
+  width: 10vw;
+  align-items: flex-end;
+  height: 10vh; }
   nav h1 {
     font-family: "Bebas Neue", cursive;
     font-size: 3vw;
@@ -47,7 +47,6 @@ contentScrollBox {
     width: 90vw; }
     contentScrollBox a img {
       margin-Right: 60vw;
-      background-image: url("../images/Resume.png");
       width: 20vw; }
 
 /*# sourceMappingURL=styles.css.map */
