@@ -1,3 +1,30 @@
 @import url('https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap')
-@import 'colors.sass'
-@import '_nav'
+@import '_colors.sass'
+@import '_nav.sass'
+@import 'media-tools.sass'
+
+appContainer
+    display: flex
+    justify-content: space-between
+    border-top: 2vh solid $red
+    position: fixed
+    width: 100vw
+    top: 0
+    left: 0
+contentScrollBox
+    display: block
+    align-items: center
+    margin: 0
+    height: 100vh
+    // width: widthSetter
+    overflow-Y: scroll
+    overflow-X: hidden
+    a
+        display: flex
+        justify-content: flex-end
+        width: 90vw
+        img
+            margin-Right: 60vw
+            background-image: url('../images/Resume.png')
+            width: 20vw
+            //Mobile styling here to fix resume placment.

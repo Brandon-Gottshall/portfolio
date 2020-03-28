@@ -1,39 +1,53 @@
 @import url("https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap");
 nav {
   postition: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
-  width: 15vw;
-  padding-top: 4vh; }
+  margin: 0 3vw 0 3vw;
+  width: 30vw;
+  align-items: flex-end; }
   nav h1 {
     font-family: "Bebas Neue", cursive;
-    font-size: 4vw;
-    background-color: white; }
-
-first {
-  margin: 1.5vh 0 0 2vw; }
-
-last {
-  margin: 0.2vh 0 0 5vw; }
+    font-size: 3vw;
+    background-color: white;
+    height: 0.5vh; }
 
 button {
-  flex: 0.05;
+  flex: 0.03;
+  width: 15vw;
   font-size: 1.5vw;
-  margin: 0 2vw 0 2vw;
   text-align: left;
   border: none;
   background-color: rgba(0, 0, 0, 0); }
   button:hover {
-    flex: 0.05;
-    font-size: 1.5vw;
-    margin: 0 2vw 0 2vw;
-    text-align: left;
-    border: none;
     border-left: 0.3vw solid #b32015;
     transition: padding-left 300ms ease-in-out;
     padding-left: 1.5vw;
     background-color: rgba(0, 0, 0, 0); }
+
+appContainer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 2vh solid #b32015;
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0; }
+
+contentScrollBox {
+  display: block;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  overflow-Y: scroll;
+  overflow-X: hidden; }
+  contentScrollBox a {
+    display: flex;
+    justify-content: flex-end;
+    width: 90vw; }
+    contentScrollBox a img {
+      margin-Right: 60vw;
+      background-image: url("../images/Resume.png");
+      width: 20vw; }
 
 /*# sourceMappingURL=styles.css.map */
