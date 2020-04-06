@@ -1,28 +1,11 @@
 import React from 'react'
-
-//Color Imports
-import { red } from '../../services/colorPallete'
+import '../../styles/styles.css'
 
 export default function Divider({text}) {
-    const container = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        margin: '2vw, 0, 2vw, 0'
-    }
-    const lineStyle = {
-        flex: '1',
-        marginLeft: '2vw',
-        height: '1vh',
-        backgroundColor: red
-    }
-    const textStyle = {
-        fontSize: '2vw',
-        fontStyle: 'italic'
-    }
+
     return(
-        <div style={container}>
-            <p style={textStyle}>{text}</p>
-            <div style={lineStyle}></div>
+        <div className='dividerContainer'>
+            <p className='dividerTextStyle'>{text}</p>
+            <div className='dividerLineStyle' style={{height:'1vw', width: '80vw', backgroundColor: 'red'}}></div>
         </div>)
 }

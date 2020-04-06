@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../styles/styles.css'
 //Image import
 import crimeNY from '../images/crime-ny.png'
 //Icon imports
@@ -28,7 +29,7 @@ const render = () => {
     switch (name) {
         case 'Crime NY':
         return (
-            <div style={styles.grid}>
+            <div className='' style={styles.grid}>
                 <div>
                     <h1>Crime NY</h1>
                 <img src={crimeNY}/>

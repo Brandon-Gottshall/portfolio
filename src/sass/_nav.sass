@@ -1,26 +1,26 @@
 //I nead to set this up to display none at mobile resolution.
 
 nav
-    postition: fixed
-    flex-direction: column
-    margin: 0 3vw 0 3vw
-    width: 10vw
-    align-items: flex-end
+    postition: sticky
+    display: flex
+    width: 100vw
+    align-items: center
+    justify-content: center
     height: 10vh
     h1
         font-family: 'Bebas Neue', cursive
         font-size: 3vw
         background-color: white
-        height: .5vh
+        margin-right: 3vh
 button
-        flex: .03
+        flex: .3
         width: 15vw
         font-size: 1.5vw
-        text-align: left
+        text-align: center
         border: none
         background-color: rgba(0,0,0,0)
         &:hover
-            border-left: .3vw solid $red
-            transition: padding-left 300ms ease-in-out
-            padding-left: 1.5vw
-            background-color: rgba(0,0,0,0)
+            // border-left: .3vw solid $red
+            // border-right: .3vw solid $red
+            font-size: 2vw
+            transition: font-size 300ms ease-in-out

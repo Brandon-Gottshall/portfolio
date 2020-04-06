@@ -4,7 +4,7 @@ import jump from 'jump.js'
 //My Component Imports
 import Divider from './components/shared/Divider'
 import Profile from './components/Profile'
-import Nav from './components/Nav'
+import Header from './components/Header'
 import Skills from './components/Skills'
 import Languages from './components/Languages'
 import Form from './components/Form.js'
@@ -12,7 +12,7 @@ import Form from './components/Form.js'
 import './styles/styles.css'
 import { red } from './services/colorPallete'
 //Image Imports
-import resume from './resume.pdf'
+import resume from './Resume.pdf'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 export default function App() {
@@ -20,7 +20,7 @@ export default function App() {
     const onDocumentLoadSuccess = ({numPages}) => setNumPages(numPages)
     return (
         <div className='appContainer'>
-            <Nav/>
+            <Header/>
             <div className='contentScrollBox'>
                 <br/>
                 <Profile/>
@@ -47,7 +47,7 @@ export default function App() {
                     </Document>
 
                 </a>
-                    <Divider text='Contact Me' />
+                    <Divider />
                     <br/>
                     <Form/>
                     <br/>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 //SASSy imports
 import '../styles/styles.css'
 
-export default function Nav() {
+export default function Header() {
 
 
     const aboutMeHelper = () => console.log('triggered')
@@ -14,17 +14,10 @@ export default function Nav() {
     }
     return(
         <nav className='nav'>
-            <h1
-            className='first'
-            >Brandon</h1>
-            <h1
-            className='last'
-            >Gottshall</h1>
-
-            <br/>
-                <button className='button 1' onClick={aboutMeHelper}>About Me</button>
-                <button className='button 2' onClick={resumeHelper}>Resume</button>
-                <button className='button 3' onClick={contactMeHelper}>Contact Me</button>
+            <h1>Brandon Gottshall</h1>
+                <button className='button' onClick={aboutMeHelper}>About Me</button>
+                <button className='button' onClick={resumeHelper}>Resume</button>
+                <button className='button' onClick={contactMeHelper}>Contact Me</button>
         </nav>
     )
 }
