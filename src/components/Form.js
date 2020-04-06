@@ -1,15 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../styles/form.css'
 
-export default function form() {
-    const styles = {
-        container: {
+export default function Form() {
+    const [status, setStatus] = useState('')
 
+    function submitForm(ev) {
+      ev.preventDefault();
+      const form = ev.target;
+      const data = new FormData(form);
+      const xhr = new XMLHttpRequest();
+      xhr.open(form.method, form.action);
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== XMLHttpRequest.DONE) return;
+        if (xhr.status === 200) {
+          form.reset()
+          setStatus("SUCCESS")
+        } else {
+          setStatus("ERROR")
         }
+      };
+      xhr.send(data);
     }
     return (
         <div>
-            <form id="fs-frm" name="simple-contact-form" accept-charset="utf-8" action="https://formspree.io/brandon@gottshall.dev" method="post">
+        <form
+          onSubmit={submitForm}
+          action="https://formspree.io/brandon@gottshall.dev"
+          method="POST"
+          id="fs-frm"
+          name="simple-contact-form"
+          accept-charset="utf-8">
+
             <fieldset id="fs-frm-inputs">
             <label for="full-name">Full Name</label>
             <input type="text" name="name" id="full-name" placeholder="First and Last" required=""/>
@@ -22,7 +44,8 @@ export default function form() {
             <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission"/>
 
             </fieldset>
-            <input type="submit" value="Submit"/>
+            {status === "SUCCESS" ? <p>Thanks!</p> : <button>Submit</button>}
+            {status === "ERROR" && <p>Ooops! There was an error.</p>}
             </form>
         </div>
     )
