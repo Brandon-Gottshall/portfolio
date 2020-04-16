@@ -5,7 +5,7 @@ import { red } from '../services/colorPallete'
 import { FaBrain, FaHandshake, FaPeopleCarry } from 'react-icons/fa'
 import { IoIosBowtie } from "react-icons/io"
 
-export default function Skills() {
+export default function Skills({width}) {
     const styles = {
         skillBox: {
             display: 'flex',
@@ -15,12 +15,12 @@ export default function Skills() {
             marginBottom: '1vh'
         },
         icon:{
-            width: '5vw',
-            height: '5vw'
+            width: (width > 620)?'5vw':'10vw',
+            height: (width > 620)?'5vw':'10vw'
         },
         iconActive:{
-            width: '7vw',
-            height: '7vw',
+            width: (width > 620)?'7vw':'12vw',
+            height: (width > 620)?'7vw':'12vw',
             color: red
         },
         renderContainer: {
@@ -95,6 +95,7 @@ export default function Skills() {
                     onMouseEnter={() => setGrowth(true)}
                     onMouseLeave={() => setGrowth(false)}
                     onClick={() => clickHelper(1)}
+                    viewBox='0 0 640 490'
                 />
                 <FaHandshake
                     style={iconStyleHelper(responsibility, 2)}

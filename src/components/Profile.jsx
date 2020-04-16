@@ -7,19 +7,20 @@ import { red } from '../services/colorPallete'
 import me from '../images/me.png'
 // Icon imports
 import { GithubIcon, LinkedInIcon } from '../services/svgHelper'
+import { Arrow } from '../services/svgHelper.js'
 
 
 export default function Profile({width, height}) {
     const profile = {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         margin: 'auto',
         marginLeft: (width > 620)?'5vw':'auto',
-        marginBottom: '1vh',
-        marginTop: '10vh',
-        height: '50vh'
+        marginBottom: (width > 620)?height*0.01:(width > 320)?0:0,
+        marginTop: (width > 620)?height*0.1:(width > 320)?'-10px':0,
+        height: (width > 620)?height*0.8:(width > 321)?height:height,
     }
     const styles = {
         nameContaniner: {
@@ -36,34 +37,35 @@ export default function Profile({width, height}) {
         },
         nameText: {
             fontFamily: 'Bebas Neue',
-            fontSize: '48px'
+            fontSize: (width > 321)?'48px':'38px',
+            marginTop: (width > 620)?0:(width > 321)?0:0
         },
         mission: {
             width: (width > 620)?width*0.6:width*0.8,
             textAlign: 'center',
-            fontSize: '22px'
+            fontSize: (width > 620)?'22px':'15px'
         },
         iconContainer: {
             display: 'flex',
-            marginTop: (width > 620)?'1.5vw':'5vw',
-            marginBottom: (width > 620)?'0':'5vw',
+            marginTop: (width > 620)?'1.5vw':'10vw',
+            marginBottom: (width > 620)?0:(width > 321)?height*0.15:height*0.2,
             height: width*0.04,
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             alignItems: 'center'
         },
             icon: {
                 height:(width > 620)?'3vw':'10vw',
                 width: (width > 620)?'3vw':'10vw',
                 margin: (width > 620)?'0.5vw':'1vw'
-            }
+            },
+        arrow: {
+            height: (width > 321)?height*0.1:height*0.15
+        }
     }
     return(
-        <>
         <div style={profile}>
             {(window.innerWidth > 620) ? (null) : (
-                <div style={styles.nameContaniner}>
                     <h1 style={styles.nameText}>Brandon Gottshall</h1>
-                </div>
             )}
             <img style={styles.profileImage} alt="Brandon Gottshall" src={me} />
 
@@ -74,9 +76,14 @@ export default function Profile({width, height}) {
                     <a href='https://www.linkedin.com/in/brandon-gottshall/'><LinkedInIcon style={styles.icon}/></a>
                 </div>
             </p>
+            {(window.innerWidth > 620) ? (null) : (
+                    <>
+                        <Arrow style={styles.arrow}
+                            height={height*0.15}/>
+                    </>
+            )}
 
         </div>
-        </>
     )
 }
 

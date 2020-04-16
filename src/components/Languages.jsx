@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import '@brainhubeu/react-carousel/lib/style.css';
 import {Transition} from 'react-transition-group'
 import ProjectRender from './ProjectRender'
 import Divider from './shared/Divider'
@@ -17,7 +18,7 @@ import {
     HTMLIcon
 } from '../services/svgHelper'
 
-export default function Languages({setLangActive}) {
+export default function Languages({setLangActive, width}) {
     const [reactIcon, setReactIcon] = useState(false)
     const [reactNativeIcon, setReactNativeIcon] = useState(false)
     const [jSIcon, setJSIcon] = useState(false)
@@ -80,7 +81,8 @@ export default function Languages({setLangActive}) {
             alignItems: 'center',
             height: '10vw',
             justifyContent: 'space-around',
-            marginBottom: '0'
+            marginBottom: '5vh',
+            marginTop: '3vh'
         },
         div: {
             transition: `height ${duration}ms ease-in-out`,
@@ -94,19 +96,22 @@ export default function Languages({setLangActive}) {
         },
         icon: {
             transition: `height ${duration}ms ease-in-out`,
-            width: '5vw',
-            height: '5vw',
-            margin: '2vw'
+            width: (width > 620)?'5vw':'10vw',
+            height: (width > 620)?'5vw':'10vw',
         },
         iconActive: {
             transition: `height ${duration}ms ease-in-out`,
-            width: '6vw',
-            height: '6vw',
-            color: red,
-            margin: '2vw 0 2vw 1.5vw'
+            width: (width > 620)?'6vw':'10vw',
+            height: (width > 620)?'6vw':'10vw',
+            color: red
         },
         renderContainer: {
             textAlign: 'center'
+        },
+        carousel: {
+            backgroundColor: 'red',
+            width: width*0.8,
+            height: width*1.2
         }
     }
 
@@ -160,7 +165,7 @@ export default function Languages({setLangActive}) {
             </Transition>
         </div>
         <div style={styles.renderContainer}>
-            <Divider text='Projects'/>
+            <Divider width={width} text='Projects'/>
             <ProjectRender id={activeId}/>
         </div>
     </div>)

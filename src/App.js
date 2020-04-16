@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import jump from 'jump.js'
 //My Component Imports
 import Divider from './components/shared/Divider'
-import Profile from './components/Profile'
+import Profile from './components/Profile.jsx'
 import Nav from './components/Nav'
 import Skills from './components/Skills'
-import Languages from './components/Languages'
+import Languages from './components/Languages.jsx'
 import ResumeImage from './components/ResumeImage'
 import Form from './components/Form.js'
 //Color Imports
@@ -59,8 +59,8 @@ export default function App() {
             margin: '0',
             height: '100vh',
             width:(width>620)?width*0.78:width,
-            overflowY: 'scroll',
-            overflowX: 'hidden'
+            overflowY: 'visible',
+            overflowX: 'hidden',
         },
         pdf: {
             width: '10vw'
@@ -76,15 +76,15 @@ export default function App() {
             <div style={styles.scrollBox} onScroll={scrollSetter}>
                 <br/>
                 <Profile width={width} height={height}/>
-                <Divider text='Skills' />
-                <Skills/>
-                <Divider text='Languages' />
-                <Languages setLangActive={setLangActive}/>
+                <Divider width={width} text='Skills' />
+                <Skills width={width}/>
+                <Divider width={width} text='Languages' />
+                <Languages width={width} setLangActive={setLangActive}/>
                 <br/>
-                <Divider text='Resume' />
+                <Divider width={width} text='Resume' />
                 <br/>
                 <ResumeImage/>
-                <Divider text='Contact Me' />
+                <Divider width={width} text='Contact Me' />
                 <br/>
                 <Form/>
                 <br/>
