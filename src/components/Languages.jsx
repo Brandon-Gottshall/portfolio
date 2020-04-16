@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import '@brainhubeu/react-carousel/lib/style.css';
 import {Transition} from 'react-transition-group'
 import ProjectRender from './ProjectRender'
 import Divider from './shared/Divider'
