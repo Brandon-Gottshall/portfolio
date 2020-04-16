@@ -10,6 +10,7 @@ const styles = {
         width: '70vw',
         height: '40vh',
         margin: '2vw',
+        marginBottom: '5vh',
         paddingLeft: '2vw',
         textAlign: 'left',
         border: '.2vw solid black'
@@ -21,7 +22,7 @@ const styles = {
     grid: {
         display: 'grid',
         gridTemplateColumns: '50% 50%',
-        gridTemplateRows: '100%'
+        gridTemplateRows: '100%',
     }
 }
 const render = () => {

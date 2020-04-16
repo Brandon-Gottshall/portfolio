@@ -25,9 +25,10 @@ export default function ProjectRender({id}) {
             display: 'grid',
             gridTemplateColumns: '33% 33% 33%',
             gridTemplateRows: '50% 50%',
-            height: '40vw',
+            height: '400px',
             width: '100%',
-            margin: '2vw'
+            margin: '2vw',
+            marginTop: '10vh'
         },
         galleryViewNone: {
             display: 'none'
@@ -38,6 +39,7 @@ export default function ProjectRender({id}) {
             alignItems: 'center',
             justifyContent: 'center',
             margin: 'auto',
+            marginTop: '5vh',
             width: '15vw',
             height: '20vw'
         },
@@ -48,7 +50,6 @@ export default function ProjectRender({id}) {
             margin: 'auto',
             width: '14vw',
             height: '14vw',
-            border: `.1vw solid ${red}`
         },
         title: {
             fontSize: '1.2vw',
@@ -56,12 +57,16 @@ export default function ProjectRender({id}) {
         },
         languageContainer: {
             display: 'flex',
+            flexWrap: 'wrap',
+            width: '10vw',
             alignItems: 'flex-start',
-            justifyContent: 'flex-start'
+            justifyContent: 'center'
         },
         languageIcon: {
             width: '2vw',
-            height: '2vw'
+            height: '2vw',
+            marginTop: '1vh',
+            marginRight: '5px'
         },
         preview: {
             width: '80vw',
@@ -115,7 +120,7 @@ export default function ProjectRender({id}) {
     const styleHelper = () => (id==0) ? styles.galleryViewNone:styles.galleryView
 
     return (
-        <>
+        <div style={{display:'flex', flexDirection:'column'}} >
             <h4>{
                 languages[id]
             }</h4>
@@ -142,6 +147,6 @@ export default function ProjectRender({id}) {
                         )}})
                     }
             </div>
-        </>
+        </div>
     )
 }

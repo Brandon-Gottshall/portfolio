@@ -50,9 +50,9 @@ export default function Skills() {
                 case 1:
                     return (
                         <>
-                            <h4>Growth</h4>
+                            <h4>Growth Mindset</h4>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                            <p>I embrace failure as a chance to learn and pivot. I often create goals beyond my current ability, as I know that is the best way to improve my skills.</p>
                         </>
                     )
                 case 2:
@@ -60,7 +60,8 @@ export default function Skills() {
                         <>
                             <h4>Responsibility</h4>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                            <p>During my time in the Marine
+                            Corps I was given the responsibility of managing maintenance on over $7,000,000 worth of equipment. I grew with this role, researching and asking constant questions to improve my effectiveness within the role and maintain equipment readiness.</p>
                         </>
                     )
                 case 3:
@@ -68,15 +69,14 @@ export default function Skills() {
                         <>
                             <h4>Teamwork</h4>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                            <p>I've been part of many teams in my adult life but one of the most enjoyable instances was during my time at General Assembly. In a team of three developers, we collaborated with the UX design team to create a reworked version of booking.com with easier accessibility and eco-friendly features.  </p>
                         </>
                     )
                 case 4:
                     return (
                         <>
                             <h4>Profesionalism</h4>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta eros eget elementum sagittis. Proin at magna imperdiet, suscipit tellus vel, pellentesque diam. Maecenas vitae sem aliquam, fermentum leo eget, porta justo. Aenean et venenatis magna, nec consectetur eros. In aliquam leo lectus, sed hendrerit leo commodo vitae. In maximus cursus orci vel semper. Morbi dictum nisl sodales leo aliquam elementum. Nunc vitae ligula finibus, efficitur diam lobortis, mollis metus. Donec mauris lectus, pretium tempor condimentum porta, varius vel arcu. Morbi vestibulum ligula in rutrum luctus.</p>
+                            <p>As an assistant maintenance chief, I was often required to talk to other Marines with much higher rank and pay-grade. I learned to conduct myself with respect and professionalism in the workplace.</p>
                         </>
                     )
                 default:

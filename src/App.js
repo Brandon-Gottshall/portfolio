@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jump from 'jump.js'
 //My Component Imports
 import Divider from './components/shared/Divider'
@@ -6,16 +6,43 @@ import Profile from './components/Profile'
 import Nav from './components/Nav'
 import Skills from './components/Skills'
 import Languages from './components/Languages'
+import ResumeImage from './components/ResumeImage'
 import Form from './components/Form.js'
 //Color Imports
 import { red } from './services/colorPallete'
 //Image Imports
-import resume from './images/Resume.png'
 
 export default function App() {
-    const widthSetter = (window.innerWidth > 620) ? ('80vw') : ('100vw')
-    const resumeWidthSetter = (window.innerWidth > 620) ? ('60vw') : ('100vw')
-    const resumeMarginSetter = (window.innerWidth > 620) ? ('20vw') : ('-9vw')
+    const [ width, setWidth ] = useState(window.innerWidth)
+    const [ height, setHeight ] = useState(window.innerHeight)
+    const [ scroll, setScroll ] = useState(0)
+    const [ langActive, setLangActive ] = useState(false)
+    function debounce(fn, ms) {
+        let timer
+        return _ => {
+            clearTimeout(timer)
+            timer = setTimeout(_ => {
+                timer = null
+                fn.apply(this, arguments)
+            }, ms)
+        };
+    }
+    function scrollSetter(x) {
+        const scrollAmount = x.target.scrollTop
+
+        setScroll(scrollAmount)
+    }
+    useEffect(()=>{
+        const debouncedHandleResize = debounce(function handleResize() {
+                setWidth(window.innerWidth)
+                setHeight(window.innerHeight)
+        }, 1000)
+        window.addEventListener('resize', debouncedHandleResize)
+
+        return _ => {
+          window.removeEventListener('resize', debouncedHandleResize)
+      }
+    },[])
     const styles = {
         container: {
             display: 'flex',
@@ -31,27 +58,32 @@ export default function App() {
             alignItems: 'center',
             margin: '0',
             height: '100vh',
-            width: widthSetter,
+            width:(width>620)?width*0.78:width,
             overflowY: 'scroll',
             overflowX: 'hidden'
+        },
+        pdf: {
+            width: '10vw'
+        },
+        resumeContainer: {
+            position: 'relative',
+            width:'100vw'
         }
     }
     return (
         <div style={styles.container}>
-        {(window.innerWidth > 620) ? (<Nav/>) : (null)}
-            <div style={styles.scrollBox}>
+        {(width > 620) ? (<Nav langActive={langActive} scroll={scroll}/>) : (null)}
+            <div style={styles.scrollBox} onScroll={scrollSetter}>
                 <br/>
-                <Profile/>
+                <Profile width={width} height={height}/>
                 <Divider text='Skills' />
                 <Skills/>
                 <Divider text='Languages' />
-                <Languages/>
+                <Languages setLangActive={setLangActive}/>
                 <br/>
                 <Divider text='Resume' />
                 <br/>
-            <a style={{display: 'flex', justifyContent: 'flex-end', width: '90vw'}} href='https://www.gottshall.dev/Resume.pdf'>
-                    <img style={{marginRight: resumeMarginSetter, width: resumeWidthSetter}} src={resume}/>
-                </a>
+                <ResumeImage/>
                 <Divider text='Contact Me' />
                 <br/>
                 <Form/>
@@ -61,3 +93,4 @@ export default function App() {
         </div>
     )
 }
+// console.log(x.target.scrollTop);

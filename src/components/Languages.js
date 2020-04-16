@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Transition} from 'react-transition-group'
 import ProjectRender from './ProjectRender'
 import Divider from './shared/Divider'
@@ -17,7 +17,7 @@ import {
     HTMLIcon
 } from '../services/svgHelper'
 
-export default function Skills() {
+export default function Languages({setLangActive}) {
     const [reactIcon, setReactIcon] = useState(false)
     const [reactNativeIcon, setReactNativeIcon] = useState(false)
     const [jSIcon, setJSIcon] = useState(false)
@@ -28,25 +28,9 @@ export default function Skills() {
     const [hTMLIcon, setHTMLIcon] = useState(false)
     const [cSSIcon, setCSSIcon] = useState(false)
     const [activeId, setActiveId] = useState(0)
-    const transitionStyles = {
-        entering: {
-            width: '8vw',
-            height: '8vw'
-        },
-        entered: {
-            width: '8vw',
-            height: '8vw'
-        },
-        exiting: {
-            width: '8vw',
-            height: '10vw'
-        },
-        exited: {
-            width: '8vw',
-            height: '10vw'
-        }
-    }
-    const duration = 400
+    useEffect(()=>{
+        setLangActive(Boolean(activeId))
+    },[activeId])
     const iconStyleHelper = (state, id) => (
         state
         ? styles.iconActive
@@ -70,6 +54,26 @@ export default function Skills() {
         : setActiveId(id)
 
     const render = () => (<ProjectRender id={activeId}/>)
+
+    const duration = 400
+    const transitionStyles = {
+        entering: {
+            width: '8vw',
+            height: '8vw'
+        },
+        entered: {
+            width: '8vw',
+            height: '8vw'
+        },
+        exiting: {
+            width: '8vw',
+            height: '10vw'
+        },
+        exited: {
+            width: '8vw',
+            height: '10vw'
+        }
+    }
     const styles = {
         languageBox: {
             display: 'flex',
