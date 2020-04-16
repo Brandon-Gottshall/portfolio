@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import jump from 'jump.js'
 //My Component Imports
 import Divider from './components/shared/Divider'
 import Profile from './components/Profile.jsx'
@@ -27,9 +26,11 @@ export default function App() {
             }, ms)
         };
     }
+    function jumpHelper(target) {
+        console.log('jumped')
+    }
     function scrollSetter(x) {
         const scrollAmount = x.target.scrollTop
-
         setScroll(scrollAmount)
     }
     useEffect(()=>{
@@ -75,9 +76,9 @@ export default function App() {
         {(width > 620) ? (<Nav langActive={langActive} scroll={scroll}/>) : (null)}
             <div style={styles.scrollBox} onScroll={scrollSetter}>
                 <br/>
-                <Profile width={width} height={height}/>
+                <Profile width={width} height={height} jumpHelper={jumpHelper}/>
                 <Divider width={width} text='Skills' />
-                <Skills width={width}/>
+                <Skills width={width} className='skills'/>
                 <Divider width={width} text='Languages' />
                 <Languages width={width} setLangActive={setLangActive}/>
                 <br/>

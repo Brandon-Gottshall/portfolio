@@ -1,6 +1,4 @@
-
 import React from 'react'
-
 //Color Imports
 import { red } from '../services/colorPallete'
 // Image imports
@@ -10,7 +8,7 @@ import { GithubIcon, LinkedInIcon } from '../services/svgHelper'
 import { Arrow } from '../services/svgHelper.js'
 
 
-export default function Profile({width, height}) {
+export default function Profile({width, height, jumpHelper}) {
     const profile = {
         display: 'flex',
         flexDirection: 'column',
@@ -77,10 +75,14 @@ export default function Profile({width, height}) {
                 </div>
             </p>
             {(window.innerWidth > 620) ? (null) : (
-                    <>
-                        <Arrow style={styles.arrow}
-                            height={height*0.15}/>
-                    </>
+                    <div style={{backgroundColor:'blue'}} onClick={()=>{
+                        jumpHelper(200)
+                    }}>
+                        <Arrow
+                            style={styles.arrow}
+                            height={height*0.15}
+                            />
+                    </div>
             )}
 
         </div>
