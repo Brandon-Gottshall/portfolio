@@ -3,7 +3,7 @@ import React from 'react'
 //Color Imports
 import { red } from '../../services/colorPallete'
 
-export default function Divider({text, width}) {
+export default function Divider({text, width, className}) {
     const container = {
         display: 'flex',
         alignItems: 'center',
@@ -21,7 +21,7 @@ export default function Divider({text, width}) {
         fontStyle: 'italic'
     }
     return(
-        <div style={container}>
+        <div className={className} style={container}>
             <p style={textStyle}>{text}</p>
             <div style={lineStyle}></div>
         </div>)

@@ -8,7 +8,7 @@ import { GithubIcon, LinkedInIcon } from '../services/svgHelper'
 import { Arrow } from '../services/svgHelper.js'
 
 
-export default function Profile({width, height, jumpHelper}) {
+export default function Profile({width, height, scrollSetter}) {
     const profile = {
         display: 'flex',
         flexDirection: 'column',
@@ -18,7 +18,7 @@ export default function Profile({width, height, jumpHelper}) {
         marginLeft: (width > 620)?'5vw':'auto',
         marginBottom: (width > 620)?height*0.01:(width > 320)?0:0,
         marginTop: (width > 620)?height*0.1:(width > 320)?'-10px':0,
-        height: (width > 620)?height*0.8:(width > 321)?height:height,
+        height: (width > 620)?height:(width > 321)?height:height,
     }
     const styles = {
         nameContaniner: {
@@ -46,9 +46,9 @@ export default function Profile({width, height, jumpHelper}) {
         iconContainer: {
             display: 'flex',
             marginTop: (width > 620)?'1.5vw':'10vw',
-            marginBottom: (width > 620)?0:(width > 321)?height*0.15:height*0.2,
             height: width*0.04,
             justifyContent: 'space-around',
+            marginBottom: (width > 620)?height*0.1:(width > 321)?height*0.15:height*0.2,
             alignItems: 'center'
         },
             icon: {
@@ -56,8 +56,21 @@ export default function Profile({width, height, jumpHelper}) {
                 width: (width > 620)?'3vw':'10vw',
                 margin: (width > 620)?'0.5vw':'1vw'
             },
+        arrowContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyItems: 'center',
+            margin: 0
+        },
         arrow: {
-            height: (width > 321)?height*0.1:height*0.15
+            height: (width > 620)?height*0.2:(width > 321)?height*0.25:height*0.15
+        },
+        arrowText: {
+            margin: 0,
+            lineHeight: '8px',
+            fontSize: '12px',
+            fontWeight: '500'
         }
     }
     return(
@@ -74,16 +87,11 @@ export default function Profile({width, height, jumpHelper}) {
                     <a href='https://www.linkedin.com/in/brandon-gottshall/'><LinkedInIcon style={styles.icon}/></a>
                 </div>
             </p>
-            {(window.innerWidth > 620) ? (null) : (
-                    <div style={{backgroundColor:'blue'}} onClick={()=>{
-                        jumpHelper(200)
-                    }}>
-                        <Arrow
-                            style={styles.arrow}
-                            height={height*0.15}
-                            />
-                    </div>
-            )}
+                <div style={styles.arrowContainer} onClick={()=>scrollSetter('.skills')}>
+                    <p style={styles.arrowText}>{width>620?'Click':'Touch'}</p>
+                    <Arrow
+                        style={styles.arrow}/>
+                </div>
 
         </div>
     )

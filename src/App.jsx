@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-//My Component Imports
+import React, { useState, useEffect, useRef } from 'react'
+import { Link, animateScroll as rScroll } from "react-scroll"
+//Component Imports
 import Divider from './components/shared/Divider'
 import Profile from './components/Profile.jsx'
 import Nav from './components/Nav'
@@ -26,12 +27,15 @@ export default function App() {
             }, ms)
         };
     }
-    function jumpHelper(target) {
-        console.log('jumped')
-    }
-    function scrollSetter(x) {
-        const scrollAmount = x.target.scrollTop
-        setScroll(scrollAmount)
+    function scrollFinder(x) {
+            const scrollAmount = x.target.scrollTop
+            setScroll(scrollAmount)
+        }
+    function scrollSetter(target) {
+        let scrollNode = document.querySelector('.scroll')
+        let skillsNode = document.querySelector(target)
+        scrollNode.scrollTop=skillsNode.offsetTop+1
+        setScroll(skillsNode.offsetTop)
     }
     useEffect(()=>{
         const debouncedHandleResize = debounce(function handleResize() {
@@ -59,8 +63,9 @@ export default function App() {
             alignItems: 'center',
             margin: '0',
             height: '100vh',
+            scrollBehavior: 'smooth',
             width:(width>620)?width*0.78:width,
-            overflowY: 'visible',
+            overflowY: 'auto',
             overflowX: 'hidden',
         },
         pdf: {
@@ -73,25 +78,25 @@ export default function App() {
     }
     return (
         <div style={styles.container}>
-        {(width > 620) ? (<Nav langActive={langActive} scroll={scroll}/>) : (null)}
-            <div style={styles.scrollBox} onScroll={scrollSetter}>
-                <br/>
-                <Profile width={width} height={height} jumpHelper={jumpHelper}/>
-                <Divider width={width} text='Skills' />
-                <Skills width={width} className='skills'/>
-                <Divider width={width} text='Languages' />
-                <Languages width={width} setLangActive={setLangActive}/>
-                <br/>
-                <Divider width={width} text='Resume' />
-                <br/>
-                <ResumeImage/>
-                <Divider width={width} text='Contact Me' />
-                <br/>
-                <Form/>
-                <br/>
-
-            </div>
+            {(width > 620) ? (<Nav langActive={langActive} height={height} scroll={scroll} scrollSetter={scrollSetter}/>) : (null)}
+                <div style={styles.scrollBox}
+                     onScroll={scrollFinder}
+                     className='scroll'>
+                    <br/>
+                    <Profile width={width} height={height} scrollSetter={scrollSetter}/>
+                    <Divider width={width} text='Skills' className='skills'/>
+                    <Skills width={width}/>
+                    <Divider width={width} text='Languages' className='languages' />
+                    <Languages width={width} setLangActive={setLangActive}/>
+                    <br/>
+                    <Divider width={width} text='Resume' className='resume' />
+                    <br/>
+                    <ResumeImage/>
+                    <Divider width={width} text='Contact Me' className='contactMe'  />
+                    <br/>
+                    <Form/>
+                    <br/>
+                </div>
         </div>
     )
 }
-// console.log(x.target.scrollTop);

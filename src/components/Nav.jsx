@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { Link, animateScroll } from "react-scroll"
 import { Transition } from 'react-transition-group'
 
 //Color Imports
 import { red } from '../services/colorPallete'
 
-export default function Nav({scroll, langActive}) {
+export default function Nav({scroll, langActive, scrollSetter, height}) {
 const styles = {
     nav: {
         postition: 'fixed',
@@ -30,15 +31,18 @@ const styles = {
                 flex: '.05',
                 fontSize: '1.5vw',
                 margin: '0 2vw 0 2vw',
+                outline: 'none',
                 textAlign: 'left',
                 border: 'none',
-                backgroundColor: 'rgba(0,0,0,0)'
+                borderLeft: 'none',
+                backgroundColor: 'rgba(0,0,0,0)',
         },
         buttonActive: {
             flex: '.05',
             fontSize: '1.5vw',
             margin: '0 2vw 0 2vw',
             textAlign: 'left',
+            outline: 'none',
             border: 'none',
             borderLeft: `.3vw solid ${red}`,
             transition: 'padding-left 300ms ease-in-out',
@@ -54,8 +58,8 @@ const styles = {
     }
     const duration = 300
 
-const [activeButton, setActiveButton] = useState(1)
-const [offset, setOffset] = useState(0)
+const [ activeButton, setActiveButton ] = useState(1)
+const [ offset, setOffset ] = useState(0)
 const [ style1, setStyle1 ] = useState(styles.buttonActive)
 const [ style2, setStyle2 ] = useState(styles.button)
 const [ style3, setStyle3 ] = useState(styles.button)
@@ -122,16 +126,14 @@ const activeStyleSelector = id => {
  }
  useEffect(()=>{
      setOffset(langActive ? 400 : 0)
-     console.log(langActive)
  }, [langActive])
 useEffect(()=>{
-    console.log(scroll)
-    if (scroll < 390) navHelper(1)
-    if (scroll > 390 && scroll < 614) navHelper(2)
-    if (scroll > 614 && scroll < 805 ) navHelper(3)
-    if (scroll > 805 && scroll < (1000+offset) ) navHelper(4)
-    if (scroll > (1000+offset) && scroll < (2226+offset) ) navHelper(5)
-    if (scroll > (2226+offset)) navHelper(6)
+    if (scroll < 650) navHelper(1)
+    if (scroll > document.querySelector('.skills').offsetTop && scroll < document.querySelector('.languages').offsetTop) navHelper(2)
+    if (scroll > document.querySelector('.languages').offsetTop && scroll < document.querySelector('.projects').offsetTop ) navHelper(3)
+    if (scroll > document.querySelector('.projects').offsetTop && scroll < document.querySelector('.resume').offsetTop ) navHelper(4)
+    if (scroll > document.querySelector('.resume').offsetTop && scroll < document.querySelector('.contactMe').offsetTop ) navHelper(5)
+    if (scroll > document.querySelector('.contactMe').offsetTop-height*0.5) navHelper(6)
 },[scroll])
 return(
     <nav style={styles.nav}>
@@ -145,23 +147,42 @@ return(
         <br/>
 
         <Transition in={activeButton===1} timeout={duration}>
-            <button style={style1} onClick={()=>navHelper(1)}>About Me</button>
+                <button style={style1} onClick={()=> {
+                    navHelper(1)
+                    scrollSetter('.scroll')
+                }}>About Me</button>
         </Transition>
         <Transition in={activeButton===2} timeout={duration}>
-            <button style={style2} onClick={()=>navHelper(2)}>Skills</button>
+                <button style={style2} onClick={()=> {
+                    navHelper(2)
+                    scrollSetter('.skills')
+                }}>Skills</button>
         </Transition>
         <Transition in={activeButton===3} timeout={duration}>
-            <button style={style3} onClick={()=>navHelper(3)}>Languages</button>
+            <button style={style3} onClick={()=>{
+                navHelper(3)
+                scrollSetter('.languages')
+            }}>Languages</button>
         </Transition>
         <Transition in={activeButton===4} timeout={duration}>
-            <button style={style4} onClick={()=>navHelper(4)}>Projects</button>
+            <button style={style4} onClick={()=>{
+                navHelper(4)
+                scrollSetter('.languages')
+            }}>Projects</button>
         </Transition>
         <Transition in={activeButton===5} timeout={duration}>
-            <button style={style5} onClick={()=>navHelper(5)}>Resume</button>
+            <button style={style5} onClick={()=>{
+                navHelper(5)
+                scrollSetter('.resume')
+            }}>Resume</button>
         </Transition>
         <Transition in={activeButton===6} timeout={duration}>
-        <button style={style6} onClick={()=>navHelper(6)}>Contact Me</button>
+        <button style={style6} onClick={()=>{
+            navHelper(6)
+            scrollSetter('.contactMe')
+        }}>Contact Me</button>
         </Transition>
     </nav>
 )
 }
+// console.log(scroll)
