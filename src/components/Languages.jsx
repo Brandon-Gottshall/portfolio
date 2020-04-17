@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Transition} from 'react-transition-group'
-import ProjectRender from './ProjectRender'
+import ProjectRender from './ProjectRender.jsx'
 import Divider from './shared/Divider'
 //Color Imports
 import {red} from '../services/colorPallete'
@@ -164,7 +164,7 @@ export default function Languages({setLangActive, width}) {
             </Transition>
         </div>
         <div style={styles.renderContainer}>
-            <ProjectRender id={activeId}/>
+            <ProjectRender id={activeId} width={width}/>
         </div>
     </div>)
 }
