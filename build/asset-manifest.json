@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.b29b98fd.chunk.css",
-    "main.js": "/static/js/main.f02769c8.chunk.js",
-    "main.js.map": "/static/js/main.f02769c8.chunk.js.map",
+    "main.js": "/static/js/main.e22d49cd.chunk.js",
+    "main.js.map": "/static/js/main.e22d49cd.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c2b20a0b.js",
     "runtime-main.js.map": "/static/js/runtime-main.c2b20a0b.js.map",
-    "static/js/2.02467b9c.chunk.js": "/static/js/2.02467b9c.chunk.js",
-    "static/js/2.02467b9c.chunk.js.map": "/static/js/2.02467b9c.chunk.js.map",
+    "static/js/2.30c30518.chunk.js": "/static/js/2.30c30518.chunk.js",
+    "static/js/2.30c30518.chunk.js.map": "/static/js/2.30c30518.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.5c12d3269797ac103f3c3dd63cf69ff3.js": "/precache-manifest.5c12d3269797ac103f3c3dd63cf69ff3.js",
+    "precache-manifest.f40baeee2ace6c5ee9b039b1e3e4eaee.js": "/precache-manifest.f40baeee2ace6c5ee9b039b1e3e4eaee.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.b29b98fd.chunk.css.map": "/static/css/main.b29b98fd.chunk.css.map",
-    "static/js/2.02467b9c.chunk.js.LICENSE.txt": "/static/js/2.02467b9c.chunk.js.LICENSE.txt",
+    "static/js/2.30c30518.chunk.js.LICENSE.txt": "/static/js/2.30c30518.chunk.js.LICENSE.txt",
     "static/media/crime-ny.png": "/static/media/crime-ny.1d13f5c1.png",
     "static/media/me.png": "/static/media/me.0445d89c.png",
     "static/media/question.png": "/static/media/question.d1a8b4c1.png",
@@ -19,8 +19,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.c2b20a0b.js",
-    "static/js/2.02467b9c.chunk.js",
+    "static/js/2.30c30518.chunk.js",
     "static/css/main.b29b98fd.chunk.css",
-    "static/js/main.f02769c8.chunk.js"
+    "static/js/main.e22d49cd.chunk.js"
   ]
 }

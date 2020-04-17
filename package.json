@@ -11,6 +11,7 @@
     "radium": "^0.26.0",
     "react": "^16.13.0",
     "react-anime": "^3.0.3",
+    "react-card-flip": "^1.0.10",
     "react-dom": "^16.13.0",
     "react-google-font-loader": "^1.1.0",
     "react-icons": "^3.9.0",

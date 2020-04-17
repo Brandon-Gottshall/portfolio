@@ -88,7 +88,6 @@ export default function Profile({width, height, scrollSetter}) {
                 </div>
             </p>
                 <div style={styles.arrowContainer} onClick={()=>scrollSetter('.skills')}>
-                    <p style={styles.arrowText}>{width>620?'Click':'Touch'}</p>
                     <Arrow
                         style={styles.arrow}/>
                 </div>

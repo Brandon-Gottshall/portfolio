@@ -8,7 +8,7 @@ export default function Preview({name, setPreviewName}) {
 const styles = {
     preview: {
         width: '70vw',
-        height: '40vh',
+        height: '50vh',
         margin: '2vw',
         marginBottom: '5vh',
         paddingLeft: '2vw',
@@ -40,7 +40,7 @@ const render = () => {
                     <GithubIcon height='3vw' width='3vw'/>
                     </a>
                     <a href='https://crime-ny.surge.sh'>
-                    <LinkedInIcon />
+
                     </a>
                 </div>
             </div>

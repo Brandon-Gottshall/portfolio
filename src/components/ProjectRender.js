@@ -1,7 +1,5 @@
 
 import React, { useState } from 'react'
-//My component imports
-import Preview from './Preview'
 //Color Imports
 import { red } from '../services/colorPallete'
 //Image Imports
@@ -16,7 +14,8 @@ import { ReactIcon,
          RailsIcon,
          PostgreIcon,
          CSSIcon,
-         HTMLIcon     } from '../services/svgHelper'
+         HTMLIcon,
+        GithubIcon} from '../services/svgHelper'
 
 export default function ProjectRender({id}) {
     const [ previewName, setPreviewName ] = useState(null)
@@ -121,10 +120,9 @@ export default function ProjectRender({id}) {
 
     return (
         <div style={{display:'flex', flexDirection:'column'}} >
-            <h4>{
+            <h4 style={{margins:'0'}}>{
                 languages[id]
             }</h4>
-            <Preview name={previewName} setPreviewId={setPreviewName} />
         <div style={styleHelper()}>
                 {projects.map(({name, languageIds, preview}, index) => {
                     if (index < 3) {
@@ -132,9 +130,13 @@ export default function ProjectRender({id}) {
                             languageIds.includes(id) ?
                             <div style={styles.container} key={index} onClick={()=>setPreviewName(name)}>
                             <div style={styles.project}>
-                            <img stlye={{width: '100%', height: '100%'}} src={preview} />
+                            <img alt='preview of project' stlye={{width: '100%', height: '100%'}} src={preview} />
                             </div>
-                            <h3 style={styles.title}>{name}</h3>
+                            <h3 style={styles.title}>{name}
+                                <a href='https://github.com/Brandon-Gottshall/Crime-NY'>
+                                    <GithubIcon height='1vw' width='1vw'/>
+                                </a>
+                            </h3>
                             <div style={styles.languageContainer}>
                             {
                                 languageIds.map(language => {

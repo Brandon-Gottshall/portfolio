@@ -86,7 +86,7 @@ export default function App() {
                     <Profile width={width} height={height} scrollSetter={scrollSetter}/>
                     <Divider width={width} text='Skills' className='skills'/>
                     <Skills width={width}/>
-                    <Divider width={width} text='Languages' className='languages' />
+                    <Divider width={width} text='Projects' className='projects' />
                     <Languages width={width} setLangActive={setLangActive}/>
                     <br/>
                     <Divider width={width} text='Resume' className='resume' />

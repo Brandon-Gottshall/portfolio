@@ -164,7 +164,6 @@ export default function Languages({setLangActive, width}) {
             </Transition>
         </div>
         <div style={styles.renderContainer}>
-            <Divider width={width} text='Projects' className='projects'/>
             <ProjectRender id={activeId}/>
         </div>
     </div>)

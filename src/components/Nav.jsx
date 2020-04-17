@@ -129,9 +129,8 @@ const activeStyleSelector = id => {
  }, [langActive])
 useEffect(()=>{
     if (scroll < 650) navHelper(1)
-    if (scroll > document.querySelector('.skills').offsetTop && scroll < document.querySelector('.languages').offsetTop) navHelper(2)
-    if (scroll > document.querySelector('.languages').offsetTop && scroll < document.querySelector('.projects').offsetTop ) navHelper(3)
-    if (scroll > document.querySelector('.projects').offsetTop && scroll < document.querySelector('.resume').offsetTop ) navHelper(4)
+    if (scroll > document.querySelector('.skills').offsetTop && scroll < document.querySelector('.projects').offsetTop) navHelper(2)
+    if (scroll > document.querySelector('.projects').offsetTop && scroll < document.querySelector('.resume').offsetTop ) navHelper(3)
     if (scroll > document.querySelector('.resume').offsetTop && scroll < document.querySelector('.contactMe').offsetTop ) navHelper(5)
     if (scroll > document.querySelector('.contactMe').offsetTop-height*0.5) navHelper(6)
 },[scroll])
@@ -161,13 +160,7 @@ return(
         <Transition in={activeButton===3} timeout={duration}>
             <button style={style3} onClick={()=>{
                 navHelper(3)
-                scrollSetter('.languages')
-            }}>Languages</button>
-        </Transition>
-        <Transition in={activeButton===4} timeout={duration}>
-            <button style={style4} onClick={()=>{
-                navHelper(4)
-                scrollSetter('.languages')
+                scrollSetter('.projects')
             }}>Projects</button>
         </Transition>
         <Transition in={activeButton===5} timeout={duration}>
