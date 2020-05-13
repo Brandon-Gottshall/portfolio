@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '../styles/form.css'
+import {red} from '../services/colorPallete'
 
 export default function Form() {
     const [status, setStatus] = useState('')
@@ -23,9 +24,14 @@ export default function Form() {
       xhr.send(data);
     }
     return (
-        <div>
+        <div style={{marginBottom:'10vh'}}>
         <form
           onSubmit={submitForm}
+          style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+          }}
           action="https://formspree.io/brandon@gottshall.dev"
           method="POST"
           id="fs-frm"
@@ -44,7 +50,12 @@ export default function Form() {
             <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission"/>
 
             </fieldset>
-            {status === "SUCCESS" ? <p>Thanks!</p> : <button>Submit</button>}
+            {status === "SUCCESS" ? <p>Thanks!</p> : <button style={{
+                backgroundColor:red,
+                width: "15vw",
+                height: "3vh",
+                borderRadius: '1vh'
+            }}>Submit</button>}
             {status === "ERROR" && <p>Ooops! There was an error.</p>}
             </form>
         </div>
