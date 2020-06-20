@@ -72,13 +72,13 @@ const activeStyleSelector = id => {
  const navHelper = (num) => {
      activeStyleSelector(num)
  }
-useEffect(()=>{
-    if (scroll < 650) navHelper(1)
-    if (scroll > document.querySelector('.skills').offsetTop && scroll < document.querySelector('.projects').offsetTop) navHelper(2)
-    if (scroll > document.querySelector('.projects').offsetTop && scroll < document.querySelector('.resume').offsetTop ) navHelper(3)
-    if (scroll > document.querySelector('.resume').offsetTop && scroll < document.querySelector('.contactMe').offsetTop ) navHelper(5)
-    if (scroll > document.querySelector('.contactMe').offsetTop-height*0.5) navHelper(6)
-},[scroll])
+// useEffect(()=>{
+//     if (scroll < 650) navHelper(1)
+//     if (scroll > document.querySelector('.skills').offsetTop && scroll < document.querySelector('.projects').offsetTop) navHelper(2)
+//     if (scroll > document.querySelector('.projects').offsetTop && scroll < document.querySelector('.resume').offsetTop ) navHelper(3)
+//     if (scroll > document.querySelector('.resume').offsetTop && scroll < document.querySelector('.contactMe').offsetTop ) navHelper(5)
+//     if (scroll > document.querySelector('.contactMe').offsetTop-height*0.5) navHelper(6)
+// },[scroll])
 return(
     <nav className="top-0 left-0 mr-1 mt-12 hidden flex-col flex-grow w-1/3 sm:flex" >
         <h1 className="font-bebas text-3xl ml-3">Brandon</h1>

@@ -19,6 +19,7 @@ export default function Skills({width}) {
     const [ activeId, setActiveId ] = useState(0)
     const clickHelper = (id) => {
         (id == activeId) ? setActiveId(0) : setActiveId(id)
+        console.log(width)
     }
     return(
         <div>
