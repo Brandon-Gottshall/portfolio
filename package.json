@@ -1,45 +1,20 @@
 {
-  "name": "portfolio",
-  "homePage": "http://gottshall.dev",
-  "version": "0.1.2",
+  "name": "with-tailwindcss",
+  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "jump.js": "^1.0.2",
-    "radium": "^0.26.0",
-    "react": "^16.13.0",
-    "react-anime": "^3.0.3",
-    "react-card-flip": "^1.0.10",
-    "react-dom": "^16.13.0",
-    "react-google-font-loader": "^1.1.0",
-    "react-icons": "^3.9.0",
-    "react-pdf": "^4.1.0",
-    "react-scripts": "3.4.0",
-    "react-scroll": "^1.7.16",
-    "react-scroll-to": "^3.0.0-beta.6",
-    "react-transition-group": "^4.3.0"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "next": "latest",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
   }
 }
