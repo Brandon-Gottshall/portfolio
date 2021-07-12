@@ -15,15 +15,15 @@ export default function Home() {
       <main className="flex flex-col items-center justify-center flex-1 w-full px-20 text-center">
       <div className="flex flex-col items-center justify-center flex-grow w-64 pt-3 whitespace-nowrap">
         <h1 className="text-6xl font-bold text-red-500">Brandon Gottshall</h1>
-        <TextLoop className="transform-gpu" interval={3000} delay={1500}>
-          <h3 className="w-64 text-3xl font-thin">Freelance Developer</h3>
-          <TextLoop className="transform-gpu" interval={1500}>
-            <h3 className="w-64 text-3xl font-thin">Former Marine</h3>
-            <h3 className="w-64 text-3xl font-thin">Entrepreneur</h3>
+        <TextLoop className="transform-gpu" interval={1000}>
+          <h3 className="text-3xl font-thin w-96">Software Engineer</h3>
+          <h3 className="text-3xl font-thin w-96">Former Marine</h3>
+          <h3 className="text-3xl font-thin w-96">Entrepreneur</h3>
+          <h3 className="text-3xl font-thin w-96">Automation Enthusiast</h3>
+          <h3 className="text-3xl font-thin w-96">Second Brain Evangelist</h3>
           </TextLoop>
-        </TextLoop>
       </div>
-      <div className="flex justify-center mt-auto mb-10 transition transform -translate-y-2 duration-1500 transform-gpu group animate-bounce-quick justify-self-end hover:animate-none">
+      <div className="flex justify-center mt-auto mb-10 transition transform -translate-y-2 duration-1500 transform-gpu group animate-bounce justify-self-end hover:animate-none">
         <svg className="w-6 h-6 mt-2 transition transform -translate-y-2 fill-current duration-1500 transform-gpu animate-pulse text-amber-900 group-hover:text-red-500 animate-none" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
           <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>

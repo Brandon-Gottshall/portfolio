@@ -8,6 +8,9 @@ module.exports = {
         'bounce-quick': 'bounce .75s infinite'
       }
     },
+    minWidth: {
+      '1/2': '50%'
+    }
   },
   variants: {
     extend: {},
