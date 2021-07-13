@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
-        "SVGs"
-    ]
+        "SVGs",
+        "Scroller"
+    ],
+    "standard.enable": true,
 }
