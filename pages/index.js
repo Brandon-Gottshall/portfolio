@@ -22,7 +22,7 @@ const Home = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen py-2'>
+    <div className='flex flex-col items-center justify-center h-screen'>
       <Head>
         <title>Brandon Gottshall</title>
         <link rel='icon' href='/favicon.ico' />
@@ -34,7 +34,7 @@ const Home = () => {
         <Resume pageNumber={pageNumber} linkSafeguard={linkSafeguard} setPageNumber={setPageNumber} setLinkSafeguard={setLinkSafeguard} lockScroll={lockScroll} />
       </ReactPageScroller>
 
-      <footer className='flex items-center justify-between w-full h-16 pr-24 border-t'>
+      <footer className='flex items-center justify-between w-full h-16 pr-24 border-t nm-convex-white-lg'>
         <div className='flex items-center justify-between h-8 pl-2 pr-16 w-52'>
           <SocialIcon style={{ width: '4rem' }} url='https://www.linkedin.com/in/brandon-gottshall/' bgColor='#ffffff' fgColor='#000000' />
           <SocialIcon style={{ width: '4rem' }} url='https://github.com/Brandon-Gottshall' bgColor='#ffffff' fgColor='#000000' />
