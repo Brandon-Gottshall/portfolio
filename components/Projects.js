@@ -99,21 +99,7 @@ export default function Projects ({ pageNumber, linkSafeguard, setPageNumber, se
         : 'translate-x-off-screen-left duration-500'}`}
           >Projects
           </h3>
-          <div className='flex justify-between w-full mt-4 mb-2 sm:px-10'>
-            <div className={`flex w-full sm:w-auto transform-gpu items-center justify-center space-x-10 py-auto transform ${(linkSafeguard && pageNumber === 1) ? 'translate-x-0 animate-fade-in-from-right' : 'translate-x-off-screen-right duration-500'} w-auto whitespace-nowrap`}>
-              {languagesUsedArray.map((language) => (
-                <Tooltip key={`key_langTT_${language}`} tooltipText={language}>
-                  <div onClick={() => addFilter(language)}>
-                    <LanguageIcon
-                      key={`key_langIcon_${language}`} iconName={language} iconStyle='w-10 h-10 transform-gpu hover:animate-bounce' setFilters={setFilters}
-                    />
-                  </div>
-                </Tooltip>
-              ))}
-            </div>
-          </div>
           <div className='flex justify-center w-full h-full'>
-            <DotIndicator projects={projects} projectPageNumber={projectPageNumber} setProjectPageNumber={setProjectPageNumber} />
             <div
               onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col flex-grow w-full h-full overflow-y-scroll snap snap-y snap-mandatory'
             >
