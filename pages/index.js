@@ -8,7 +8,7 @@ const Home = () => {
     <div className='flex flex-col items-center justify-center h-screen'>
       <Head>
         <title>Brandon Gottshall</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='favicon.ico' />
       </Head>
 
       <main className='flex flex-col items-center justify-center w-full h-full px-20 text-center'>
