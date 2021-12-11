@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { SocialIcon } from 'react-social-icons'
+import { useAppContext } from '../context/AppContext'
 
 const Layout = ({ children }) => {
+  const { showTitleBool } = useAppContext()
   return (
     <div className='flex flex-col items-center justify-center h-screen'>
       <Head>
@@ -10,11 +12,12 @@ const Layout = ({ children }) => {
         <link rel='icon' href='favicon.ico' />
       </Head>
       <header className='absolute top-0 flex flex-row justify-end w-screen p-12 text-gray-600 body-font'>
+        <h1 className={'text-2xl font-bold text-red-500 transition duration-500 ease-in-out' + (showTitleBool ? '' : ' hidden')}>Brandon Gottshall</h1>
         <nav className='flex items-center justify-center text-base md:ml-auto'>
-          <Link className='mr-5 hover:text-gray-900' href=''>Projects</Link>
-          <Link className='mr-5 hover:text-gray-900' href=''>Resume</Link>
+          <Link href='/Projects'><a className='mr-5 hover:text-red-500'>Projects</a></Link>
+          <Link href='/Resume'><a className='mr-5 hover:text-red-500'>Resume</a></Link>
         </nav>
-        <button className='inline-flex items-center px-3 py-1 mt-4 text-base bg-gray-100 border-0 rounded focus:outline-none hover:bg-red-400 md:mt-0'>
+        <button className='inline-flex items-center px-6 py-1 mt-4 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded focus:outline-none hover:bg-black md:mt-0'>
           Contact Me
           <svg
             fill='none'

@@ -142,5 +142,5 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwindcss-scroll-snap'), flipCard]
+  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), flipCard]
 }

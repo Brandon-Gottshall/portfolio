@@ -20,7 +20,7 @@ export default function ProjectCard ({ title, description, languages, link, imag
 
   return mobile
     ? (
-      <div className='flex flex-col items-end justify-center flex-grow w-full min-h-full sm:min-h-0 sm:overflow-y-auto sm:pt-0 sm:mb-0 sm:mt-1 sm:h-96 sm:w-1/4 sm:py-12 snap-start'>
+      <div className='flex flex-col items-end justify-center flex-grow w-full min-h-full sm:min-h-0 sm:overflow-y-auto sm:pt-0 sm:mb-0 sm:mt-1 sm:h-96 sm:w-1/4 sm:py-12 -start'>
         <div className={`w-10/12 mb-8 mr-6 h-5/6 sm:py-3 sm:mx-auto smooth-flip ${flipped ? 'flipped-card' : ''}`} onClick={cardFlipper}>
           <div className={flipped ? 'flipped-card-inner' : 'flip-card-inner-mobile'}>
             <div className={`flex flex-col items-center h-full transition-shadow nm-convex-gray-400-sm rounded-3xl ${flipped ? 'flipped-card-front' : 'flip-card-front'} sm:py-4`}>
@@ -49,7 +49,7 @@ export default function ProjectCard ({ title, description, languages, link, imag
       </div>
       )
     : (
-      <div className='flex flex-col items-center justify-center flex-grow w-full min-h-full sm:min-h-0 sm:overflow-y-auto sm:pt-0 sm:mb-0 sm:mt-1 sm:h-96 sm:w-1/4 sm:py-12 snap-start'>
+      <div className='flex flex-col items-center justify-center flex-grow w-full min-h-full sm:min-h-0 sm:overflow-y-auto sm:pt-0 sm:mb-0 sm:mt-1 sm:h-96 sm:w-1/4 sm:py-12 -start'>
         <div className='w-4/5 mb-8 h-5/6 sm:py-3 sm:mx-auto smooth-flip flip-card'>
           <div className={'flip-card-inner ' + buttonStyle} onClick={toggleButtonStyle}>
             <div className='flex flex-col items-center h-full transition-shadow flip-card-front sm:py-4 rounded-3xl'>

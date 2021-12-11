@@ -6,9 +6,8 @@ import { LanguageIcon } from './LanguageIcon'
 import Tooltip from './Tooltip'
 import projectsData from '../data/projects.json'
 import useWindowSize from '../util/useWindowSize'
-import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 
-export default function Projects ({ pageNumber, linkSafeguard, setPageNumber, setLinkSafeguard, lockScroll, unlockScroll }) {
+export default function ProjectComponent ({ pageNumber, linkSafeguard, setPageNumber, setLinkSafeguard, lockScroll, unlockScroll }) {
   const openPage1 = async () => {
     unlockScroll()
     setLinkSafeguard(false)
@@ -101,7 +100,7 @@ export default function Projects ({ pageNumber, linkSafeguard, setPageNumber, se
           </h3>
           <div className='flex justify-center w-full h-full'>
             <div
-              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col flex-grow w-full h-full overflow-y-scroll snap snap-y snap-mandatory'
+              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col flex-grow w-full h-full overflow-y-scroll '
             >
               {projects.map((project, index) => {
                 const { name, description, url, languages } = project
