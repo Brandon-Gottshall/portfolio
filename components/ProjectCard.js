@@ -35,10 +35,10 @@ export default function ProjectCard ({ title, description, languages, link, imag
                 <div className='flex flex-wrap self-end justify-center w-full h-auto pb-2 mb-1'>
                   {languages
                     ? languages.map((language) => {
-                      console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
-                      return (<LanguageIcon key={`key_projectcard_${language}_icon`} iconName={language} iconStyle={iconStyleMobile} />
-                      )
-                    })
+                        console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
+                        return (<LanguageIcon key={`key_projectcard_${language}_icon`} iconName={language} iconStyle={iconStyleMobile} />
+                        )
+                      })
                     : ([<LanguageIcon key='key_projectcard_ex1_icon' iconName='Flutter' iconStyle={iconStyle} />,
                       <LanguageIcon key='key_projectcard_ex2_icon' iconName='JS' iconStyle={iconStyle} />])}
                 </div>
@@ -64,10 +64,10 @@ export default function ProjectCard ({ title, description, languages, link, imag
                 <div className='flex flex-wrap self-end justify-center w-full h-auto pb-2 mb-1'>
                   {languages
                     ? languages.map((language) => {
-                      console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
-                      return (<LanguageIcon key={`key_projectcard_${language}_icon`} iconName={language} iconStyle={iconStyle} />
-                      )
-                    })
+                        console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
+                        return (<LanguageIcon key={`key_projectcard_${language}_icon`} iconName={language} iconStyle={iconStyle} />
+                        )
+                      })
                     : ([<LanguageIcon key='key_projectcard_ex1_icon' iconName='Flutter' iconStyle={iconStyle} />,
                       <LanguageIcon key='key_projectcard_ex2_icon' iconName='JS' iconStyle={iconStyle} />])}
                 </div>
