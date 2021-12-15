@@ -1,6 +1,5 @@
 import { LanguageIcon, iconList } from './LanguageIcon'
 import { useState } from 'react'
-import { ScrollIntoViewIfNeeded } from 'react-scroll-into-view-if-needed'
 
 export default function ProjectCard ({ title, description, languages, link, imageURI, mobile }) {
   const iconStyle = 'w-4 h-4 ml-1'
@@ -16,7 +15,7 @@ export default function ProjectCard ({ title, description, languages, link, imag
   const cardFlipper = () => {
     setFlipped(!flipped)
   }
-  console.dir({ title, description, languages, link, imageURI })
+  // console.dir({ title, description, languages, link, imageURI })
 
   return mobile
     ? (
@@ -64,7 +63,7 @@ export default function ProjectCard ({ title, description, languages, link, imag
                 <div className='flex flex-wrap self-end justify-center w-full h-auto pb-2 mb-1'>
                   {languages
                     ? languages.map((language) => {
-                        console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
+                        // console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
                         return (<LanguageIcon key={`key_projectcard_${language}_icon`} iconName={language} iconStyle={iconStyle} />
                         )
                       })

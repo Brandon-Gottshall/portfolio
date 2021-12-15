@@ -1,9 +1,6 @@
 import { Document, Page, pdfjs } from 'react-pdf'
 import useWindowSize from '../util/useWindowSize'
 import { useEffect, useRef, useState } from 'react'
-// import dynamic from 'next/dynamic'
-// import BouncingLink from './BouncingLink'
-import BouncingArrow from '../components/BouncingArrow'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
