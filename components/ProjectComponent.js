@@ -52,7 +52,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           </div>
         </div>
         <div
-          onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
+          onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap justify-center mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
         >
           {projects.map(({ title, description, languages, link, imageURI }) => {
             console.log(JSON.stringify(
@@ -66,8 +66,8 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
               }
             ))
 
-            return (<ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile={false} />) 
-}
+            return (<ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile={false} />)
+          }
           )}
         </div>
       </main>
