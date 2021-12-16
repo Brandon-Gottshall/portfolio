@@ -55,16 +55,16 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap justify-center mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
         >
           {projects.map(({ title, description, languages, link, imageURI }) => {
-            console.log(JSON.stringify(
-              {
-                title: title,
-                description: description,
-                languages: languages,
-                link: link,
-                imageURI: imageURI,
-                mobile: false
-              }
-            ))
+            // console.log(JSON.stringify(
+            //   {
+            //     title: title,
+            //     description: description,
+            //     languages: languages,
+            //     link: link,
+            //     imageURI: imageURI,
+            //     mobile: false
+            //   }
+            // ))
 
             return (<ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile={false} />)
           }
@@ -82,7 +82,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           </h3>
           <div className='flex justify-center w-full h-full'>
             <div
-              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col flex-grow w-full h-full overflow-y-scroll '
+              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col w-full h-full overflow-y-scroll '
             >
               {projects.map((project, index) => {
                 const { name, description, url, languages } = project
@@ -107,12 +107,3 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
     )
   }
 }
-// <div className={`flex w-1/4 items-center justify-center space-x-1 transform ${(linkSafeguard && pageNumber === 1) ? 'translate-x-0 animate-fade-in-from-left' : 'translate-x-off-screen-left duration-500'}  w-96 whitespace-nowrap`}>
-// <DeviceIcon deviceIconStyle linkSafeguard deviceName='web' altText='I develop for web.' tooltipText='Web Development' />
-// <DeviceIcon deviceIconStyle linkSafeguard deviceName='desktop-mobile' altText='I develop for Desktop, tablets, and mobile.' tooltipText='Standalone Software (Desktop, Mobile, Tablet etc.)' />
-// <DeviceIcon deviceIconStyle linkSafeguard deviceName='cloud' altText='I develop for cloud Solutions. GCP and Firebase Primarily' tooltipText='Cloud Development (GCP, Firebase)' />
-// </div>
-
-// {projectsData.filter(({ languages }) => languages.some(languages => languages.includes(filters))).map(({ title, description, languages, link, imageURI }, index) => {
-//   return (<ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile />)
-// })}

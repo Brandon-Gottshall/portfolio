@@ -15,7 +15,7 @@ const flipCard = plugin(function ({ addUtilities }) {
     },
     /* This container is needed to position the front and back side */
     '.flip-card-body': {
-      textAlign: 'center'
+      textAlign: 'left'
     },
     /* Style the front side (fallback if image is missing) */
     '.flip-card-front': {
@@ -104,5 +104,5 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), flipCard]
+  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar'), flipCard]
 }
