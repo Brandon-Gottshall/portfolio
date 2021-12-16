@@ -11,7 +11,7 @@ export default function ProjectCard ({
   const iconStyle = 'w-4 h-4 ml-1'
 
   return (
-    <div className='flex flex-col items-center justify-center w-64 h-56 m-2 bg-red-200 rounded-lg sm:min-h-0 sm:overflow-y-auto sm:pt-0'>
+    <div className='flex flex-col items-center justify-center w-64 h-56 m-2 bg-red-700 rounded-lg sm:min-h-0 sm:overflow-y-auto sm:pt-0'>
       <div className='w-11/12 h-full sm:mx-auto flip-card'>
         <div className='flip-card-body'>
           <div className='h-full flip-card-front'>
@@ -28,7 +28,7 @@ export default function ProjectCard ({
           </div>
           <div className='flex flex-col items-center flip-card-back rounded-3xl'>
             <div className='flex flex-col justify-between w-full h-full pt-2'>
-              <p className='flex-grow mt-1 overflow-visible scrollbar-thin scrollbar-thumb-red-300 scrollbar-track-white hover:scrollbar-thumb-red-500'>
+              <p className='flex-grow mt-1 overflow-visible scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white hover:scrollbar-thumb-black'>
                 {description ||
                   "This is a project description. It has many words. It's a placeholder for the description to come."}
               </p>
@@ -41,6 +41,7 @@ export default function ProjectCard ({
                           key={`key_projectcard_${language}_icon`}
                           iconName={language}
                           iconStyle={iconStyle}
+                          color='white'
                         />
                       )
                     })
