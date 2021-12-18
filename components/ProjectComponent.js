@@ -1,7 +1,6 @@
 
 import ProjectCard from './ProjectCard'
-import { LanguageIcon } from './LanguageIcon'
-import Tooltip from './Tooltip'
+import LanguageSelectionIcon from './LanguageSelectionIcon'
 import projectsData from '../data/projects.json'
 import useWindowSize from '../util/useWindowSize'
 import { useState, useEffect } from 'react'
@@ -38,15 +37,9 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           >Projects
           </h3>
           <div className='flex justify-between w-full mt-4 mb-2 overflow-x-scroll scrollbar-hide sm:px-10'>
-            <div className='flex items-center justify-center w-full pt-8 space-x-10 transform translate-x-0 sm:w-auto transform-gpu py-auto animate-fade-in-from-right whitespace-nowrap'>
+            <div className='flex items-center justify-center w-full pt-8 space-x-10 transform translate-x-0 transform-gpu py-auto animate-fade-in-from-right whitespace-nowrap'>
               {languagesUsedArray.map((language) => (
-                <Tooltip key={`key_langTT_${language}`} tooltipText={language}>
-                  <div onClick={() => modifyFilters(language)}>
-                    <LanguageIcon
-                      key={`key_langIcon_${language}`} iconName={language} iconStyle='w-10 h-10 transform-gpu hover:animate-bounce'
-                    />
-                  </div>
-                </Tooltip>
+                LanguageSelectionIcon({ language, modifyFilters: (language) => modifyFilters(language), filters })
               ))}
             </div>
           </div>

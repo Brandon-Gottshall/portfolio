@@ -23,12 +23,12 @@ export default function ProjectCard ({
                   alt=''
                 />
               </div>
-              <h2 className='my-2 text-2xl font-thin'>{title || 'Crime NY'}</h2>
+              <h2 className='my-2 text-xl text-white'>{title || 'Crime NY'}</h2>
             </div>
           </div>
           <div className='flex flex-col items-center flip-card-back rounded-3xl'>
             <div className='flex flex-col justify-between w-full h-full pt-2'>
-              <p className='flex-grow mt-1 overflow-visible scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white hover:scrollbar-thumb-black'>
+              <p className='flex-grow mt-1 overflow-visible scrollbar-thin scrollbar-thumb-black scrollbar-track-white text-shadow-white'>
                 {description ||
                   "This is a project description. It has many words. It's a placeholder for the description to come."}
               </p>

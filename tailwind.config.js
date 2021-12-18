@@ -45,6 +45,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      textShadow: {
+        white: '0 0.3px 2px #ffffff, 0 -0.3px 2px #ffffff, 0.3px 0 2px #ffffff, -0.3px 0 2px #ffffff',
+        black: '0 0.3px 2px #000000, 0 -0.3px 2px #000000, 0.3px 0 2px #000000, -0.3px 0 2px #000000'
+      },
       keyframes: {
         'fade-in-down': {
           '0%': {
@@ -104,5 +108,5 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar'), flipCard]
+  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar'), require('tailwindcss-textshadow'), flipCard]
 }
