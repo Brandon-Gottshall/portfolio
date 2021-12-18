@@ -12,7 +12,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
 
   useEffect(() => {
     console.log(`filters: ${JSON.stringify(filters, null, 1)}`)
-    setProjects(projectsData.filter(({ languages }) => languages.some(languages => languages.includes(filters))))
+    setProjects(projectsData.filter(({ languages }) => filters.every(language => languages.includes(language))))
   }, [filters])
 
   const languagesUsed = new Set(projectsData.map(({ languages }) => languages.map(language => language)).flat())
@@ -33,7 +33,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
       <main className='flex flex-col items-center justify-start w-screen h-full text-center'>
         <div className='flex flex-col items-center justify-center w-full mt-4 sm:px-20'>
           <h3
-            className='text-2xl font-thin text-red-500 transform translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
+            className='mt-10 text-2xl font-thin text-red-500 transform translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
           >Projects
           </h3>
           <div className='flex justify-between w-full mt-4 mb-2 overflow-x-scroll scrollbar-hide sm:px-10'>
