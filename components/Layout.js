@@ -17,20 +17,22 @@ const Layout = ({ children }) => {
           <div className='flex items-center justify-end w-1/3 mr-8'>
             <Link href='/Projects'><a className='mr-5 hover:text-red-500'>Projects</a></Link>
             <Link href='/Resume'><a className='mr-5 hover:text-red-500'>Resume</a></Link>
-            <button className='inline-flex items-center w-32 h-12 px-6 py-1 mt-4 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black md:mt-0'>
-              Contact Me
-              <svg
-                fill='none'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                className='w-4 h-4 ml-1'
-                viewBox='0 0 24 24'
-              >
-                <path d='M5 12h14M12 5l7 7-7 7' />
-              </svg>
-            </button>
+            <Link href='/Contact'>
+              <button className='inline-flex items-center w-32 h-12 px-6 py-1 mt-4 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black md:mt-0'>
+                Contact Me
+                <svg
+                  fill='none'
+                  stroke='currentColor'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  className='w-4 h-4 ml-1'
+                  viewBox='0 0 24 24'
+                >
+                  <path d='M5 12h14M12 5l7 7-7 7' />
+                </svg>
+              </button>
+            </Link>
           </div>
         </nav>
       </header>
