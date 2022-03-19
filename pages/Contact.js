@@ -66,6 +66,7 @@ export default Contact
 async function submitHelper ({ email, number, inquiry }) {
   console.log({ source: 'submitHelper', email, number, inquiry })
   const res = await fetch('/api/sendEmail', { // eslint-disable-line no-undef
+    headers: { 'Content-Type': 'application/json' },
     method: 'POST',
     mode: 'no-cors', // TODO: remove this
     credentials: 'same-origin',

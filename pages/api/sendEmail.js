@@ -12,7 +12,7 @@ export default function sendEmail (req, res) {
     html: `<p>Email: ${email}</p><p>Number: ${number}</p><p>Inquiry: ${inquiry}</p>`
   }
   console.log(message)
-  sgMail.send(message).send(message)
+  sgMail.send(message)
     .then(() => {
       console.log('Email sent')
     })
