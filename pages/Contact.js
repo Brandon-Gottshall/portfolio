@@ -8,17 +8,17 @@ function Contact () {
       number: '',
       inquiry: ''
     },
-    onSubmit: values => {
-      console.log(JSON.stringify(values, null, 2))
-    }
+    onSubmit: async values => {
+      await submitHelper(values)
+    },
+    enableReinitialize: true
   })
-  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-full mt-60'>
       <h1 className='text-2xl text-red-500'>Contact Me</h1>
       <form onSubmit={formik.handleSubmit} className='flex flex-col items-center w-full h-full mt-8'>
-        <div className='flex items-center justify-center space-x-6'>
+        <div className='flex flex-col items-center justify-center'>
           <div className='flex flex-col items-center justify-center'>
             <label htmlFor='email' className='text-xl font-thin'>Email Address</label>
             <input
@@ -30,11 +30,9 @@ function Contact () {
               value={formik.values.email}
             />
           </div>
-          <h1 className='text-xl font-thin'>And / Or</h1>
           <div className='flex flex-col items-center justify-center'>
             <label htmlFor='tel' className='text-xl font-thin'>Phone Number</label>
             <PhoneInput
-              placeholder='Enter phone number'
               withCountryCallingCode={false}
               country='US'
               id='tel'
@@ -48,10 +46,10 @@ function Contact () {
         </div>
         <div className='flex flex-col items-center justify-center w-full h-1/2'>
           <label htmlFor='text' className='text-xl font-thin'>Inquiry</label>
-          <textArea
+          <input
             id='inquiry'
             name='inquiry'
-            type='text'
+            type='textArea'
             className='w-2/3 h-full p-2 mb-4 border-2 border-gray-600 rounded-lg'
             onChange={formik.handleChange}
             value={formik.values.inquiry}
@@ -64,3 +62,17 @@ function Contact () {
 }
 
 export default Contact
+
+async function submitHelper ({ email, number, inquiry }) {
+  console.log({ source: 'submitHelper', email, number, inquiry })
+  const res = await fetch('/api/sendEmail', { // eslint-disable-line no-undef
+    method: 'POST',
+    mode: 'no-cors', // TODO: remove this
+    credentials: 'same-origin',
+    body: JSON.stringify({ email, number, inquiry })
+  }).then(res => res.json())
+  // }).catch(err => {
+  //   console.log(`Error from submitHelper: ${JSON.stringify(err, null, 2)}`)
+  // })
+  console.log(`Response from submitHelper: ${JSON.stringify(res, null, 4)}`)
+}

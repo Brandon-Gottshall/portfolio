@@ -6,7 +6,8 @@
         "projectcard",
         "pspdfkit",
         "Scroller",
-        "SVGs"
+        "SVGs",
+        "vcard"
     ],
     "standard.enable": true,
 }
