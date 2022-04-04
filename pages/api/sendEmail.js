@@ -2,11 +2,11 @@
 
 export default function sendEmail (req, res) {
   const sgMail = require('@sendgrid/mail')
-  sgMail.setApiKey(process.env.SENDGRID)
-  const { email, number, inquiry } = req.body
+  const { email, number, inquiry, apiKey } = req.body
+  sgMail.setApiKey(process.env.SENDGRID || apiKey)
   console.log({ email, number, inquiry })
   const message = {
-    from: 'me+portfolio@brandongottshall.com',
+    from: 'blgottshall@gmail.com',
     to: 'blgottshall@gmail.com',
     subject: 'Portfolio Inquiry',
     html: `<p>Email: ${email}</p><p>Number: ${number}</p><p>Inquiry: ${inquiry}</p>`
@@ -18,6 +18,7 @@ export default function sendEmail (req, res) {
     })
     .catch((error) => {
       console.error(error)
+      console.error(JSON.stringify(error.response.body, null, 2))
     })
-  res.end(JSON.stringify({ test: 'test', email, number, inquiry }))
+  res.end(JSON.stringify({ test: 'test', email, number, inquiry, apiKey }))
 }
