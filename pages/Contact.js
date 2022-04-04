@@ -75,5 +75,9 @@ async function submitHelper ({ email, number, inquiry }) {
   // }).catch(err => {
   //   console.log(`Error from submitHelper: ${JSON.stringify(err, null, 2)}`)
   // })
+<<<<<<< HEAD
   console.log(`Response from submitHelper: ${JSON.stringify(res, null, 4)}`)
+=======
+  console.log(`Response from submitHelper: ${JSON.stringify(res.body, null, 4)}`)
+>>>>>>> a119a24d2ffb5347177511f8865107f7511812e8
 }
