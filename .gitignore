@@ -33,3 +33,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# bfg
+bfg.jar
+..bfg-report

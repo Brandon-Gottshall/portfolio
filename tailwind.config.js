@@ -41,8 +41,7 @@ const flipCard = plugin(function ({ addUtilities }) {
 
 module.exports = {
   mode: 'jit',
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       textShadow: {
@@ -107,6 +106,5 @@ module.exports = {
       }
     }
   },
-  variants: {},
   plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar'), require('tailwindcss-textshadow'), flipCard]
 }
