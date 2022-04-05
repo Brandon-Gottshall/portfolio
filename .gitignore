@@ -32,3 +32,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+.env
+secrets.txt
+bfg.jar
+*.txt
