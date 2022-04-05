@@ -37,3 +37,4 @@ yarn-error.log*
 # bfg
 bfg.jar
 ..bfg-report
+secrets.txt
