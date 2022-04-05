@@ -24,7 +24,7 @@
   {
     "title": "Strategy HR",
     "description": "Company Site of Strategy HR Solutions an HR consulting & Solutions company out of Brooklyn NY.",
-    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Vercel Serverless Functions"],
+    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://ipixcovid19tracker.com",
     "imageURI": "public/"
   },

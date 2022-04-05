@@ -1,11 +1,13 @@
 {
     "cSpell.words": [
-        "SVGs",
-        "Scroller",
+        "afill",
         "cdnjs",
         "phuocng",
         "projectcard",
-        "pspdfkit"
+        "pspdfkit",
+        "Scroller",
+        "SVGs",
+        "vcard"
     ],
     "standard.enable": true,
 }

@@ -3,86 +3,51 @@ const plugin = require('tailwindcss/plugin')
 // Rotate X utilities
 const flipCard = plugin(function ({ addUtilities }) {
   addUtilities({
-    '.smooth-flip > *': {
+    '.flip-card': {
+      /* Do an horizontal flip when you move the mouse over the flip box container */
+      perspective: '40rem',
       transition: 'transform 0.8s',
       transformStyle: 'preserve-3d',
-      perspective: '1000px'
-    },
-    '.flip-card': {
-      perspective: '1000px',
       /* Do an horizontal flip when you move the mouse over the flip box container */
       '&:hover': {
-        transform: 'rotateY(180deg)'
+        transform: 'rotateX(180deg)'
       }
-    },
-    '.flipped-card': {
-      perspective: '1000px',
-      transform: 'rotateY(180deg)'
     },
     /* This container is needed to position the front and back side */
-    '.flip-card-inner': {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      textAlign: 'center',
-      transform: 'rotateY(0deg)',
-      /* Do an horizontal flip when you move the mouse over the flip box container */
-      '&:hover': {
-        transform: 'rotateY(180deg)'
-      }
+    '.flip-card-body': {
+      textAlign: 'left'
     },
-    '.flip-card-inner-mobile': {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      textAlign: 'center'
-    },
-    '.flipped-card-inner': {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      textAlign: 'center',
-      transform: 'rotateY(180deg)'
-      // webkitBackfaceVisibility: 'hidden', /* Safari */
-      // backfaceVisibility: 'hidden'
-    },
-
     /* Style the front side (fallback if image is missing) */
     '.flip-card-front': {
+      backfaceVisibility: 'hidden',
       position: 'absolute',
+      top: 0,
+      left: 0,
       width: '100%',
-      height: '100%',
-      transform: 'rotateY(0deg)'
+      height: '100%'
     },
-    '.flipped-card-front': {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      transform: 'rotateY(180deg)'
-    },
-
     /* Style the back side */
     '.flip-card-back': {
+      backfaceVisibility: 'hidden',
       position: 'absolute',
+      top: 0,
+      left: 0,
       width: '100%',
       height: '100%',
-      transform: 'rotateY(180deg)'
-    },
-    '.flipped-card-back': {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      transform: 'rotateY(0deg)'
+      transform: 'rotateX(-180deg)'
     }
   })
 })
 
 module.exports = {
   mode: 'jit',
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      textShadow: {
+        white: '0 0.3px 2px #ffffff, 0 -0.3px 2px #ffffff, 0.3px 0 2px #ffffff, -0.3px 0 2px #ffffff',
+        black: '0 0.3px 2px #000000, 0 -0.3px 2px #000000, 0.3px 0 2px #000000, -0.3px 0 2px #000000'
+      },
       keyframes: {
         'fade-in-down': {
           '0%': {
@@ -141,6 +106,5 @@ module.exports = {
       }
     }
   },
-  variants: {},
-  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), flipCard]
+  plugins: [require('tailwindcss-neumorphism'), require('tailwind-scrollbar-hide'), require('tailwind-scrollbar'), require('tailwindcss-textshadow'), flipCard]
 }
