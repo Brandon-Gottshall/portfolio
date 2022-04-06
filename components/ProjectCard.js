@@ -9,17 +9,20 @@ export default function ProjectCard ({
   mobile
 }) {
   const iconStyle = 'w-4 h-4 ml-1'
+  const imageLink = imageURI || '/portfolioScreenshot.png'
+  console.log(imageURI)
 
   return (
     <div className='flex flex-col items-center justify-center w-64 h-56 m-2 bg-red-700 rounded-lg sm:min-h-0 sm:overflow-y-auto sm:pt-0'>
-      <div className='w-11/12 h-full sm:mx-auto flip-card'>
+      <div className='w-full h-full flip-card'>
         <div className='flip-card-body'>
           <div className='h-full flip-card-front'>
-            <div className='flex flex-col items-center justify-between h-full py-1 flip-card-front rounded-3xl'>
-              <div className='flex items-center justify-center w-full h-auto overflow-visible rounded-2xl'>
+            <div className='flex flex-col items-center justify-start w-full h-full rounded-3xl flip-card-front'>
+              <div className='flex items-start justify-center w-full h-auto overflow-hidden rounded-sm'>
                 <img
-                  className='w-full h-full p-1 rounded-sm'
-                  src='/portfolioScreenshot.png'
+                  className='flex w-full p-2 rounded-xl'
+                  style={{ height: '11.2em' }}
+                  src={imageLink}
                   alt=''
                 />
               </div>

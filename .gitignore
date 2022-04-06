@@ -38,3 +38,4 @@ yarn-error.log*
 bfg.jar
 ..bfg-report
 secrets.txt
+yarn.lock
