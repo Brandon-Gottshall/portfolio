@@ -15,7 +15,7 @@ function Contact () {
   })
 
   return (
-    <div className='flex flex-col items-center justify-center w-full min-h-full mt-60'>
+    <div className='flex flex-col items-center justify-center w-full min-h-full'>
       <h1 className='text-2xl text-red-500'>Contact Me</h1>
       <form onSubmit={formik.handleSubmit} className='flex flex-col items-center w-full h-full mt-8'>
         <div className='flex flex-col items-center justify-center'>

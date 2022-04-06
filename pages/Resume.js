@@ -1,45 +1,25 @@
 import { Document, Page, pdfjs } from 'react-pdf'
 import useWindowSize from '../util/useWindowSize'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
-export default function Resume ({
-  pageNumber, linkSafeguard, setPageNumber, setLinkSafeguard, lockScroll
-}) {
-  const [pdfScrollYPos, setPdfScrollYPos] = useState(null)
+export default function Resume () {
   const [pdfScale, setPDFScale] = useState(1.2)
-  const pdfContainerRef = useRef()
   const windowSize = useWindowSize()
-
-  useEffect(() => {
-    if (pageNumber === 2) {
-      pdfScrollYPos >= 1
-        ? lockScroll(true)
-        : lockScroll(false)
-    }
-  }, [pdfScrollYPos])
-
-  const onScroll = () => {
-    setPdfScrollYPos(pdfContainerRef.current.scrollTop)
-  }
-
-  const openPage2 = async () => {
-    setLinkSafeguard(false)
-    setPageNumber(1)
-    setTimeout(() => {
-      setLinkSafeguard(true)
-    }, 800)
-  }
-
   return (
-    <main className='flex flex-col items-center justify-between w-screen h-full px-2 mt-24 text-center md:px-20'>
+    <main className='flex flex-col items-center justify-between w-screen h-full px-2 text-center md:px-20'>
       <div className='flex items-center justify-start w-screen' />
-      <div className='flex items-start justify-center flex-grow w-screen overflow-y-auto nm-convex-gray-300-lg' ref={pdfContainerRef} onScroll={onScroll}>
+      <div className='flex items-start justify-center flex-grow w-screen overflow-y-auto nm-convex-gray-300-lg'>
         <Document file='./resume.pdf' className='flex flex-col items-center justify-center flex-grow overflow-y-auto width-full'>
-          <div className='flex items-center justify-between w-full mt-6'>
+          <div className='flex items-center justify-between w-full mt-12 mb-6'>
             <div className='w-1/2 '>
-              <a href='resume.pdf' download='BrandonGottshallResume' className='w-32 px-6 py-3 mt-12 text-lg text-white rounded-sm text-thin nm-convex-red-500-xs nm-convex-red'>Download</a>
+              <a
+                href='resume.pdf' download="Brandon Gottshall\'s Resume"
+                className='w-32 px-6 py-3 mt-12 text-lg text-white rounded-sm text-thin nm-convex-red-500-xs nm-convex-red'
+              >
+                Download
+              </a>
             </div>
             <div className='flex items-center justify-center w-1/2 space-x-4 sm:p-6'>
               <div className='w-10 h-auto text-4xl text-center rounded-lg select-none nm-convex-gray-300-xs' onClick={() => setPDFScale(pdfScale - 0.1)}>-</div>
@@ -60,7 +40,19 @@ export default function Resume ({
             renderAnnotationLayer={false}
             renderTextLayer={false}
           />
-          <a href='resume.pdf' download='BrandonGottshallResume' className='text-2xl text-white rounded-sm text-thin nm-convex-red-500-xs nm-convex-red'>Download</a>
+          {/*
+        // TODO  Change Resume Projects blurb "Links available on my personal site"
+        // TODO  **Maybe** make text selectable and copyable
+        // TODO  **Maybe** make text clickable and open in new tab
+      */}
+          <div className='flex items-center justify-center w-full mb-12 h-1/12'>
+            <a
+              href='resume.pdf' download="Brandon Gottshall\'s Resume"
+              className='w-32 px-6 py-3 text-lg text-white rounded-sm mb-18 text-thin nm-convex-red-500-xs nm-convex-red'
+            >
+              Download
+            </a>
+          </div>
         </Document>
       </div>
     </main>
