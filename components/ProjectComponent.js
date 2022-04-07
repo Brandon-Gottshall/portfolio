@@ -33,11 +33,11 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
       <main className='flex flex-col items-center justify-start w-screen h-full text-center'>
         <div className='flex flex-col items-center justify-center w-full mt-4 sm:px-20'>
           <h3
-            className='mt-10 text-2xl font-thin text-red-500 transform translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
+            className='mt-10 text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
           >Projects
           </h3>
           <div className='flex justify-between w-full mt-4 mb-2 overflow-x-scroll scrollbar-hide sm:px-10'>
-            <div className='flex items-center justify-center w-full pt-8 space-x-10 transform translate-x-0 transform-gpu py-auto animate-fade-in-from-right whitespace-nowrap'>
+            <div className='flex items-center justify-center w-full pt-8 space-x-10 translate-x-0 transform-gpu py-auto animate-fade-in-from-right whitespace-nowrap'>
               {languagesUsedArray.map((language) => (
                 LanguageSelectionIcon({ language, modifyFilters: (language) => modifyFilters(language), filters })
               ))}
