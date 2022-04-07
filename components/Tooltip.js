@@ -18,7 +18,7 @@ export default function Tooltip ({ children, tooltipText, color }) {
   }
   return (
     <div
-      className='relative flex items-center justify-center'
+      className='relative flex items-center justify-center w-auto'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -35,13 +35,3 @@ export default function Tooltip ({ children, tooltipText, color }) {
     </div>
   )
 }
-
-// <div
-//   className='absolute flex flex-col items-center w-auto h-auto px-4 py-2 text-black transition-all duration-150 rounded-sm'
-//   style={{ marginLeft: 0, top: '100%', opacity: 0 }}
-//   ref={topTipRef}
-// >
-//   <p className='w-full text-xs text-center text-black whitespace-nowrap'>
-//     Click to filter projects
-//   </p>
-// </div>
