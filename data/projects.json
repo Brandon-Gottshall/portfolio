@@ -3,8 +3,8 @@
     "title": "Crime NY",
     "description": "A historical experience of the ever changing climate of crime in NYC. Using data from NYC Open Data",
     "languages": ["React", "JS"],
-    "link": "",
-    "imageURI": "public/"
+    "link": "/sorryWIP",
+    "imageURI": "/crimeNY.gif"
   },
   {
     "title": "Dog Park",
@@ -12,27 +12,27 @@
     "languages": ["Next.js", "React", "Tailwind", "JS", "Ruby",
       "Rails"],
     "link": "https://dog-park.vercel.app",
-    "imageURI": "public/"
+    "imageURI": "/dogPark.gif"
   },
   {
-    "title": "IPIX COVID-19 Tracker",
+    "title": "IPIX COVID Tracker",
     "description": "Created on behalf of Innovation Pharmaceuticals utilizing data from John Hopkins. This site is static and rebuilt on a daily basis to keep the information current.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
     "link": "https://ipixcovid19tracker.com",
-    "imageURI": "public/"
+    "imageURI": "/tracker.gif"
   },
   {
     "title": "Strategy HR",
     "description": "Company Site of Strategy HR Solutions an HR consulting & Solutions company out of Brooklyn NY.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
-    "link": "https://ipixcovid19tracker.com",
-    "imageURI": "public/"
+    "link": "https://www.strategyhrsolutions.com",
+    "imageURI": "/strategy.gif"
   },
   {
     "title": "My Portfolio",
     "description": "You're on it! My own Personal Portfolio",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
-    "link": "https://ipixcovid19tracker.com",
-    "imageURI": "public/"
+    "link": "https://www.brandongottshall.com",
+    "imageURI": ""
   }
 ]

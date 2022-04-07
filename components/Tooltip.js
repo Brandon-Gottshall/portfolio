@@ -1,6 +1,7 @@
 import React from 'react'
 
-export default function Tooltip ({ children, tooltipText }) {
+export default function Tooltip ({ children, tooltipText, color }) {
+  console.log(color)
   // const bottomTipRef = React.createRef(null)
   const topTipRef = React.createRef(null)
   function handleMouseEnter () {
@@ -17,16 +18,16 @@ export default function Tooltip ({ children, tooltipText }) {
   }
   return (
     <div
-      className='relative flex items-center justify-center'
+      className='relative flex items-center justify-center w-auto'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className='absolute flex flex-col items-center w-auto h-auto px-4 py-2 text-black transition-all duration-150 rounded-sm'
+        className={`absolute flex flex-col items-center w-auto h-auto px-4 py-2 transition-all duration-150 rounded-sm text-${color || 'black'} ${color ? 'bg-white' : ''}`}
         style={{ marginLeft: 0, bottom: '50%', opacity: 0 }}
         ref={topTipRef}
       >
-        <p className='w-full text-lg font-thin text-center text-black whitespace-nowrap'>
+        <p className='w-full text-lg font-thin text-center whitespace-nowrap'>
           {tooltipText}
         </p>
       </div>
@@ -34,13 +35,3 @@ export default function Tooltip ({ children, tooltipText }) {
     </div>
   )
 }
-
-// <div
-//   className='absolute flex flex-col items-center w-auto h-auto px-4 py-2 text-black transition-all duration-150 rounded-sm'
-//   style={{ marginLeft: 0, top: '100%', opacity: 0 }}
-//   ref={topTipRef}
-// >
-//   <p className='w-full text-xs text-center text-black whitespace-nowrap'>
-//     Click to filter projects
-//   </p>
-// </div>
