@@ -14,15 +14,14 @@ export default function ProjectCard ({
   console.log(imageURI)
 
   return (
-    <a target='_blank' href={link} rel='noopener noreferrer' className='flex flex-col items-center justify-center w-64 h-56 m-2 bg-white shadow-lg rounded-xl sm:min-h-0 sm:overflow-y-auto sm:pt-0'>
+    <a target='_blank' href={link} rel='noopener noreferrer' className='flex flex-col items-center justify-center w-64 h-56 m-2 bg-white shadow-lg rounded-xl sm:min-h-0 sm:overflow-y-auto sm:pt-0 lg:w-96 lg:h-72'>
       <div className='w-full h-full flip-card'>
         <div className='flip-card-body'>
           <div className='h-full flip-card-front'>
             <div className='flex flex-col items-center justify-start w-full h-full rounded-3xl flip-card-front'>
               <div className='flex items-start justify-center w-full h-auto overflow-hidden rounded-sm'>
                 <img
-                  className='flex w-full p-2 rounded-2xl'
-                  style={{ height: '11.2em' }}
+                  className='flex w-full h-48 p-2 lg:h-64 rounded-2xl'
                   src={imageLink}
                   alt=''
                 />

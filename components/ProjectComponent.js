@@ -45,7 +45,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           </div>
         </div>
         <div
-          onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap justify-center mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
+          onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap justify-center w-full mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
         >
           {projects.map(({ title, description, languages, link, imageURI }) => {
             // console.log(JSON.stringify(
@@ -67,15 +67,15 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
     )
   } else {
     return (
-      <main className='flex flex-col items-center justify-start w-screen h-full text-center'>
-        <div className='flex flex-col items-center justify-between w-screen h-full mt-4'>
+      <main className='flex flex-col items-center justify-start w-auto h-full text-center'>
+        <div className='flex flex-col items-center justify-center w-auto h-full mt-4'>
           <h3
-            className='text-2xl font-thin text-red-500 transform translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
+            className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
           >Projects
           </h3>
-          <div className='flex justify-center w-full h-full'>
+          <div className='flex items-center justify-center w-full h-full'>
             <div
-              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col w-full h-full overflow-y-scroll '
+              onTouchStart={lockScroll} onTouchEnd={unlockScroll} className='flex flex-col w-11/12 h-full overflow-y-scroll '
             >
               {projects.map((project, index) => {
                 const { name, description, url, languages } = project
