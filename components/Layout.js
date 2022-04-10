@@ -8,8 +8,9 @@ const Layout = ({ children }) => {
   useEffect(() => {
   }, [menuOpenBool])
   const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
+  const closeMenu = () => setMenuOpenBool(false)
   return (
-    <div className='flex h-screen'>
+    <div className='flex w-auto h-screen'>
       <div className={`z-20 justify-start table w-1/2 h-screen overflow-x-scroll bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
         <Head>
           <title>Brandon Gottshall</title>
@@ -17,12 +18,12 @@ const Layout = ({ children }) => {
         </Head>
         <header className='sticky top-0 z-10 items-center justify-center table-row w-screen h-24 text-gray-600 body-font nm-flat-white-sm'>
           <nav className='flex items-center justify-between w-full h-full'>
-            <div className='w-1/4 my-auto'>
+            <div className='w-1/2 my-auto'>
               <Link href='/'>
-                <a className='w-full h-24 pl-4 my-auto text-sm font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl whitespace-nowrap'>Brandon <div className='hidden sm:inline'> Gottshall</div></a>
+                <a className='w-full h-32 pl-4 my-auto text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl sm:whitespace-nowrap'>Brandon Gottshall</a>
               </Link>
             </div>
-            <div className='my-auto mr-2 w-36'>
+            <div className='w-auto my-auto mr-8'>
               <button onClick={menuOpenHelper} className='flex-col items-center justify-center h-full space-y-2'>
                 <div className={`w-10 h-1 bg-black transform-gpu rotate-0 duration-1000 ${menuOpenBool ? 'rotate-45' : ''}`} />
                 <div className={`w-10 h-1 bg-black transform-gpu rotate-0 duration-1000 ${menuOpenBool ? '-translate-y-3 -rotate-45' : ''}`} />
@@ -73,9 +74,27 @@ const Layout = ({ children }) => {
           </footer>
         </div>
       </div>
-      <div className='absolute top-0 right-0 z-10 w-64 h-screen bg-red-400' />
+      <div className='absolute top-0 right-0 z-10 w-64 h-screen bg-red-400'>
+        <div className='grid w-full grid-cols-1 grid-rows-4 place-items-center h-1/2'>
+          <NavLink key='HomeKey' text='Home' href='/' />
+          <NavLink key='ProjectsKey' text='Projects' href='/Projects' />
+          <NavLink key='ResumeKey' text='Resume' href='/Resume' />
+          <NavLink key='ContactMeKey' text='Contact Me' href='/Contact' />
+        </div>
+      </div>
     </div>
   )
 }
-
+const NavLink = ({ href, text }, closeMenu) => (
+  <Link href={href}>
+    <a
+      className='h-14 pt-3 text-center text-white font-semibold text-xl nm-flat-black-xs w-9/12'
+      href={href}
+      target='_self'
+      rel='noopener noreferrer'
+      onClick={() => closeMenu()}
+    >{text}
+    </a>
+  </Link>
+)
 export default Layout
