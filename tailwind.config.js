@@ -43,6 +43,11 @@ module.exports = {
   mode: 'jit',
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      xs: '400px',
+      tiny: '200px'
+      // sm: '640px',
+    },
     extend: {
       textShadow: {
         white: '0 0.3px 2px #ffffff, 0 -0.3px 2px #ffffff, 0.3px 0 2px #ffffff, -0.3px 0 2px #ffffff',
