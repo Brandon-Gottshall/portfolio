@@ -19,10 +19,10 @@ export default function LandingPage (database) {
         </h1>
         <TextLoop className='transform-gpu' interval={1000}>
           <SubTitle title='Software Engineer' />
+          <SubTitle title='Cloud Engineer' />
           <SubTitle title='Former Marine' />
-          <SubTitle title='Entrepreneur' />
           <SubTitle title='Automation Enthusiast' />
-          <SubTitle title='Second Brain Evangelist' />
+          <SubTitle title='Lifetime Student' />
         </TextLoop>
       </div>
     </main>

@@ -15,8 +15,8 @@ const Layout = ({ children }) => {
     }
   }
   return (
-    <div className='flex w-screen h-screen'>
-      <div className={`z-20 justify-start table w-screen h-screen overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
+    <div className='flex w-screen h-screen overflow-visible'>
+      <div className={`z-20 justify-start table w-screen h-full overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
         <Head>
           <title>Brandon Gottshall</title>
           <link rel='icon' href='favicon.ico' />
@@ -50,8 +50,8 @@ const Layout = ({ children }) => {
         {/*
       // TODO Make footer static allowing it to be revealed on scroll. Like it lies underneath.
       */}
-        <div className='table-row'>
-          <footer className='sticky bottom-0 flex-col w-screen h-24 border-t sm:flex nm-flat-white-sm'>
+        <div className='sticky bottom-0 table-row'>
+          <footer className='flex-col w-screen h-24 border-t nm-flat-white-sm'>
             <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
               <div className='w-full h-full text-center'>
                 <SocialIcon
@@ -90,24 +90,26 @@ const Layout = ({ children }) => {
         </div>
       </div>
       <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-64 h-screen bg-red-500'>
-        <div className='flex flex-col items-center justify-start space-y-4'>
-          <NavLink key='HomeKey' text='Home' href='/' />
-          <NavLink key='ProjectsKey' text='Projects' href='/Projects' />
-          <NavLink key='ResumeKey' text='Resume' href='/Resume' />
-          <NavLink key='ContactMeKey' text='Contact Me' href='/Contact' />
+        <div className='flex flex-col items-center justify-start pt-4 space-y-4'>
+          <NavLink key='HomeKey' text='Home' href='/' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ProjectsKey' text='Projects' href='/Projects' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ResumeKey' text='Resume' href='/Resume' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ContactMeKey' text='Contact Me' href='/Contact' onTouchEnd={() => closeMenu()} />
         </div>
       </div>
     </div>
   )
 }
-const NavLink = ({ href, text }) => (
+const NavLink = ({ href, text }, onTouchEnd) => (
   <Link href={href}>
     <a
-      className='w-64 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
+      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
       href={href}
       target='_self'
       rel='noopener noreferrer'
-      onClick={() => {}}
+      onClick={() => {
+        onTouchEnd()
+      }}
     >{text}
     </a>
   </Link>
