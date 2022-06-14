@@ -8,10 +8,15 @@ const Layout = ({ children }) => {
   useEffect(() => {
   }, [menuOpenBool])
   const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
-  const closeMenu = () => setMenuOpenBool(false)
+  const closeMenu = () => {
+    if (menuOpenBool) {
+      // wait .2 seconds
+      setTimeout(() => { setMenuOpenBool(false) }, 200)
+    }
+  }
   return (
     <div className='flex w-screen h-screen'>
-      <div className={`z-20 justify-start table w-sceen h-screen overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
+      <div className={`z-20 justify-start table w-screen h-screen overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
         <Head>
           <title>Brandon Gottshall</title>
           <link rel='icon' href='favicon.ico' />
@@ -84,8 +89,8 @@ const Layout = ({ children }) => {
           </footer>
         </div>
       </div>
-      <div className='absolute top-0 right-0 z-10 flex justify-center w-64 h-screen bg-red-500'>
-        <div className='grid w-full grid-cols-1 grid-rows-4 h-3/4 place-items-center'>
+      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-64 h-screen bg-red-500'>
+        <div className='flex flex-col items-center justify-start space-y-4'>
           <NavLink key='HomeKey' text='Home' href='/' />
           <NavLink key='ProjectsKey' text='Projects' href='/Projects' />
           <NavLink key='ResumeKey' text='Resume' href='/Resume' />
@@ -95,14 +100,14 @@ const Layout = ({ children }) => {
     </div>
   )
 }
-const NavLink = ({ href, text }, closeMenu) => (
+const NavLink = ({ href, text }) => (
   <Link href={href}>
     <a
-      className='w-9/12 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
+      className='w-64 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
       href={href}
       target='_self'
       rel='noopener noreferrer'
-      onClick={() => closeMenu()}
+      onClick={() => {}}
     >{text}
     </a>
   </Link>

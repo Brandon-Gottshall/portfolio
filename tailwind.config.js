@@ -13,6 +13,9 @@ const flipCard = plugin(function ({ addUtilities }) {
         transform: 'rotateX(180deg)'
       }
     },
+    '.manual-flip': {
+      transform: 'rotateX(180deg)'
+    },
     /* This container is needed to position the front and back side */
     '.flip-card-body': {
       textAlign: 'left'
