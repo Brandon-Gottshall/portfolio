@@ -26,10 +26,10 @@ const Layout = ({ children }) => {
             <div className='w-32 my-auto xs:w-64'>
               <Link href='/'>
                 <a className='flex items-center justify-start w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl sm:whitespace-nowrap'>
-                  <h1 className='h-24 pt-8'>Brandon
+                  <div className='h-24 pt-8'>Brandon
                     <h1 className='hidden h-24 pt-8 xs:inline'> Gottshall
                     </h1>
-                  </h1>
+                  </div>
                 </a>
               </Link>
             </div>

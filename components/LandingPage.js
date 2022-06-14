@@ -10,7 +10,6 @@ export default function LandingPage (database) {
   //     setLinkSafeguard(true);
   //   }, 800);
   // };
-  console.log(database)
   return (
     <main className='flex flex-col items-center justify-center w-full h-full px-20 text-center'>
       <div className='flex flex-col items-center justify-center flex-grow w-24 pt-3 xs:w-64 whitespace-nowrap'>
