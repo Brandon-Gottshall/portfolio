@@ -5,6 +5,38 @@ function Contact () {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
   const [inquiry, setInquiry] = useState('')
+  const [submitStatus, setSubmitStatus] = useState('')
+  const submitButtonStyles = {
+    // style: ['Message text', 'Tailwind CSS'']
+    '': ['', 'hidden'],
+    error: ['Error! Please try again.', 'text-red-500'],
+    errorNoEmailOrPhone: ['Error! Please input Email and/or Phone Number', 'text-red-500'],
+    success: ['Success! Message has been sent.', 'text-1xl']
+  }
+  async function submitHelper (event) {
+    event.preventDefault()
+    const formData = {
+      email: event.target.email.value,
+      phoneNumber: event.target.tel.value,
+      inquiry: event.target.inquiry.value
+    }
+    console.log(formData)
+    if ((formData.email || formData.phoneNumber) && formData.inquiry) {
+      const res = await fetch('/api/sendEmail', { // eslint-disable-line no-undef
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        mode: 'no-cors', // TODO: remove this
+        credentials: 'same-origin',
+        body: JSON.stringify(formData)
+      }).then(res => res.json()).catch(err => {
+        console.log(`Error from submitHelper: ${JSON.stringify(err, null, 2)}`)
+      })
+      setSubmitStatus('success')
+      console.log(`Response from submitHelper: ${JSON.stringify(res, null, 4)}`)
+    } else if (!formData.email && !formData.phoneNumber) {
+      setSubmitStatus('errorNoEmailOrPhone')
+    }
+  }
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-full'>
       <h1 className='text-2xl text-red-500'>Contact Me</h1>
@@ -40,16 +72,17 @@ function Contact () {
         </div>
         <div className='flex flex-col items-center justify-center w-full h-1/2'>
           <label htmlFor='text' className='text-xl font-thin'>Your Message</label>
-          <input
+          <textArea
             id='inquiry'
             name='inquiry'
             type='textArea'
-            className='w-2/3 h-64 p-2 mb-4 border-2 border-gray-600 rounded-lg'
+            className='w-2/3 h-64 p-2 mb-4 text-left border-2 border-gray-600 rounded-lg outline-none'
             value={inquiry}
             onChange={e => setInquiry(e.value)}
             required
           />
         </div>
+        <p className={submitButtonStyles[submitStatus][1]}>{submitButtonStyles[submitStatus][0]}</p>
         <button type='submit' className='inline-flex items-center justify-center w-24 h-12 py-1 m-2 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black md:mt-0'>Submit</button>
       </form>
     </div>
@@ -57,23 +90,3 @@ function Contact () {
 }
 
 export default Contact
-
-async function submitHelper (event) {
-  event.preventDefault()
-  const formData = {
-    email: event.target.email.value,
-    phoneNumber: event.target.tel.value,
-    inquiry: event.target.inquiry.value
-  }
-  console.log(formData)
-  const res = await fetch('/api/sendEmail', { // eslint-disable-line no-undef
-    headers: { 'Content-Type': 'application/json' },
-    method: 'POST',
-    mode: 'no-cors', // TODO: remove this
-    credentials: 'same-origin',
-    body: JSON.stringify(formData)
-  }).then(res => res.json()).catch(err => {
-    console.log(`Error from submitHelper: ${JSON.stringify(err, null, 2)}`)
-  })
-  console.log(`Response from submitHelper: ${JSON.stringify(res, null, 4)}`)
-}
