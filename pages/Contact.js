@@ -39,25 +39,25 @@ function Contact () {
   }
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-full'>
-      <h1 className='text-2xl text-red-500'>Contact Me</h1>
+      <h3 className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'>Contact Me</h3>
       <form onSubmit={submitHelper} className='flex flex-col items-center w-full h-full mt-8'>
-        <div className='flex flex-row items-center justify-center'>
+        <div className='flex flex-col items-center justify-center mb-8 sm:flex-row'>
           <div className='flex flex-col items-center justify-center'>
-            <label htmlFor='email' className='text-xl font-thin'>Email Address</label>
+            <label htmlFor='email' className='h-8 text-xl font-thin'>Email Address</label>
             <input
               id='email'
               name='email'
               type='email'
-              className='w-full p-2 mb-4 border-2 border-gray-600 rounded-lg'
+              className='w-full h-8 border-2 border-gray-600 rounded-lg'
               value={email}
               onChange={e => setEmail(e.value)}
             />
           </div>
-          <div className='mx-8'>
-            <p className='text-xl font-thin'>And / Or</p>
+          <div className='h-8 pt-2 mx-8 my-4'>
+            <p className='text-xl italic font-thin'>And / Or</p>
           </div>
           <div className='flex flex-col items-center justify-center'>
-            <label htmlFor='tel' className='text-xl font-thin'>Phone Number</label>
+            <label htmlFor='tel' className='h-8 text-xl font-thin'>Phone Number</label>
             <PhoneInput
               withCountryCallingCode={false}
               country='US'
@@ -66,13 +66,13 @@ function Contact () {
               type='text'
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.value)}
-              className='w-full p-2 mb-4 border-2 border-gray-600 rounded-lg'
+              className='w-full h-8 border-2 border-gray-600 rounded-lg'
             />
           </div>
         </div>
         <div className='flex flex-col items-center justify-center w-full h-1/2'>
           <label htmlFor='text' className='text-xl font-thin'>Your Message</label>
-          <textArea
+          <textarea
             id='inquiry'
             name='inquiry'
             type='textArea'
@@ -83,7 +83,7 @@ function Contact () {
           />
         </div>
         <p className={submitButtonStyles[submitStatus][1]}>{submitButtonStyles[submitStatus][0]}</p>
-        <button type='submit' className='inline-flex items-center justify-center w-24 h-12 py-1 m-2 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black md:mt-0'>Submit</button>
+        <button type='submit' className='inline-flex items-center justify-center w-24 h-12 py-1 mt-2 mb-6 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black md:mt-0'>Submit</button>
       </form>
     </div>
   )

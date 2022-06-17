@@ -48,8 +48,8 @@ module.exports = {
   theme: {
     screens: {
       xs: '400px',
-      tiny: '200px'
-      // sm: '640px',
+      tiny: '200px',
+      sm: '640px'
     },
     extend: {
       textShadow: {

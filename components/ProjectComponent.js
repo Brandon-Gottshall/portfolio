@@ -3,7 +3,7 @@ import ProjectCard from './ProjectCard'
 import LanguageSelectionIcon from './LanguageSelectionIcon'
 import projectsData from '../data/projects.json'
 import { useState, useEffect } from 'react'
-import { BrowserView, MobileView } from 'react-device-detect'
+import { BrowserView, MobileView, isMobile } from 'react-device-detect'
 
 export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScroll, unlockScroll }) {
   const [filters, setFilters] = useState([])
@@ -12,7 +12,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
   useEffect(() => {
     console.log(`filters: ${JSON.stringify(filters, null, 1)}`)
     setProjects(projectsData.filter(({ languages }) => filters.every(language => languages.includes(language))))
-  }, [filters])
+  }, [filters, isMobile])
 
   const languagesUsed = new Set(projectsData.map(({ languages }) => languages.map(language => language)).flat())
   const languagesUsedArray = Array.from(languagesUsed)
@@ -67,6 +67,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
       <MobileView>
         <main className='flex-col items-center justify-start w-auto h-full text-center'>
           <div className='flex-col items-center justify-center w-full h-full mt-4'>
+            <div className='w-screen h-2' />
             <h3
               className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
             >Projects

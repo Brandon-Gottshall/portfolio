@@ -10,13 +10,13 @@ const Layout = ({ children }) => {
   const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
   const closeMenu = () => {
     if (menuOpenBool) {
-      // wait .2 seconds
-      setTimeout(() => { setMenuOpenBool(false) }, 200)
+      // wait .4 seconds
+      setTimeout(() => { setMenuOpenBool(false) }, 400)
     }
   }
   return (
     <div className='flex w-screen h-screen overflow-visible'>
-      <div className={`z-20 justify-start table w-screen h-full overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`}>
+      <div className={`z-20 justify-start table w-screen h-full overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`} onTouchStart={closeMenu}>
         <Head>
           <title>Brandon Gottshall</title>
           <link rel='icon' href='favicon.ico' />
@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
               <Link href='/'>
                 <a className='flex items-center justify-start w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl sm:whitespace-nowrap'>
                   <div className='h-24 pt-8'>Brandon
-                    <h1 className='hidden h-24 pt-8 xs:inline'> Gottshall
+                    <h1 className='hidden h-24 pt-8 sm:inline'> Gottshall
                     </h1>
                   </div>
                 </a>

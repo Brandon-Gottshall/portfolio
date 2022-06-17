@@ -1,6 +1,6 @@
 import { LanguageIcon } from './LanguageIcon'
 import Tooltip from './Tooltip'
-import Link from 'next/link'
+import { Link } from 'next'
 import { useState, useEffect } from 'react'
 import { BrowserView, MobileView } from 'react-device-detect'
 
@@ -31,9 +31,11 @@ export default function ProjectCard ({
                 <div className='flex flex-col items-center justify-start w-full h-full rounded-3xl flip-card-front'>
                   <div className='flex items-start justify-center w-full h-auto overflow-hidden rounded-sm'>
                     <img
-                      className='flex w-full h-48 p-2 lg:h-64 rounded-2xl'
+                      className='hidden w-full h-48 p-2 lg:h-64 rounded-2xl'
                       src={imageLink}
                       alt=''
+                      height='90%'
+                      width='90%'
                     />
                   </div>
                   <h2 className='my-2 text-xl font-semibold text-red-800'>{title || 'Crime NY'}</h2>
