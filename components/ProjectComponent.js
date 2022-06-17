@@ -10,14 +10,12 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
   const [projects, setProjects] = useState(projectsData.filter(({ languages }) => languages.some(languages => languages.includes(filters))))
 
   useEffect(() => {
-    console.log(`filters: ${JSON.stringify(filters, null, 1)}`)
     setProjects(projectsData.filter(({ languages }) => filters.every(language => languages.includes(language))))
   }, [filters, isMobile])
 
   const languagesUsed = new Set(projectsData.map(({ languages }) => languages.map(language => language)).flat())
   const languagesUsedArray = Array.from(languagesUsed)
   const modifyFilters = (language) => {
-    console.log(`modifyFilters: ${language}`)
     let activeLanguageFilterSet
     if (filters.includes(language)) {
       activeLanguageFilterSet = new Set(filters.filter(filter => filter !== language))
@@ -46,20 +44,7 @@ export default function ProjectComponent ({ pageNumber, linkSafeguard, lockScrol
           <div
             onMouseOver={lockScroll} onMouseOut={unlockScroll} className='flex flex-wrap justify-center w-full mt-2 mb-8 overflow-y-auto nm-inset-gray-100 rounded-3xl'
           >
-            {projects.map(({ title, description, languages, link, imageURI }) => {
-              // console.log(JSON.stringify(
-              //   {
-              //     title: title,
-              //     description: description,
-              //     languages: languages,
-              //     link: link,
-              //     imageURI: imageURI,
-              //     mobile: false
-              //   }
-              // ))
-
-              return (<ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile={false} />)
-            }
+            {projects.map(({ title, description, languages, link, imageURI }) => <ProjectCard key={`key_${title}_projectCard`} title={title} description={description} languages={languages} link={link} imageURI={imageURI} mobile={false} />
             )}
           </div>
         </main>

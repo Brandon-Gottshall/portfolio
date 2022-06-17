@@ -20,19 +20,15 @@ function Contact () {
       phoneNumber: event.target.tel.value,
       inquiry: event.target.inquiry.value
     }
-    console.log(formData)
     if ((formData.email || formData.phoneNumber) && formData.inquiry) {
-      const res = await fetch('/api/sendEmail', { // eslint-disable-line no-undef
+      await fetch('/api/sendEmail', { // eslint-disable-line no-undef
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         mode: 'no-cors', // TODO: remove this
         credentials: 'same-origin',
         body: JSON.stringify(formData)
-      }).then(res => res.json()).catch(err => {
-        console.log(`Error from submitHelper: ${JSON.stringify(err, null, 2)}`)
-      })
+      }).then(res => res.json())
       setSubmitStatus('success')
-      console.log(`Response from submitHelper: ${JSON.stringify(res, null, 4)}`)
     } else if (!formData.email && !formData.phoneNumber) {
       setSubmitStatus('errorNoEmailOrPhone')
     }

@@ -7,7 +7,6 @@ import cloudIcon from '../public/cloud.svg'
 
 export default function DeviceIcon ({ linkSafeguard, deviceIconStyle, deviceName, altText, tooltipText }) {
   useEffect(() => {
-    console.log(`linkSafeguard : ${linkSafeguard}`)
   }, [linkSafeguard])
   const iconSelector = {
     web: webIcon,

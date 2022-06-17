@@ -14,7 +14,6 @@ export default function ProjectCard ({
 }) {
   const iconStyle = 'w-4 h-4 ml-1'
   const imageLink = imageURI || '/portfolioScreenshot.png'
-  console.log(imageURI)
   const [touched, setTouched] = useState(false)
   let flipCard
   useEffect(() => {
@@ -52,7 +51,6 @@ export default function ProjectCard ({
                   <div className='flex flex-wrap self-end justify-center flex-shrink w-full py-2 mb-1'>
                     {languages
                       ? languages.map((language) => {
-                          // console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
                           return (
                             <Tooltip key={`key_langTT_projectcard__${language}`} tooltipText={language} color='red-400'>
                               <LanguageIcon
@@ -109,7 +107,6 @@ export default function ProjectCard ({
                   <div className='flex flex-wrap self-end justify-center flex-shrink w-full py-2 mb-1'>
                     {languages
                       ? languages.map((language) => {
-                          // console.log(`Project: ${title}\nIconName:${language}\nIcon: ${iconList[language]}`)
                           return (
                             <Tooltip key={`key_langTT_projectcard__${language}`} tooltipText={language} color='red-400'>
                               <LanguageIcon
