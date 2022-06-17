@@ -1,5 +1,6 @@
 import PhoneInput from 'react-phone-number-input/input'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import _ from 'lodash'
 
 function Contact () {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -13,6 +14,16 @@ function Contact () {
     errorNoEmailOrPhone: ['Error! Please input Email and/or Phone Number', 'text-red-500'],
     success: ['Success! Message has been sent.', 'text-1xl']
   }
+  useEffect(() => {
+    if (submitStatus === 'success') {
+      setTimeout(() => {
+        setPhoneNumber('')
+        setEmail('')
+        setInquiry('')
+        setSubmitStatus('')
+      }, 6000)
+    }
+  }, [submitStatus])
   async function submitHelper (event) {
     event.preventDefault()
     const formData = {
@@ -39,7 +50,7 @@ function Contact () {
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-full'>
       <h3 className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'>Contact Me</h3>
-      <form onSubmit={submitHelper} className='flex flex-col items-center w-full h-full mt-8'>
+      <form onSubmit={(e) => _.debounce(submitHelper(e), 6000)} className='flex flex-col items-center w-full h-full mt-8'>
         <div className='flex flex-col items-center justify-center mb-8 sm:flex-row'>
           <div className='flex flex-col items-center justify-center'>
             <label htmlFor='email' className='h-8 text-xl font-thin'>Email Address</label>
