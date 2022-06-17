@@ -13,6 +13,9 @@ const flipCard = plugin(function ({ addUtilities }) {
         transform: 'rotateX(180deg)'
       }
     },
+    '.manual-flip': {
+      transform: 'rotateX(180deg)'
+    },
     /* This container is needed to position the front and back side */
     '.flip-card-body': {
       textAlign: 'left'
@@ -43,6 +46,11 @@ module.exports = {
   mode: 'jit',
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      xs: '400px',
+      tiny: '200px',
+      sm: '640px'
+    },
     extend: {
       textShadow: {
         white: '0 0.3px 2px #ffffff, 0 -0.3px 2px #ffffff, 0.3px 0 2px #ffffff, -0.3px 0 2px #ffffff',

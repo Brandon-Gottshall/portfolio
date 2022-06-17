@@ -4,20 +4,23 @@
     "description": "A historical experience of the ever changing climate of crime in NYC. Using data from NYC Open Data",
     "languages": ["React", "JS"],
     "link": "/sorryWIP",
+    "imageHash": "K5Bg0kt70000Rj~qJQxurX",
     "imageURI": "/crimeNY.gif"
   },
   {
     "title": "Dog Park",
     "description": "This Project was put together for a DataDog sponsored Hackathon. The goal was to create a way for new hires to more easily familiarize themselves with company hierarchy and make contacting the appropriate staff member simple",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Ruby",
-      "Rails"],
+    "Rails"],
     "link": "https://dog-park.vercel.app",
+    "imageHash": "KiM%sP4.9F_LRQRQIUofof",
     "imageURI": "/dogPark.gif"
   },
   {
     "title": "IPIX COVID Tracker",
     "description": "Created on behalf of Innovation Pharmaceuticals utilizing data from John Hopkins. This site is static and rebuilt on a daily basis to keep the information current.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
+    "imageHash": "K5PGjh*J0[0eRPUb00aK-:",
     "link": "https://ipixcovid19tracker.com",
     "imageURI": "/tracker.gif"
   },
@@ -26,6 +29,7 @@
     "description": "Company Site of Strategy HR Solutions an HR consulting & Solutions company out of Brooklyn NY.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.strategyhrsolutions.com",
+    "imageHash": "K8M@fns9It00aKIW.TbbM_",
     "imageURI": "/strategy.gif"
   },
   {
@@ -33,6 +37,7 @@
     "description": "You're on it! My own Personal Portfolio",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
     "link": "https://www.brandongottshall.com",
+    "imageHash": "KaRo]URjs:M{a|jZ_NtQV@s",
     "imageURI": ""
   }
 ]

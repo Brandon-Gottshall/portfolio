@@ -1,83 +1,117 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { SocialIcon } from 'react-social-icons'
+import { useState, useEffect } from 'react'
 
 const Layout = ({ children }) => {
+  const [menuOpenBool, setMenuOpenBool] = useState(false)
+  useEffect(() => {
+  }, [menuOpenBool])
+  const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
+  const closeMenu = () => {
+    if (menuOpenBool) {
+      // wait .4 seconds
+      setTimeout(() => { setMenuOpenBool(false) }, 400)
+    }
+  }
   return (
-    <div className='justify-start table w-screen h-screen'>
-      <Head>
-        <title>Brandon Gottshall</title>
-        <link rel='icon' href='favicon.ico' />
-      </Head>
-      <header className='sticky top-0 z-10 items-center justify-center table-row w-screen h-24 text-gray-600 body-font nm-flat-white-sm'>
-        <nav className='flex items-center justify-between w-full h-full text-base md:ml-auto'>
-          <Link href='/'>
-            <a className='w-1/3 pl-4 text-2xl font-bold text-red-500 transition duration-500 ease-in-out whitespace-nowrap'>Brandon Gottshall</a>
-          </Link>
-          <div className='flex items-center justify-end w-1/3 mr-8'>
-            <Link href='/Projects'><a className='flex items-center h-12 py-1 mr-5 hover:text-red-500'>Projects</a></Link>
-            <Link href='/Resume'><a className='flex items-center h-12 py-1 mr-5 hover:text-red-500'>Resume</a></Link>
-            <Link href='/Contact'>
-              <button className='inline-flex items-center w-32 h-12 px-6 py-1 text-base text-center text-white transition duration-500 ease-in-out bg-red-500 border-0 rounded whitespace-nowrap focus:outline-none hover:bg-black'>
-                Contact Me
-                <svg
-                  fill='none'
-                  stroke='currentColor'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  className='w-4 h-4 ml-1'
-                  viewBox='0 0 24 24'
-                >
-                  <path d='M5 12h14M12 5l7 7-7 7' />
-                </svg>
+    <div className='flex w-screen h-screen overflow-visible'>
+      <div className={`z-20 justify-start table w-screen h-full overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`} onTouchStart={closeMenu}>
+        <Head>
+          <title>Brandon Gottshall</title>
+          <link rel='icon' href='favicon.ico' />
+        </Head>
+        <header className='sticky top-0 z-10 items-center justify-start table-row h-12 text-gray-600 xs:justify-center body-font nm-flat-white-sm'>
+          <nav className='flex items-center justify-between w-10/12 h-full mx-4 px-auto xs:w-11/12'>
+            <div className='w-32 my-auto xs:w-64'>
+              <Link href='/'>
+                <a className='flex items-center justify-start w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl sm:whitespace-nowrap'>
+                  <div className='h-24 pt-8'>Brandon
+                    <h1 className='hidden h-24 pt-8 sm:inline'> Gottshall
+                    </h1>
+                  </div>
+                </a>
+              </Link>
+            </div>
+            <div className='w-10 h-10 my-auto'>
+              <button onClick={menuOpenHelper} className='flex-col items-center justify-center w-10 h-10 space-y-2'>
+                <div className={`w-10 h-1 bg-black transform-gpu rotate-0 duration-1000 ${menuOpenBool ? 'rotate-45' : ''}`} />
+                <div className={`w-10 h-1 bg-black transform-gpu rotate-0 duration-1000 ${menuOpenBool ? '-translate-y-3 -rotate-45' : ''}`} />
+                <div className={`w-10 h-1 bg-black transition-opacity duration-500 opacity-100 ${menuOpenBool ? 'opacity-0' : ''}`} />
               </button>
-            </Link>
-          </div>
-        </nav>
-      </header>
-      <div className='items-center justify-center table-row w-screen h-full m-0 bg-red'>
-        {children}
-      </div>
+            </div>
 
-      {/*
+          </nav>
+        </header>
+        <div className='table-row w-full h-full m-0 bg-red'>
+          {children}
+        </div>
+
+        {/*
       // TODO Make footer static allowing it to be revealed on scroll. Like it lies underneath.
       */}
-      <div className='table-row'>
-        <footer className='sticky bottom-0 flex w-screen h-24 border-t nm-flat-white-sm flex-nowrap space-between'>
-          <div className='flex-col w-48 h-full pl-2 flex-nowrap'>
-            <SocialIcon
-              style={{ height: '100%' }}
-              url='https://www.linkedin.com/in/brandon-gottshall/'
-              bgColor='#1C00ff00'
-              fgColor='#000000'
-            />
-            <SocialIcon
-              style={{ height: '100%' }}
-              url='https://github.com/Brandon-Gottshall'
-              bgColor='#1C00ff00'
-              fgColor='#000000'
-            />
-            <SocialIcon
-              style={{ height: '100%' }}
-              url='mailto:blgottshall@gmail.com'
-              bgColor='#1C00ff00'
-              fgColor='#000000'
-            />
-          </div>
-          <div className='flex-grow h-full' />
-          <a
-            className='flex items-center w-48 mr-4 whitespace-nowrap'
-            href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Powered by{' '} <img src='/vercel.svg' alt='Vercel Logo' className='w-24 h-12 ml-2' />
-          </a>
-        </footer>
+        <div className='sticky bottom-0 table-row'>
+          <footer className='flex-col w-screen h-24 border-t nm-flat-white-sm'>
+            <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
+              <div className='w-full h-full text-center'>
+                <SocialIcon
+                  style={{ height: '100%' }}
+                  url='https://www.linkedin.com/in/brandon-gottshall/'
+                  bgColor='#1C00ff00'
+                  fgColor='#000000'
+                />
+              </div>
+              <div className='items-center justify-center w-full h-full text-center'>
+                <SocialIcon
+                  style={{ height: '100%' }}
+                  url='https://github.com/Brandon-Gottshall'
+                  bgColor='#1C00ff00'
+                  fgColor='#000000'
+                />
+              </div>
+              <div className='items-center justify-center w-full h-full text-center'>
+                <SocialIcon
+                  style={{ height: '100%' }}
+                  url='mailto:blgottshall@gmail.com'
+                  bgColor='#1C00ff00'
+                  fgColor='#000000'
+                />
+              </div>
+            </div>
+            <a
+              className='items-center hidden w-full mr-4 sm:flex whitespace-nowrap'
+              href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Powered by{' '} <img src='/vercel.svg' alt='Vercel Logo' className='w-24 h-12 ml-2' />
+            </a>
+          </footer>
+        </div>
+      </div>
+      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-64 h-screen bg-red-500'>
+        <div className='flex flex-col items-center justify-start pt-4 space-y-4'>
+          <NavLink key='HomeKey' text='Home' href='/' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ProjectsKey' text='Projects' href='/Projects' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ResumeKey' text='Resume' href='/Resume' onTouchEnd={() => closeMenu()} />
+          <NavLink key='ContactMeKey' text='Contact Me' href='/Contact' onTouchEnd={() => closeMenu()} />
+        </div>
       </div>
     </div>
   )
 }
-
+const NavLink = ({ href, text }, onTouchEnd) => (
+  <Link href={href}>
+    <a
+      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
+      href={href}
+      target='_self'
+      rel='noopener noreferrer'
+      onClick={() => {
+        onTouchEnd()
+      }}
+    >{text}
+    </a>
+  </Link>
+)
 export default Layout

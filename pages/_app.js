@@ -12,6 +12,7 @@ const firebaseConfig = {
   appId: '1:943464959167:web:6e6845d6757dda52798a0a',
   measurementId: 'G-YW042E2BKS'
 }
+
 function MyApp ({ Component, pageProps }) {
   const app = initializeApp(firebaseConfig)
   const database = getDatabase(app)

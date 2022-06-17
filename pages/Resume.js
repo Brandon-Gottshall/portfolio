@@ -9,8 +9,11 @@ export default function Resume () {
   const windowSize = useWindowSize()
   return (
     <main className='flex flex-col items-center justify-between w-screen h-full px-2 text-center md:px-20'>
-      <div className='flex items-center justify-start w-screen' />
-      <div className='flex items-start justify-center flex-grow w-screen overflow-y-auto nm-convex-gray-300-lg'>
+      <h3
+        className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
+      >Resume
+      </h3>
+      <div className='flex items-start justify-center flex-grow w-screen overflow-y-auto'>
         <Document file='./resume.pdf' className='flex flex-col items-center justify-center flex-grow overflow-y-auto width-full'>
           <div className='flex items-center justify-between w-full mt-12 mb-6'>
             <div className='w-1/2 '>
@@ -33,7 +36,7 @@ export default function Resume () {
           </div>
           <Page
             style={{ width: '80%', height: '100%' }}
-            className='mb-10'
+            className='mb-10 border-8 border-gray-600 rounded-lg'
             scale={windowSize.width / 1000 * pdfScale}
             key='page_1'
             pageNumber={1}

@@ -1,18 +1,12 @@
 import React from 'react'
 
 export default function Tooltip ({ children, tooltipText, color }) {
-  console.log(color)
-  // const bottomTipRef = React.createRef(null)
   const topTipRef = React.createRef(null)
   function handleMouseEnter () {
-    // bottomTipRef.current.style.opacity = 1
-    // bottomTipRef.current.style.marginTop = '20px'
     topTipRef.current.style.opacity = 1
     topTipRef.current.style.marginBottom = '20px'
   }
   function handleMouseLeave () {
-    // bottomTipRef.current.style.opacity = 0
-    // bottomTipRef.current.style.marginTop = '10px'
     topTipRef.current.style.opacity = 0
     topTipRef.current.style.marginBottom = '10px'
   }
