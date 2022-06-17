@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// import sgMail from '@sendgrid/mail'
+import sgMail from '@sendgrid/mail'
 export default async function sendEmail (req, res) {
   const { email, phoneNumber, inquiry } = req.body
   const message = {
