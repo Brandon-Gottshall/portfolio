@@ -24,11 +24,14 @@ function Contact () {
       await fetch('/api/sendEmail', { // eslint-disable-line no-undef
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
-        mode: 'no-cors', // TODO: remove this
         credentials: 'same-origin',
         body: JSON.stringify(formData)
-      }).then(res => res.json())
-      setSubmitStatus('success')
+      }).then(() => {
+        setSubmitStatus('success')
+      }).catch((error) => {
+        console.error(error)
+        setSubmitStatus('error')
+      })
     } else if (!formData.email && !formData.phoneNumber) {
       setSubmitStatus('errorNoEmailOrPhone')
     }
