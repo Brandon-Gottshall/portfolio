@@ -44,7 +44,7 @@ function Contact () {
               id='email'
               name='email'
               type='email'
-              className='w-full h-8 border-2 border-gray-600 rounded-lg'
+              className='w-full h-8 border-2 border-gray-600 rounded-lg outline-none'
               value={email}
               onChange={e => setEmail(e.value)}
             />
@@ -62,7 +62,7 @@ function Contact () {
               type='text'
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.value)}
-              className='w-full h-8 border-2 border-gray-600 rounded-lg'
+              className='w-full h-8 pl-2 border-2 border-gray-600 rounded-lg outline-none'
             />
           </div>
         </div>
