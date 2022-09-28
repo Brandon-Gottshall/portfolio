@@ -14,20 +14,23 @@ const Layout = ({ children }) => {
       setTimeout(() => { setMenuOpenBool(false) }, 400)
     }
   }
+
   return (
     <div className='flex w-screen h-screen overflow-visible'>
-      <div className={`z-20 justify-start table w-screen h-full overflow-x-hidden bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64' : ''}`} onTouchStart={closeMenu}>
+      <div className={`z-20 justify-start table w-screen h-full bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''}`} onTouchStart={closeMenu}>
         <Head>
           <title>Brandon Gottshall</title>
           <link rel='icon' href='favicon.ico' />
         </Head>
-        <header className='sticky top-0 z-10 items-center justify-start table-row h-12 text-gray-600 xs:justify-center body-font nm-flat-white-sm'>
+        <header className='sticky top-0 z-10 items-center justify-center table-row h-24 text-gray-600 xs:h-48 xs:justify-center body-font nm-flat-white-sm'>
           <nav className='flex items-center justify-between w-10/12 h-full mx-4 px-auto xs:w-11/12'>
-            <div className='w-32 my-auto xs:w-64'>
+            <div className='w-32 xs:w-64'>
               <Link href='/'>
-                <a className='flex items-center justify-start w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl sm:whitespace-nowrap'>
-                  <div className='h-24 pt-8'>Brandon
-                    <h1 className='hidden h-24 pt-8 sm:inline'> Gottshall
+                <a className='flex items-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out justify-CENTER sm:text-2xl lg:text-3xl sm:whitespace-nowrap'>
+                  <div className='flex items-center h-auto pb-2'>
+                    <h1 className='h-auto pl-1 align-middle py-auto'> Brandon
+                    </h1>
+                    <h1 className='hidden h-auto pl-1 py-auto sm:inline'> Gottshall
                     </h1>
                   </div>
                 </a>
@@ -78,18 +81,10 @@ const Layout = ({ children }) => {
                 />
               </div>
             </div>
-            <a
-              className='items-center hidden w-full mr-4 sm:flex whitespace-nowrap'
-              href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Powered by{' '} <img src='/vercel.svg' alt='Vercel Logo' className='w-24 h-12 ml-2' />
-            </a>
           </footer>
         </div>
       </div>
-      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-64 h-screen bg-red-500'>
+      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-auto h-screen px-4 bg-red-500'>
         <div className='flex flex-col items-center justify-start pt-4 space-y-4'>
           <NavLink key='HomeKey' text='Home' href='/' onTouchEnd={() => closeMenu()} />
           <NavLink key='ProjectsKey' text='Projects' href='/Projects' onTouchEnd={() => closeMenu()} />
@@ -103,7 +98,7 @@ const Layout = ({ children }) => {
 const NavLink = ({ href, text }, onTouchEnd) => (
   <Link href={href}>
     <a
-      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm nm-flat-black-xs'
+      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm xs:w-64 nm-flat-black-xs'
       href={href}
       target='_self'
       rel='noopener noreferrer'

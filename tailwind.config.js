@@ -47,7 +47,7 @@ module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
-      xs: '400px',
+      xs: '420px',
       tiny: '200px',
       sm: '640px'
     },
