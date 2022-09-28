@@ -35,7 +35,7 @@
   {
     "title": "My Portfolio",
     "description": "You're on it! My own Personal Portfolio",
-    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
+    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.brandongottshall.com",
     "imageHash": "KaRo]URjs:M{a|jZ_NtQV@s",
     "imageURI": ""
