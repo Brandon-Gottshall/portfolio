@@ -1,4 +1,4 @@
-const sorryWIP = () => {
+const SorryWIP = () => {
   return (
     <div className='flex items-center justify-center h-full text-center bg-red-300'>
       <h1>Sorry, this application is being refreshed.</h1>
@@ -7,4 +7,4 @@ const sorryWIP = () => {
   )
 }
 
-export default sorryWIP
+export default SorryWIP
