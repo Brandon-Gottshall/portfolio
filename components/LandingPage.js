@@ -1,15 +1,7 @@
 import TextLoop from 'react-text-loop'
 import SubTitle from './SubTitle'
 
-// old props { setPageNumber, setLinkSafeguard }
-export default function LandingPage (database) {
-  // const openPage2 = async () => {
-  //   setLinkSafeguard(false);
-  //   setPageNumber(1);
-  //   setTimeout(() => {
-  //     setLinkSafeguard(true);
-  //   }, 800);
-  // };
+export default function LandingPage () {
   return (
     <main className='flex flex-col items-center justify-center w-full h-full px-20 text-center'>
       <div className='flex flex-col items-center justify-center flex-grow w-24 pt-3 xs:w-64 whitespace-nowrap'>
