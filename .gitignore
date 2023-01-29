@@ -42,3 +42,4 @@ yarn.lock
 sendgrid.env
 yarn.lock
 *.lock
+yarn.lock

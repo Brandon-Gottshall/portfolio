@@ -51,6 +51,9 @@ module.exports = {
       tiny: '200px',
       sm: '640px'
     },
+    fontFamily: {
+      ox: 'Oxanium'
+    },
     extend: {
       textShadow: {
         white: '0 0.3px 2px #ffffff, 0 -0.3px 2px #ffffff, 0.3px 0 2px #ffffff, -0.3px 0 2px #ffffff',
