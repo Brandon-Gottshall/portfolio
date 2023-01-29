@@ -11,27 +11,23 @@ const Layout = ({ children }) => {
   const closeMenu = () => {
     if (menuOpenBool) {
       // wait .4 seconds
-      setTimeout(() => { setMenuOpenBool(false) }, 400)
+      setTimeout(() => { setMenuOpenBool(false) }, 1000)
     }
   }
 
+  // TODO Delay the closing of the menu when the mouse leaves the menu.
+
   return (
-    <div className='flex w-screen h-screen overflow-visible'>
-      <div className={`z-20 justify-start table w-screen h-full bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''}`} onTouchStart={closeMenu}>
-        <Head>
-          <title>Brandon Gottshall</title>
-          <link rel='icon' href='favicon.ico' />
-        </Head>
-        <header className='sticky top-0 z-10 items-center justify-center table-row h-24 text-gray-600 xs:h-48 xs:justify-center body-font nm-flat-white-sm'>
-          <nav className='flex items-center justify-between w-10/12 h-full mx-4 px-auto xs:w-11/12'>
+    <div className='flex min-h-screen overflow-visible'>
+      <div className={`z-20 flex-col justify-between w-screen bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''}`} onTouchStart={closeMenu}>
+
+        <header className='sticky top-0 z-10 h-24 text-gray-600 sm:h-28 xs:justify-center body-font'>
+          <div className='flex items-center justify-between w-10/12 h-full mx-4 px-auto xs:w-11/12'>
             <div className='w-32 xs:w-64'>
               <Link href='/'>
                 <a className='flex items-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out justify-CENTER sm:text-2xl lg:text-3xl sm:whitespace-nowrap'>
                   <div className='flex items-center h-auto pb-2'>
-                    <h1 className='h-auto pl-1 align-middle py-auto'> Brandon
-                    </h1>
-                    <h1 className='hidden h-auto pl-1 py-auto sm:inline'> Gottshall
-                    </h1>
+                    <h1 className='h-auto pl-1 font-bold align-middle py-auto font-ox'> Gott Codes </h1>
                   </div>
                 </a>
               </Link>
@@ -44,16 +40,16 @@ const Layout = ({ children }) => {
               </button>
             </div>
 
-          </nav>
+          </div>
         </header>
-        <div className='table-row w-full h-full m-0 bg-red'>
+        <div className='min-h-full m-0 overflow-visible bg-red flex-fill'>
           {children}
         </div>
 
         {/*
       // TODO Make footer static allowing it to be revealed on scroll. Like it lies underneath.
       */}
-        <div className='sticky bottom-0 table-row'>
+        <div className='sticky bottom-0'>
           <footer className='flex-col w-screen h-24 border-t nm-flat-white-sm'>
             <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
               <div className='w-full h-full text-center'>

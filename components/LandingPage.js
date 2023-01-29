@@ -1,21 +1,26 @@
 import TextLoop from 'react-text-loop'
 import SubTitle from './SubTitle'
+import Image from 'next/image'
+import avatar from '../public/ProfileTransparent.png'
 
 export default function LandingPage () {
   return (
-    <main className='flex flex-col items-center justify-center w-full h-full px-20 text-center'>
-      <div className='flex flex-col items-center justify-center flex-grow w-24 pt-3 xs:w-64 whitespace-nowrap'>
-        <h1 className='text-lg font-bold text-red-500 xs:text-4xl sm:text-6xl'>
-          Brandon Gottshall
-        </h1>
-        <TextLoop className='transform-gpu' interval={1000}>
-          <SubTitle title='Software Engineer' />
-          <SubTitle title='Cloud Engineer' />
-          <SubTitle title='Former Marine' />
-          <SubTitle title='Automation Enthusiast' />
-          <SubTitle title='Lifetime Student' />
-        </TextLoop>
+    <div className='z-10 flex-col items-center justify-center pt-3 text-center align-middle h-[80vh] whitespace-nowrap overflow-show'>
+      <div className='flex-grow h-1/3' />
+      <h1 className='text-lg font-bold text-red-500 xs:text-4xl sm:text-6xl overflow-x-clip'>
+        Brandon Gottshall
+      </h1>
+      <TextLoop className='transform-gpu max-w-fit' interval={1000}>
+        <SubTitle title='Software Engineer' />
+        <SubTitle title='SE Bootcamp Instructor' />
+        <SubTitle title='Former Marine' />
+        <SubTitle title='Lifetime Student' />
+        <SubTitle title='Automation Enthusiast' />
+      </TextLoop>
+      {/* Center the image on the screen */}
+      <div className='absolute bottom-0 w-full'>
+        <Image className='' src={avatar} width={500} height={500} />
       </div>
-    </main>
+    </div>
   )
 }
