@@ -15,10 +15,8 @@ const Layout = ({ children }) => {
     }
   }
 
-  // TODO Delay the closing of the menu when the mouse leaves the menu.
-
   return (
-    <div className='flex min-h-screen overflow-visible'>
+    <div className='flex h-screen overflow-hidden bg-red-500'>
       <div className={`z-20 flex-col justify-between w-screen bg-white transform-gpu duration-1000 ${menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''}`} onTouchStart={closeMenu}>
 
         <header className='sticky top-0 z-10 h-24 text-gray-600 sm:h-28 xs:justify-center body-font'>
@@ -42,15 +40,15 @@ const Layout = ({ children }) => {
 
           </div>
         </header>
-        <div className='min-h-full m-0 overflow-visible bg-red flex-fill'>
+        <div className='m-0 overflow-visible min-h-fit bg-red flex-fill'>
           {children}
         </div>
 
         {/*
       // TODO Make footer static allowing it to be revealed on scroll. Like it lies underneath.
       */}
-        <div className='sticky bottom-0'>
-          <footer className='flex-col w-screen h-24 border-t nm-flat-white-sm'>
+        <div className='absolute bottom-0'>
+          <footer className='flex-col w-screen h-24 border-t nm-flat-white-lg'>
             <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
               <div className='w-full h-full text-center'>
                 <SocialIcon
@@ -80,7 +78,7 @@ const Layout = ({ children }) => {
           </footer>
         </div>
       </div>
-      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-auto h-screen px-4 bg-red-500'>
+      <div onMouseLeave={() => closeMenu()} className='absolute top-0 right-0 z-10 flex justify-center w-auto px-4 overflow-hidden bg-red-500 h-fit'>
         <div className='flex flex-col items-center justify-start pt-4 space-y-4'>
           <NavLink key='HomeKey' text='Home' href='/' onTouchEnd={() => closeMenu()} />
           <NavLink key='ProjectsKey' text='Projects' href='/Projects' onTouchEnd={() => closeMenu()} />
