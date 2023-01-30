@@ -5,7 +5,8 @@
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.brandongottshall.com",
     "imageHash": "KaRo]URjs:M{a|jZ_NtQV@s",
-    "imageURI": "/portfolioSC.png"
+    "imageURI": "/portfolioSC.png",
+    "id": 0
   },
   {
     "title": "Crime NY",
@@ -13,7 +14,8 @@
     "languages": ["React", "JS"],
     "link": "/sorryWIP",
     "imageHash": "K5Bg0kt70000Rj~qJQxurX",
-    "imageURI": "/crimeNY.gif"
+    "imageURI": "/crimeNY.gif",
+    "id": 1
   },
   {
     "title": "Dog Park",
@@ -22,7 +24,8 @@
     "Rails"],
     "link": "https://dog-park.vercel.app",
     "imageHash": "KiM%sP4.9F_LRQRQIUofof",
-    "imageURI": "/dogPark.gif"
+    "imageURI": "/dogPark.gif",
+    "id": 2
   },
   {
     "title": "IPIX COVID Tracker",
@@ -30,7 +33,8 @@
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
     "imageHash": "K5PGjh*J0[0eRPUb00aK-:",
     "link": "https://ipixcovid19tracker.com",
-    "imageURI": "/tracker.gif"
+    "imageURI": "/tracker.gif",
+    "id": 3
   },
   {
     "title": "Strategy HR",
@@ -38,6 +42,7 @@
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.strategyhrsolutions.com",
     "imageHash": "K8M@fns9It00aKIW.TbbM_",
-    "imageURI": "/strategy.gif"
+    "imageURI": "/strategy.gif",
+    "id": 4
   }
 ]

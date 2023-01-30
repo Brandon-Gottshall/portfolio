@@ -12,28 +12,21 @@ export default function ProjectTitle() {
 
   // Setup Router
   const router = useRouter();
-
-  // Get project title
-  let projectTitle = router.query.projectTitle;
-
-  // Replace %20 with spaces
-  // projectTitle = projectTitle.replace(/%20/g, ' ')
-  console.log(projectTitle);
-  console.log(projects.filter((project) => project.title === projectTitle));
+  let { id } = router.query
+  id = parseInt(id)
 
   // Get project data
-  const project = projects.filter(
-    (project) => project.title === projectTitle
-  )[0];
+  const project = projects[id]
+  console.log(id)
+  console.log(project)
 
-    
   // Setup Image Width based on image size
   let imageWidth
   let imageHeight
-  if (project.title === "My Portfolio") {
+  if (id === 0) {
     imageWidth = windowWidth * 0.7
-    imageHeight = windowWidth * 0.35
-  } else if (project.title === "Crime NY") {
+    imageHeight = windowWidth * 0.38
+  } else if (id === 1) {
     imageWidth = windowWidth * 0.7
     imageHeight = windowWidth * 0.45 
   } else {
@@ -41,8 +34,16 @@ export default function ProjectTitle() {
     imageHeight = windowWidth * 0.5
   }
 
+  // Show loafing screen if project data is not loaded
+  if (!project) {
+    return (
+      <div className="flex items-center justify-center h-full text-center bg-red-300">
+        <h1>Loading...</h1>
+      </div>
+    )
+  }
   return (
-    <div className="flex-col items-center justify-center w-full pt-8 overflow-y-scroll">
+    <div className={"flex-col w-full pt-8 pb-24 overflow-y-scroll" + ` h-[${imageHeight*1.5}px]`}>
       <h1 className="m-8 text-3xl font-bold text-center center font-ox">
         {project.title}
       </h1>
