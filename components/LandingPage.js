@@ -8,10 +8,9 @@ export default function LandingPage () {
   const [windowHeight, setWindowHeight] = useState(0)
   useEffect(() => {
     setWindowHeight(window.innerHeight)
-    console.log(window.innerHeight)
   }, [])
   return (
-    <div className='overflow-x-hidden'>
+    <>
       <div className='z-10 flex items-center justify-center flex-grow h-64 pt-3 text-center nm-flat-white-xl'>
         <div className='h-32 '>
           <h1 className='text-lg font-bold text-red-500 xs:text-4xl sm:text-6xl'>
@@ -28,7 +27,7 @@ export default function LandingPage () {
         {/* Center the image on the screen */}
       </div>
 
-      <div className='flex items-end justify-center flex-grow w-full max-h-fit'>
+      <div className='flex items-end justify-center flex-grow w-full h-auto -pb-56'>
         {windowHeight > 700 && windowHeight < 850 && (
           <Image src={avatar} width={400} height={400} />
         )}
@@ -37,6 +36,6 @@ export default function LandingPage () {
         )}
         {windowHeight > 950 && <Image src={avatar} width={600} height={600} />}
       </div>
-    </div>
+    </>
   )
 }
