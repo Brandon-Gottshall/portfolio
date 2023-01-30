@@ -1,5 +1,13 @@
 [
   {
+    "title": "My Portfolio",
+    "description": "You're on it! My own Personal Portfolio",
+    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
+    "link": "https://www.brandongottshall.com",
+    "imageHash": "KaRo]URjs:M{a|jZ_NtQV@s",
+    "imageURI": "/portfolioSC.png"
+  },
+  {
     "title": "Crime NY",
     "description": "A historical experience of the ever changing climate of crime in NYC. Using data from NYC Open Data",
     "languages": ["React", "JS"],
@@ -31,13 +39,5 @@
     "link": "https://www.strategyhrsolutions.com",
     "imageHash": "K8M@fns9It00aKIW.TbbM_",
     "imageURI": "/strategy.gif"
-  },
-  {
-    "title": "My Portfolio",
-    "description": "You're on it! My own Personal Portfolio",
-    "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
-    "link": "https://www.brandongottshall.com",
-    "imageHash": "KaRo]URjs:M{a|jZ_NtQV@s",
-    "imageURI": ""
   }
 ]
