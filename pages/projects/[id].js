@@ -1,5 +1,6 @@
 import projects from "../../data/projects.json";
 import Image from "next/image";
+import useNextBlurhash from 'use-next-blurhash'
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
@@ -17,8 +18,6 @@ export default function ProjectTitle() {
 
   // Get project data
   const project = projects[id]
-  console.log(id)
-  console.log(project)
 
   // Setup Image Width based on image size
   let imageWidth
@@ -48,12 +47,7 @@ export default function ProjectTitle() {
         {project.title}
       </h1>
       <div className="flex items-center justify-center my-4">
-        <Image
-          src={`${project.imageURI}`}
-          width={imageWidth}
-          height={imageHeight}
-          className="rounded"
-        />
+        {imageWrapper(project, imageWidth, imageHeight)}
       </div>
       <div className="flex items-center justify-center my-4">
         <p className="text-sm text-left w-1/2">{project.description}</p>
@@ -66,3 +60,13 @@ export default function ProjectTitle() {
     </div>
   );
 }
+function imageWrapper(project, imageWidth, imageHeight) {
+  const [blurDataUrl] = useNextBlurhash(project.imageHash);
+  return <Image
+    src={`${project.imageURI}`}
+    blurDataURL={blurDataUrl}
+    width={imageWidth}
+    height={imageHeight}
+    className="rounded" />;
+}
+

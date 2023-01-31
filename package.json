@@ -25,6 +25,7 @@
     "react-text-loop": "^2.3.0",
     "tailwind-scrollbar-hide": "^1.1.6",
     "tailwindcss-neumorphism": "^0.1.0",
+    "use-next-blurhash": "^1.0.5",
     "vercel": "^24.0.1"
   },
   "devDependencies": {
