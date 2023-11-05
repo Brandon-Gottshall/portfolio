@@ -19,7 +19,7 @@ export default function LandingPage () {
           <TextLoop className='transform-gpu max-w-fit' interval={1000}>
             <SubTitle title='Software Engineer' />
             <SubTitle title='SE Bootcamp Instructor' />
-            <SubTitle title='Former Marine' />
+            <SubTitle title='Marine Corps Veteran' />
             <SubTitle title='Lifetime Student' />
             <SubTitle title='Automation Enthusiast' />
           </TextLoop>
