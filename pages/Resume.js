@@ -8,7 +8,7 @@ export default function Resume () {
   const [pdfScale, setPDFScale] = useState(1.2)
   const windowSize = useWindowSize()
   return (
-    <main className='flex flex-col items-center justify-between w-screen h-full px-2 text-center md:px-20'>
+   [ <main className='flex flex-col items-center justify-between w-screen h-full px-2 text-center md:px-20'>
       <h3
         className='text-2xl font-thin text-red-500 translate-x-0 transform-gpu sm:text-3xl animate-fade-in-from-left'
       >Resume
@@ -53,7 +53,7 @@ export default function Resume () {
               href='resume.pdf' download="Brandon Gottshall\'s Resume"
               className='w-32 px-6 py-3 text-lg text-white rounded-sm mb-18 text-thin nm-convex-red-500-xs nm-convex-red'
             >
-              Download
+              Download]
             </a>
           </div>
         </Document>
