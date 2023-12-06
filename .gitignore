@@ -38,10 +38,10 @@ yarn-error.log*
 bfg.jar
 ..bfg-report
 secrets.txt
-yarn.lock
 sendgrid.env
-yarn.lock
+
+# lock files
 *.lock
-yarn.lock
-yarn.lock
+bun.lockb
+package-lock.json
 yarn.lock

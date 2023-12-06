@@ -5,13 +5,19 @@ import { useState } from 'react'
 
 const Layout = ({ children }) => {
   const [menuOpenBool, setMenuOpenBool] = useState(false)
+  const [pageTransitionBool, setPageTransitionBool] = useState(false)
 
   const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
-
+  // Page Transition
+  const pageTransitionHelper = async () => {
+    setPageTransitionBool(true)
+    await new Promise(r => setTimeout(r, 500))
+    setPageTransitionBool(false)
+  }
   const closeMenu = async () => {
     if (menuOpenBool) {
       // wait .4 seconds
-      await Promise(r => setTimeout(r, 400))
+      await new Promise(r => setTimeout(r, 400))
       setMenuOpenBool(false)
     }
   }
@@ -42,7 +48,7 @@ const Layout = ({ children }) => {
               <div className='w-32 xs:w-64'>
                 <Link
                   href='/'
-                  className='flex items-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out justify-CENTER sm:text-2xl lg:text-3xl sm:whitespace-nowrap'
+                  className='flex items-center justify-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out sm:text-2xl lg:text-3xl sm:whitespace-nowrap'
                 >
                   <div className='flex items-center h-auto pb-2'>
                     <h1 className='h-auto pl-1 font-bold align-middle py-auto font-ox'>
@@ -64,21 +70,27 @@ const Layout = ({ children }) => {
                   />
                   <div
                     className={`w-10 h-1 bg-black transform-gpu rotate-0 duration-1000 ${
-                      menuOpenBool ? '-translate-y-3 -rotate-45' : ''
+                      menuOpenBool ? '-translate-y-3 rotate-135' : ''
                     }`}
                   />
                   <div
                     className={`w-10 h-1 bg-black transition-opacity duration-500 opacity-100 ${
-                      menuOpenBool ? 'opacity-0' : ''
+                      menuOpenBool ? ' opacity-0' : ''
                     }`}
                   />
                 </button>
               </div>
             </div>
           </header>
-          <main className='min-h-screen m-0 bg-red flex-fill'>{children}</main>
+          <main
+            className={`m-0 bg-red transition-opacity transform-gpu flex-fill duration-1000 ${
+              pageTransitionBool ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            {children}
+          </main>
 
-          <footer className='absolute bottom-0 flex-col w-screen h-24 border-t nm-flat-white-lg'>
+          <footer className='absolute bottom-0 flex-col w-screen h-24 bg-white shadow-neu-outset'>
             <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
               <div className='w-full h-full text-center'>
                 <SocialIcon
@@ -112,10 +124,30 @@ const Layout = ({ children }) => {
           className='absolute top-0 right-0 z-10 flex justify-center w-auto px-4 overflow-hidden bg-red-500 h-fit'
         >
           <div className='flex flex-col items-center justify-start pt-4 space-y-4'>
-            <NavLink key='HomeKey' text='Home' href='/' />
-            <NavLink key='ProjectsKey' text='Projects' href='/Projects' />
-            <NavLink key='ResumeKey' text='Resume' href='/ResumeSVG' />
-            <NavLink key='ContactMeKey' text='Contact Me' href='/Contact' />
+            <NavLink
+              key='HomeKey'
+              text='Home'
+              href='/' 
+              onClick={pageTransitionHelper}
+            />
+            <NavLink
+              key='ProjectsKey'
+              text='Projects'
+              href='/Projects'
+              onClick={pageTransitionHelper}
+            />
+            <NavLink
+              key='ResumeKey'
+              text='Resume'
+              href='/ResumeSVG'
+              onClick={pageTransitionHelper}
+            />
+            <NavLink
+              key='ContactMeKey'
+              text='Contact Me'
+              href='/Contact'
+              onClick={() => pageTransitionHelper()}
+            />
           </div>
         </div>
       </div>
