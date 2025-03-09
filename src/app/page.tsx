@@ -68,26 +68,26 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-cream dark:bg-navy-darkest">
       {/* Hero Section */}
-      <section className="bg-cream dark:bg-navy-darkest py-20 md:py-32">
+      <section className="bg-cream dark:bg-navy-darkest pt-20 md:py-32">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-10 md:mb-0 z-10">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-navy/10 dark:bg-cream/10 text-navy dark:text-cream text-sm mb-6">
                 <span className="mr-2">✓</span> Available for new projects
               </div>
-              <h1 className="text-5xl md:text-6xl font-light leading-tight mb-2 text-navy dark:text-cream">
+              <h1 className="text-5xl md:text-6xl font-light leading-tight mb-2 text-navy dark:text-cream tracking-tight">
                 Brandon Gottshall
               </h1>
               <div className="mb-6">
                 <TextLoop interval={2000}>
-                  <span className="text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Software Engineer</span>
+                  <span className="font-code text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Software Engineer</span>
                   <span className="text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">SE Bootcamp Instructor</span>
                   <span className="text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Marine Corps Veteran</span>
                   <span className="text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Lifetime Student</span>
-                  <span className="text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Automation Enthusiast</span>
+                  <span className="font-code text-2xl md:text-3xl font-light text-gray-dark dark:text-tan">Automation Enthusiast</span>
                 </TextLoop>
               </div>
-              <p className="text-lg mb-8 max-w-xl text-gray-dark dark:text-tan">
+              <p className="text-lg mb-8 max-w-xl text-gray-dark dark:text-tan font-normal">
                 I&apos;m a specialized software engineer with experience crafting high-performance, scalable
                 web applications that users love.
               </p>
@@ -131,10 +131,12 @@ export default function Home() {
       </section>
 
       {/* Why Choose Me Section */}
-      <section className="bg-cream dark:bg-navy-darkest py-20">
+      <section className="bg-cream dark:bg-navy-darkest pt-10 pb-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light mb-4 text-navy dark:text-cream">Why Work With Me?</h2>
+            <h2 className="text-3xl md:text-4xl font-light mb-4 text-navy dark:text-cream tracking-tight">
+              Why Work With Me?
+            </h2>
             <p className="text-gray-dark dark:text-tan text-lg max-w-2xl mx-auto">
               I bring technical expertise, business understanding, and a commitment to excellence to every project
             </p>
@@ -147,7 +149,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-light mb-3 text-navy dark:text-cream">Technical Excellence</h3>
               <p className="text-gray-dark dark:text-tan">
-                I write clean, maintainable code following best practices. My applications are fast, secure, and built
+                I write <span className="font-code">clean, maintainable code</span> following best practices. My applications are fast, secure, and built
                 with scalability in mind.
               </p>
             </div>
@@ -180,7 +182,9 @@ export default function Home() {
       {/* Skills Section */}
       <section className="bg-cream-dark/50 dark:bg-navy py-16">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-light mb-12 text-center text-navy dark:text-cream">Technical Expertise</h2>
+          <h2 className="text-3xl font-light mb-12 text-center text-navy dark:text-cream tracking-tight">
+            Technical Expertise
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {skills.map((skillGroup) => (
@@ -190,7 +194,7 @@ export default function Home() {
                   {skillGroup.items.map((skill) => (
                     <div key={skill.name}>
                       <div className="flex justify-between mb-2">
-                        <span className="text-navy dark:text-cream">{skill.name}</span>
+                        <span className="font-code text-navy dark:text-cream">{skill.name}</span>
                         <span className="text-gray-dark dark:text-tan">{skill.level}%</span>
                       </div>
                       <div className="h-2 bg-cream/50 dark:bg-navy-light/30 rounded-full overflow-hidden">

@@ -44,8 +44,8 @@ export default function ProjectCard({
       <CardContent className="p-5 flex flex-col gap-3">
         {/* Header */}
         <div className="space-y-1">
-          <h2 className="text-lg font-bold text-navy dark:text-cream/90">{title}</h2>
-          <Badge variant="outline" className={`${statusColors[status]} text-[10px] font-medium`}>
+          <h2 className="text-lg font-light tracking-tight text-navy dark:text-cream/90">{title}</h2>
+          <Badge variant="outline" className={`${statusColors[status]} text-[10px] font-medium uppercase tracking-wider`}>
             {status === 'planned-update' ? 'Update Planned' : status.replace('-', ' ')}
           </Badge>
         </div>
@@ -61,7 +61,7 @@ export default function ProjectCard({
             <Badge 
               key={tech}
               variant="outline"
-              className="bg-transparent text-[10px] font-medium text-navy/60 dark:text-cream/50 border-navy/20 dark:border-cream/20"
+              className="font-code bg-transparent text-[10px] text-navy/60 dark:text-cream/50 border-navy/20 dark:border-cream/20"
             >
               {tech}
             </Badge>
@@ -74,7 +74,7 @@ export default function ProjectCard({
             <Button 
               asChild
               size="sm"
-              className="flex-1 bg-red-bright hover:bg-red-bright/90 text-cream"
+              className="flex-1 bg-red-bright hover:bg-red-bright/90 text-cream font-medium tracking-wide"
             >
               <a
                 href={projectUrl}
@@ -90,7 +90,7 @@ export default function ProjectCard({
               asChild
               size="sm"
               variant="outline"
-              className="flex-1 bg-transparent border-cream text-cream hover:bg-cream/10"
+              className="flex-1 bg-transparent border-cream text-cream hover:bg-cream/10 font-code tracking-tight"
             >
               <a
                 href={githubUrl}
