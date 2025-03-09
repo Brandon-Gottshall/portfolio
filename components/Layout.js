@@ -1,11 +1,14 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { SocialIcon } from 'react-social-icons'
+import Footer from './Footer'
 import { useState, useEffect } from 'react'
 
 const Layout = ({ children }) => {
+  console.log('Layout component is rendering');
   const [menuOpenBool, setMenuOpenBool] = useState(false)
-  useEffect(() => {}, [menuOpenBool])
+  useEffect(() => {
+    console.log('Layout mounted, Footer should render');
+  }, [])
   const menuOpenHelper = () => setMenuOpenBool(!menuOpenBool)
   const closeMenu = () => {
     if (menuOpenBool) {
@@ -17,7 +20,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Head>
         <title> Gott Codes </title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -28,9 +31,9 @@ const Layout = ({ children }) => {
         <meta name='keywords' content='Gott Codes' />
         <meta name='author' content='Brandon Gottshall' />
       </Head>
-      <div className='flex bg-red-500 h-fit'>
+      <div className='flex bg-red-500 flex-grow'>
         <div
-          className={`z-20 flex-col justify-between w-screen bg-white transform-gpu duration-1000 ${
+          className={`z-20 flex flex-col justify-between w-screen bg-white transform-gpu duration-1000 ${
             menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''
           }`}
           onTouchStart={closeMenu}
@@ -74,36 +77,9 @@ const Layout = ({ children }) => {
             </div>
           </header>
           {/* The body Div */}
-          <div className='min-h-screen m-0 bg-red flex-fill'>{children}</div>
-          <div className='absolute bottom-0'>
-            <footer className='flex-col w-screen h-24 border-t nm-flat-white-lg'>
-              <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
-                <div className='w-full h-full text-center'>
-                  <SocialIcon
-                    style={{ height: '100%' }}
-                    url='https://www.linkedin.com/in/brandon-gottshall/'
-                    bgColor='#1C00ff00'
-                    fgColor='#000000'
-                  />
-                </div>
-                <div className='items-center justify-center w-full h-full text-center'>
-                  <SocialIcon
-                    style={{ height: '100%' }}
-                    url='https://github.com/Brandon-Gottshall'
-                    bgColor='#1C00ff00'
-                    fgColor='#000000'
-                  />
-                </div>
-                <div className='items-center justify-center w-full h-full text-center'>
-                  <SocialIcon
-                    style={{ height: '100%' }}
-                    url='https://twitter.com/Gott_Code'
-                    bgColor='#1C00ff00'
-                    fgColor='#000000'
-                  />
-                </div>
-              </div>
-            </footer>
+          <div className='flex-grow bg-red'>{children}</div>
+          <div className="w-full">
+            <Footer />
           </div>
         </div>
         <div

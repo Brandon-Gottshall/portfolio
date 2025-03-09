@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Oxanium } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import FooterWrapper from "@/components/FooterWrapper";
 import { Providers } from "./providers";
 
 // Initialize the Oxanium font
@@ -30,10 +31,13 @@ export default function RootLayout({
     <html lang="en" className={oxanium.variable} suppressHydrationWarning>
       <body className="min-h-screen bg-cream text-navy dark:bg-black dark:text-tan transition-colors duration-300">
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          <Navbar />
-          <main>
-            {children}
-          </main>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <FooterWrapper />
+          </div>
         </Providers>
       </body>
     </html>
