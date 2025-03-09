@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# To-Do List
 
-## Getting Started
+## 1. Navigation Menu Enhancement
 
-First, run the development server:
+- **Logo Toggle:**
+  - [ ] Display initials (e.g., "BG") as the default logo.
+  - [ ] Animate the initials on hover/click to expand into the full name.
+- **Dropdown Menu:**
+  - [ ] Unfold a dropdown that reveals additional nav links.
+  - [ ] Include a subtle visual cue (e.g., an arrow or a partial peek) to indicate extra functionality.
+- **User Experience & Accessibility:**
+  - [ ] Ensure smooth animations (200–300ms) and clear hover/focus states.
+  - [ ] Implement keyboard navigation and proper ARIA attributes.
+- **Theming:**
+  - [ ] Apply the established color palette (navy, red, tan, cream) and adapt for both light and dark modes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 2. Blog
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [ ] Write and add at least one blog post.
+- [ ] Implement a subscription option for blog updates.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3. Projects
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [ ] Showcase projects by adding a dedicated projects section.
+- [ ] Schedule regular sessions to work on and update projects.
 
-## Learn More
+## 4. Resume
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] Add a section or link to display my resume on the site.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 5. Social Media Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Add follow buttons for social media in strategic locations (e.g., header, footer).
 
-## Deploy on Vercel
+## 6. Donation Options
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Integrate a donation feature (e.g., “Buy Me a Coffee”).
+- [ ] Consider adding creative incentives (e.g., “For every dollar I earn, I’ll pet my cat once”) to encourage donations.
