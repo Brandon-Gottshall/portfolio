@@ -1,6 +1,10 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import type { Project } from '@/sanity/api/project'
+import { Card, CardContent } from "../../../components/ui/card"
+import { Badge } from "../../../components/ui/badge"
+import { Button } from "../../../components/ui/button"
+import { GithubIcon } from "lucide-react"
 
 export default function ProjectCard({
   title,
@@ -12,85 +16,94 @@ export default function ProjectCard({
   status
 }: Omit<Project, '_id' | 'slug' | 'description' | 'featured'>) {
   const statusColors = {
-    'in-development': 'bg-navy/10 text-navy dark:bg-tan/10 dark:text-tan border border-navy/20 dark:border-tan/20',
-    'completed': 'bg-red/10 text-red dark:bg-red/10 dark:text-red border border-red/20',
-    'archived': 'bg-gray/10 text-gray dark:bg-gray/10 dark:text-gray border border-gray/20',
-    'planned-update': 'bg-cream/20 text-navy dark:bg-cream/10 dark:text-tan border border-cream/30'
+    'in-development': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream',
+    'completed': 'bg-red/5 text-red dark:bg-red/5 dark:text-red',
+    'archived': 'bg-gray/5 text-gray dark:bg-gray/5 dark:text-gray',
+    'planned-update': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream'
   }
 
   return (
-    <div className="group relative bg-navy-light dark:bg-navy-light/90 rounded-xl overflow-hidden border border-navy/10 dark:border-tan/10 shadow-lg shadow-navy/5">
+    <Card className="group relative overflow-hidden bg-white dark:bg-navy-light/30 transition-all duration-300 
+      border border-navy/5 dark:border-[#4A9DFF]/40
+      dark:shadow-[0_0_1px_#4A9DFF,inset_0_0_1px_#4A9DFF] 
+      dark:hover:shadow-[0_0_2px_#4A9DFF,inset_0_0_2px_#4A9DFF] 
+      dark:hover:border-[#4A9DFF]/70
+      hover:scale-[1.02]
+      w-[280px]">
       {/* Image Container */}
-      <div className="relative w-full h-56 overflow-hidden">
+      <div className="relative h-40 w-full overflow-hidden bg-gray-50 dark:bg-navy/40">
         <Image
           src={urlFor(thumbnail).url()}
           alt={title}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent dark:from-navy/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* Content Container */}
-      <div className="p-6">
+      <CardContent className="p-5 flex flex-col gap-3">
         {/* Header */}
-        <div className="flex justify-between items-start gap-4 mb-4">
-          <h2 className="text-xl font-semibold text-cream dark:text-cream">{title}</h2>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-            status === 'completed' 
-              ? 'bg-red-bright/20 text-red-bright border border-red-bright/30'
-              : statusColors[status]
-          } whitespace-nowrap`}>
+        <div className="space-y-1">
+          <h2 className="text-lg font-bold text-navy dark:text-cream/90">{title}</h2>
+          <Badge variant="outline" className={`${statusColors[status]} text-[10px] font-medium`}>
             {status === 'planned-update' ? 'Update Planned' : status.replace('-', ' ')}
-          </span>
+          </Badge>
         </div>
 
         {/* Description */}
-        <p className="text-gray dark:text-gray mb-6 line-clamp-2">
+        <p className="text-navy/70 dark:text-cream/60 text-sm leading-relaxed line-clamp-2">
           {shortDescription}
         </p>
 
         {/* Technologies */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-1.5">
           {technologies.map((tech) => (
-            <span 
-              key={tech} 
-              className="px-3 py-1 rounded-full text-xs font-medium 
-                       bg-cream/10 dark:bg-tan/10 
-                       text-cream dark:text-cream 
-                       border border-cream/20 dark:border-tan/20"
+            <Badge 
+              key={tech}
+              variant="outline"
+              className="bg-transparent text-[10px] font-medium text-navy/60 dark:text-cream/50 border-navy/20 dark:border-cream/20"
             >
               {tech}
-            </span>
+            </Badge>
           ))}
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
-          <a
-            href={projectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 px-4 py-2 text-center rounded-lg 
-                     bg-red-bright hover:bg-red-bright/90 
-                     text-cream font-medium 
-                     transition-colors duration-200"
-          >
-            View Project
-          </a>
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 px-4 py-2 text-center rounded-lg 
-                     border border-cream/20 
-                     text-cream hover:bg-cream/10 
-                     transition-colors duration-200"
-          >
-            GitHub
-          </a>
+        <div className="flex gap-2 mt-1">
+          {projectUrl && (
+            <Button 
+              asChild
+              size="sm"
+              className="flex-1 bg-red-bright hover:bg-red-bright/90 text-cream"
+            >
+              <a
+                href={projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Project
+              </a>
+            </Button>
+          )}
+          {githubUrl && (
+            <Button 
+              asChild
+              size="sm"
+              variant="outline"
+              className="flex-1 bg-transparent border-cream text-cream hover:bg-cream/10"
+            >
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GithubIcon className="mr-2 h-3.5 w-3.5" />
+                GitHub
+              </a>
+            </Button>
+          )}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 } 
