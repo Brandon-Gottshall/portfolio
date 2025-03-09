@@ -17,10 +17,30 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           {/* Desktop menu */}
           <div className="hidden md:flex space-x-8">
-            <Link href="/about" className="text-navy dark:text-tan hover:text-red dark:hover:text-red">About</Link>
-            <Link href="/projects" className="text-navy dark:text-tan hover:text-red dark:hover:text-red">Projects</Link>
-            <Link href="/blog" className="text-navy dark:text-tan hover:text-red dark:hover:text-red">Blog</Link>
-            <Link href="/contact" className="text-navy dark:text-tan hover:text-red dark:hover:text-red">Contact</Link>
+            <Link 
+              href="/about" 
+              className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright transition-colors duration-200"
+            >
+              About
+            </Link>
+            <Link 
+              href="/projects" 
+              className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright transition-colors duration-200"
+            >
+              Projects
+            </Link>
+            <Link 
+              href="/blog" 
+              className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright transition-colors duration-200"
+            >
+              Blog
+            </Link>
+            <Link 
+              href="/contact" 
+              className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright transition-colors duration-200"
+            >
+              Contact
+            </Link>
           </div>
 
           <ThemeSwitch />
@@ -41,10 +61,34 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         <div className={`${isOpen ? 'flex' : 'hidden'} absolute top-16 left-0 right-0 flex-col items-center space-y-4 py-4 bg-cream dark:bg-black md:hidden`}>
-          <Link href="/about" className="text-navy dark:text-tan hover:text-red dark:hover:text-red" onClick={() => setIsOpen(false)}>About</Link>
-          <Link href="/projects" className="text-navy dark:text-tan hover:text-red dark:hover:text-red" onClick={() => setIsOpen(false)}>Projects</Link>
-          <Link href="/blog" className="text-navy dark:text-tan hover:text-red dark:hover:text-red" onClick={() => setIsOpen(false)}>Blog</Link>
-          <Link href="/contact" className="text-navy dark:text-tan hover:text-red dark:hover:text-red" onClick={() => setIsOpen(false)}>Contact</Link>
+          <Link 
+            href="/about" 
+            className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright"
+            onClick={() => setIsOpen(false)}
+          >
+            About
+          </Link>
+          <Link 
+            href="/projects" 
+            className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright"
+            onClick={() => setIsOpen(false)}
+          >
+            Projects
+          </Link>
+          <Link 
+            href="/blog" 
+            className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright"
+            onClick={() => setIsOpen(false)}
+          >
+            Blog
+          </Link>
+          <Link 
+            href="/contact" 
+            className="text-navy dark:text-cream hover:text-red-bright dark:hover:text-red-bright"
+            onClick={() => setIsOpen(false)}
+          >
+            Contact
+          </Link>
         </div>
       </div>
     </nav>

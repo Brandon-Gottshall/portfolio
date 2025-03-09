@@ -7,11 +7,26 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			navy: '#1A237E',
-  			red: '#974951',
-  			gray: '#959991',
-  			tan: '#D7CBA9',
-  			cream: '#E3DEC8',
+  			navy: {
+  				DEFAULT: '#1A237E',
+  				light: '#303F9F',
+  			},
+  			red: {
+  				DEFAULT: '#974951',
+  				bright: '#B25D65',
+  			},
+  			gray: {
+  				DEFAULT: '#959991',
+  				dark: '#2A2A2A',
+  			},
+  			tan: {
+  				DEFAULT: '#D7CBA9',
+  				muted: '#C5B797',
+  			},
+  			cream: {
+  				DEFAULT: '#E3DEC8',
+  				dark: '#D1CCB6',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

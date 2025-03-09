@@ -12,12 +12,13 @@ const Footer = ({ lastUpdated }: FooterProps) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-navy text-cream dark:bg-black dark:text-tan">
+    <footer className="w-full bg-gray-dark">
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-8">
+        {/* Top row: 3 columns, centered as a group */}
+        <div className="flex flex-col md:flex-row justify-center md:justify-evenly items-center md:items-start gap-8">
           {/* CTA Section */}
-          <div className="md:col-span-4 flex flex-col justify-center items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-xl font-semibold mb-4">Let&apos;s Create Something Amazing</h3>
             <Link
               href="/contact"
@@ -29,7 +30,7 @@ const Footer = ({ lastUpdated }: FooterProps) => {
           </div>
 
           {/* Contact Section */}
-          <div className="md:col-span-4 flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-xl font-semibold mb-4">Get in Touch</h3>
             <p className="text-cream/80 dark:text-tan/80 mb-4">Reach out to discuss opportunities</p>
             <div className="flex gap-4">
@@ -62,7 +63,7 @@ const Footer = ({ lastUpdated }: FooterProps) => {
           </div>
 
           {/* Navigation Section */}
-          <div className="md:col-span-4 flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
             <nav className="flex flex-col space-y-2">
               <Link href="/" className="hover:text-red transition-colors duration-300">
@@ -80,14 +81,12 @@ const Footer = ({ lastUpdated }: FooterProps) => {
             </nav>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-cream/20 dark:border-tan/20">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-cream/60 dark:text-tan/60">
+        {/* Bottom Bar */}
+        <div className="border-t border-cream/20 dark:border-tan/20 pt-4">
+          <div className="flex flex-col md:flex-row justify-center md:justify-between items-center text-sm text-cream/60 dark:text-tan/60 gap-2">
             <p>© {currentYear} Brandon Gottshall. All rights reserved.</p>
-            <p className="mt-2 md:mt-0">Last Updated: {lastUpdated}</p>
+            <p>Last Updated: {lastUpdated}</p>
           </div>
         </div>
       </div>
