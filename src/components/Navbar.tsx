@@ -1,94 +1,106 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ThemeSwitch } from './ThemeSwitch';
+import { ChevronDown } from 'lucide-react';
+
+const navLinks = [
+  { title: 'About', href: '/about' },
+  { title: 'Projects', href: '/projects' },
+  { title: 'Blog', href: '/blog' },
+  { title: 'Contact', href: '/contact' },
+];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <nav className="p-4 bg-cream dark:bg-navy-darkest border-b border-navy/10 dark:border-cream/10">
       <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-light text-navy dark:text-cream">
-          BG
-        </Link>
-        
-        <div className="flex items-center gap-4">
-          {/* Desktop menu */}
-          <div className="hidden md:flex space-x-8">
-            <Link 
-              href="/about" 
-              className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            >
-              About
+        {/* Logo/Name that expands */}
+        <motion.div
+          className="relative group"
+          initial={false}
+          onMouseLeave={() => !isMobile && setIsExpanded(false)}
+        >
+          <motion.div
+            className="flex items-center gap-1 cursor-pointer pb-2 group-hover:text-navy-light dark:group-hover:text-cream/80 transition-colors duration-200"
+            initial={{ width: 'auto' }}
+            animate={{ width: isExpanded ? 'auto' : '2.5rem' }}
+            onClick={() => setIsExpanded(!isExpanded)}
+            onHoverStart={() => !isMobile && setIsExpanded(true)}
+          >
+            <Link href="/" className="whitespace-nowrap text-2xl font-light text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200">
+              {isExpanded ? 'Brandon Gottshall' : 'BG'}
             </Link>
-            <Link 
-              href="/projects" 
-              className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
+            <motion.div
+              initial={{ y: 0 }}
+              animate={{
+                y: [0, -2, 0],
+                rotate: isExpanded ? 180 : 0
+              }}
+              transition={{
+                y: {
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  duration: 1,
+                  ease: "easeInOut",
+                  repeatDelay: 0.5
+                },
+                rotate: {
+                  duration: 0.2
+                }
+              }}
+              className="opacity-50 group-hover:opacity-100 transition-opacity duration-200"
             >
-              Projects
-            </Link>
-            <Link 
-              href="/blog" 
-              className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/contact" 
-              className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            >
-              Contact
-            </Link>
-          </div>
+              <ChevronDown className="h-4 w-4 text-navy dark:text-cream" />
+            </motion.div>
+          </motion.div>
 
+          {/* Accordion menu */}
+          <AnimatePresence>
+            {isExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-full left-0 -mt-2 z-50"
+              >
+                <div className="py-1 min-w-[160px] bg-cream dark:bg-navy-darkest border border-navy/10 dark:border-cream/10 rounded-lg shadow-lg">
+                  <div className="py-1"> {/* Extra padding container to maintain hover area */}
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.title}
+                        href={link.href}
+                        onClick={() => setIsExpanded(false)}
+                        className="block px-4 py-2 text-navy dark:text-cream hover:bg-navy/5 dark:hover:bg-cream/5 transition-colors duration-200"
+                      >
+                        {link.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Theme Switch */}
+        <div className="flex items-center">
           <ThemeSwitch />
-          
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden"
-            aria-label="Toggle menu"
-          >
-            <div className="space-y-2">
-              <span className={`block w-8 h-0.5 bg-navy dark:bg-cream transition-transform duration-300 ${isOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
-              <span className={`block w-8 h-0.5 bg-navy dark:bg-cream transition-opacity duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
-              <span className={`block w-8 h-0.5 bg-navy dark:bg-cream transition-transform duration-300 ${isOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
-            </div>
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        <div className={`${isOpen ? 'flex' : 'hidden'} absolute top-16 left-0 right-0 flex-col items-center space-y-4 py-4 bg-cream dark:bg-navy-darkest border-b border-navy/10 dark:border-cream/10 md:hidden`}>
-          <Link 
-            href="/about" 
-            className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            onClick={() => setIsOpen(false)}
-          >
-            About
-          </Link>
-          <Link 
-            href="/projects" 
-            className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            onClick={() => setIsOpen(false)}
-          >
-            Projects
-          </Link>
-          <Link 
-            href="/blog" 
-            className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            onClick={() => setIsOpen(false)}
-          >
-            Blog
-          </Link>
-          <Link 
-            href="/contact" 
-            className="text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
-            onClick={() => setIsOpen(false)}
-          >
-            Contact
-          </Link>
         </div>
       </div>
     </nav>
