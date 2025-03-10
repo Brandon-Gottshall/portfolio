@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { ArrowRight, CheckCircle, ExternalLink, Github, Star, Terminal } from "lucide-react"
 import { TextLoop } from "react-text-loop-next"
+import GithubLanguageStats from '@/components/GithubLanguageStats'
 
 export default function Home() {
   const projects = [
@@ -30,39 +31,6 @@ export default function Home() {
       technologies: ["Next.js", "Stripe", "Sanity CMS", "Vercel"],
       challenge: "Created a high-converting e-commerce platform with 99% Lighthouse score",
     }
-  ]
-
-  const skills = [
-    {
-      category: "Frontend",
-      items: [
-        { name: "Next.js", level: 95 },
-        { name: "React", level: 95 },
-        { name: "TypeScript", level: 90 },
-        { name: "Tailwind CSS", level: 90 },
-        { name: "Framer Motion", level: 85 },
-      ],
-    },
-    {
-      category: "Backend",
-      items: [
-        { name: "Node.js", level: 85 },
-        { name: "API Routes", level: 90 },
-        { name: "Prisma", level: 85 },
-        { name: "MongoDB", level: 80 },
-        { name: "PostgreSQL", level: 75 },
-      ],
-    },
-    {
-      category: "DevOps",
-      items: [
-        { name: "Vercel", level: 90 },
-        { name: "CI/CD", level: 85 },
-        { name: "Docker", level: 80 },
-        { name: "AWS", level: 75 },
-        { name: "Testing", level: 85 },
-      ],
-    },
   ]
 
   return (
@@ -182,29 +150,43 @@ export default function Home() {
       {/* Skills Section */}
       <section className="bg-cream-dark/50 dark:bg-navy py-16">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-light mb-12 text-center text-navy dark:text-cream tracking-tight">
-            Technical Expertise
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-light mb-4 text-navy dark:text-cream tracking-tight">
+              Technical Expertise
+            </h2>
+            <p className="text-gray-dark dark:text-tan text-lg max-w-2xl mx-auto">
+              Analysis of my GitHub repositories, showing the percentage of projects using each technology. 
+              Hover over items to see detailed usage information.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {skills.map((skillGroup) => (
-              <div key={skillGroup.category}>
-                <h3 className="text-xl font-light mb-6 text-navy dark:text-cream">{skillGroup.category}</h3>
-                <div className="space-y-6">
-                  {skillGroup.items.map((skill) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between mb-2">
-                        <span className="font-code text-navy dark:text-cream">{skill.name}</span>
-                        <span className="text-gray-dark dark:text-tan">{skill.level}%</span>
-                      </div>
-                      <div className="h-2 bg-cream/50 dark:bg-navy-light/30 rounded-full overflow-hidden">
-                        <div className="h-full bg-red/80 dark:bg-red-bright/80 rounded-full" style={{ width: `${skill.level}%` }}></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* GitHub Language Stats */}
+            <div>
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+                Language Distribution
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories contain each programming language">ⓘ</span>
+              </h3>
+              <GithubLanguageStats type="languages" />
+            </div>
+
+            {/* GitHub Framework Stats */}
+            <div>
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+                Framework Distribution
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories use each framework, based on package dependencies">ⓘ</span>
+              </h3>
+              <GithubLanguageStats type="frameworks" />
+            </div>
+
+            {/* GitHub Tools Stats */}
+            <div>
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+                Development Tools
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories use each development tool, including testing frameworks, databases, and utilities">ⓘ</span>
+              </h3>
+              <GithubLanguageStats type="tools" />
+            </div>
           </div>
         </div>
       </section>
