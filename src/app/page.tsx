@@ -160,32 +160,38 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="space-y-16">
             {/* GitHub Language Stats */}
             <div>
-              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2 justify-center">
                 Language Distribution
                 <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits containing each programming language">ⓘ</span>
               </h3>
-              <GithubLanguageStats type="languages" />
+              <div className="max-w-4xl mx-auto">
+                <GithubLanguageStats type="languages" showBoth={true} />
+              </div>
             </div>
 
             {/* GitHub Framework Stats */}
             <div>
-              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2 justify-center">
                 Framework Distribution
                 <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits that use each framework">ⓘ</span>
               </h3>
-              <GithubLanguageStats type="frameworks" />
+              <div className="max-w-4xl mx-auto">
+                <GithubLanguageStats type="frameworks" showBoth={true} />
+              </div>
             </div>
 
             {/* GitHub Tools Stats */}
             <div>
-              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
+              <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2 justify-center">
                 Development Tools
                 <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits that use each development tool">ⓘ</span>
               </h3>
-              <GithubLanguageStats type="tools" />
+              <div className="max-w-4xl mx-auto">
+                <GithubLanguageStats type="tools" showBoth={true} />
+              </div>
             </div>
           </div>
         </div>
