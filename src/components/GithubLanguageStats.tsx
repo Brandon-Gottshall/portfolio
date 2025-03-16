@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import {
   Tooltip,
@@ -47,6 +47,11 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  // Add state for tracking active segment
+  const [activeSegment, setActiveSegment] = useState<number | null>(null)
+  
+  // Reference to hold the chart instance
+  const chartRef = useRef<any>(null)
 
   useEffect(() => {
     try {
@@ -99,13 +104,10 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
     }))
     .sort((a, b) => b.percentage - a.percentage)
 
-  // Only show top 5 for donut chart, group the rest into "Other"
-  const donutStats = [...processedStats]
-  
-  // Group small slices
-  const topItems = donutStats.slice(0, 5)
-  const smallItems = donutStats.slice(5)
-  
+  // Only show top 4 for donut chart, group the rest into "Other"
+  const topItems = processedStats.slice(0, 4)
+  const smallItems = processedStats.slice(4)
+
   // Add "Other" category if there are small items
   const othersPercentage = smallItems.reduce((sum, item) => sum + item.percentage, 0)
   const othersCommits = smallItems.reduce((sum, item) => sum + item.commits, 0)
@@ -122,8 +124,9 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
       }]
     : topItems
 
-  // For bar chart, show top 8 items
-  const barStats = processedStats.slice(0, 8)
+  // For bar chart, show top 4 plus next 5 items individually
+  const nextFiveItems = smallItems.slice(0, 5)
+  const barStats = [...topItems, ...nextFiveItems]
 
   if (loading) {
     return (
@@ -147,18 +150,10 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
     'rgba(26, 35, 126, 0.95)',    // navy
     'rgba(215, 203, 169, 0.95)',  // tan
     'rgba(48, 63, 159, 0.95)',    // navy-light
-    'rgba(178, 93, 101, 0.95)',   // red-bright
-    'rgba(100, 100, 100, 0.95)',  // gray for "Other"
+    'rgba(178, 93, 101, 0.95)',   // red-bright (for "Other")
   ]
 
-  const chartBorderColors = [
-    'rgba(255, 255, 255, 1)',   // white border for all segments
-    'rgba(255, 255, 255, 1)',
-    'rgba(255, 255, 255, 1)',
-    'rgba(255, 255, 255, 1)',
-    'rgba(255, 255, 255, 1)',
-    'rgba(255, 255, 255, 1)',
-  ]
+  const chartBorderColors = Array(5).fill('rgba(255, 255, 255, 1)')  // white borders for all segments
 
   const chartData = {
     labels: finalDonutStats.map(stat => stat.name),
@@ -175,213 +170,243 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
     ],
   }
 
-  // Custom label generator function with proper typing
-  const generateCustomLabels = (chart: any) => {
-    const data = chart.data;
-    return data.labels.map((label: string, i: number) => {
-      const meta = chart.getDatasetMeta(0);
-      const style = meta.controller.getStyle(i);
-      const value = chart.data.datasets[0].data[i].toFixed(1);
-      
-      return {
-        text: `${label} (${value}%)`,
-        fillStyle: style.backgroundColor,
-        strokeStyle: style.borderColor,
-        lineWidth: style.borderWidth,
-        pointStyle: 'circle',
-        hidden: false,
-        index: i
-      };
-    });
-  };
-
-  const chartOptions = {
+  // Update the donut options for better clarity and labeling
+  const donutOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    cutout: '55%', // Less cutout (vs. 70%) for more visible slices
     layout: {
-      padding: 20, // Add padding for labels
+      padding: 15 // More breathing room
     },
     plugins: {
       legend: {
-        position: 'right' as const,
-        labels: {
-          font: {
-            family: "'Fira Code', monospace",
-            size: 13
-          },
-          color: isDarkMode ? 'rgba(227, 222, 200, 1)' : 'rgba(26, 35, 126, 1)',
-          usePointStyle: true,
-          padding: 15,
-          boxWidth: 12,
-          boxHeight: 12,
-          generateLabels: generateCustomLabels
-        },
-        // Disable toggling legend items in a type-safe way
-        onClick: function() { return undefined; }
+        display: false,
       },
-      // Add direct labels on chart segments
       datalabels: {
-        color: '#fff',
+        color: '#FFFFFF',
         font: {
           weight: 'bold',
-          size: 12,
+          size: 13,
           family: "'Fira Sans', sans-serif",
         },
+        textStrokeColor: 'rgba(0, 0, 0, 0.7)',
+        textStrokeWidth: 3,
         formatter: (value: number) => {
-          return value > 8 ? `${value.toFixed(0)}%` : '';
+          // Only show percentage for larger slices (>10%)
+          return value > 10 ? `${value.toFixed(0)}%` : '';
         },
-        textAlign: 'center',
-        textStrokeColor: 'rgba(0, 0, 0, 0.5)',
-        textStrokeWidth: 2,
-        textShadowBlur: 5,
-        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+        align: 'center',
+        anchor: 'center'
       },
       tooltip: {
         backgroundColor: isDarkMode ? 'rgba(227, 222, 200, 0.95)' : 'rgba(26, 35, 126, 0.95)',
         titleColor: isDarkMode ? 'rgba(26, 35, 126, 0.9)' : 'rgba(227, 222, 200, 0.9)',
         bodyColor: isDarkMode ? 'rgba(26, 35, 126, 0.9)' : 'rgba(227, 222, 200, 0.9)',
-        padding: 12,
+        padding: 10,
         cornerRadius: 6,
         boxPadding: 5,
         callbacks: {
-          label: function(context: {dataIndex: number}) {
+          // Streamlined tooltip content
+          label: function(context: any) {
             const stat = finalDonutStats[context.dataIndex];
-            const percentage = stat.percentage.toFixed(1);
-            const commits = stat.commits;
-            const repos = stat.repositories;
-            
             return [
-              `${percentage}% of all commits`,
-              `${commits} total commits`,
-              `Used in ${repos} repositories`
+              `${stat.percentage.toFixed(1)}% of all commits`,
+              `Used in ${stat.repositories} repositories`
             ];
+          }
+        }
+      },
+      // Add bidirectional event handling to sync donut and bars
+      hover: {
+        onHover: function(event: any, elements: any[]) {
+          if (elements && elements.length) {
+            const index = elements[0].index;
+            setActiveSegment(index);
+          } else {
+            setActiveSegment(null);
           }
         }
       }
     },
-    cutout: '50%', // Less cutout for better visibility
-    elements: {
-      arc: {
-        borderWidth: 3
-      }
-    },
-    animation: {
-      animateRotate: true,
-      animateScale: true
-    }
-  }
+  };
 
-  // Render combined visualization with tooltips and improved contrast
+  // Update for improved layout and visual hierarchy
   if (showBoth) {
-    const donutOptions = {
-      ...chartOptions,
-      plugins: {
-        ...chartOptions.plugins,
-        legend: {
-          display: false, // Remove the built-in legend
-        },
-        datalabels: {
-          color: '#FFFFFF', // Pure white for maximum contrast
-          font: {
-            weight: 'bold',
-            size: 14,
-            family: "'Fira Sans', sans-serif",
-          },
-          textStrokeColor: 'rgba(0, 0, 0, 0.7)', // Darker stroke for better readability
-          textStrokeWidth: 3,
-          textShadowBlur: 6,
-          textShadowColor: 'rgba(0, 0, 0, 0.8)',
-          formatter: (value: number) => {
-            return value > 8 ? `${value.toFixed(0)}%` : '';
-          },
-        }
-      }
-    };
-
     return (
       <div className="bg-white/95 dark:bg-navy-darkest/95 rounded-xl border border-navy/10 dark:border-cream/10 shadow-sm p-6">
-        <h4 className="text-sm font-medium mb-4 text-navy dark:text-cream font-code flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="w-3 h-3 rounded-full bg-navy dark:bg-cream mr-2"></span>
+        <h4 className="text-lg font-medium mb-4 text-navy-dark dark:text-cream-dark flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+          <div className="font-code">
             {type.charAt(0).toUpperCase() + type.slice(1)} Distribution
           </div>
-          <span className="text-xs text-navy-light dark:text-cream italic">Top categories by usage</span>
         </h4>
         
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center">
-          {/* Donut chart on the left */}
-          <div className="md:col-span-2 flex flex-col items-center justify-center h-64">
-            <Doughnut data={chartData} options={donutOptions} />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
+          {/* Visual summary section */}
+          <div className="md:col-span-2">
+            <h4 className="text-sm font-medium mb-3 text-navy dark:text-cream font-code">
+              Visual Overview <span className="text-xs text-navy-light italic ml-2">Top {topItems.length} + Other</span>
+            </h4>
+            <div className="flex flex-col items-center justify-center h-72">
+              <Doughnut 
+                data={chartData} 
+                options={donutOptions} 
+                ref={chartRef}
+              />
+            </div>
           </div>
           
-          {/* Bar chart serving as the legend */}
+          {/* Detailed breakdown section */}
           <div className="md:col-span-3">
+            <h4 className="text-sm font-medium mb-3 text-navy dark:text-cream font-code">
+              Detailed Breakdown <span className="text-xs text-navy-light italic ml-2">Top {barStats.length} Categories</span>
+            </h4>
             <TooltipProvider delayDuration={100}>
-              <div className="space-y-4">
-                {finalDonutStats.map((stat, index) => (
-                  <div 
-                    key={stat.name} 
-                    className="group p-2 rounded-md hover:bg-cream/40 dark:hover:bg-navy-light/30"
-                  >
-                    <div className="flex justify-between mb-1">
-                      {/* Higher contrast for category names */}
-                      <span className="font-code text-navy font-medium dark:text-cream flex items-center">
-                        <span 
-                          className="w-3 h-3 rounded-full mr-2" 
-                          style={{backgroundColor: chartColors[index].toString()}}
-                        ></span>
-                        {stat.name}
-                      </span>
+              <div className="space-y-4 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar">
+                {barStats.map((stat, index) => {
+                  // Check if this is one of the additional items (beyond the top 4)
+                  const isAdditionalItem = index >= topItems.length;
+                  // For additional items, we need to find the index of "Other" in finalDonutStats
+                  const otherIndex = finalDonutStats.findIndex(item => item.name === "Other");
+                  
+                  return (
+                    <div 
+                      key={stat.name} 
+                      className={`group p-2 rounded-md transition-colors duration-200 
+                        ${activeSegment === (isAdditionalItem ? otherIndex : index) 
+                          ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm' 
+                          : 'hover:bg-cream/40 dark:hover:bg-navy-light/30'}`}
+                      onMouseEnter={() => {
+                        // For additional items, highlight the "Other" slice in the donut
+                        const targetIndex = isAdditionalItem ? otherIndex : index;
+                        setActiveSegment(targetIndex);
+                        
+                        // Update the donut chart to highlight the segment AND show tooltip
+                        if (chartRef.current) {
+                          const chart = chartRef.current;
+                          
+                          // Manually trigger hover effect on the appropriate segment
+                          chart.setActiveElements([{
+                            datasetIndex: 0,
+                            index: targetIndex
+                          }]);
+                          
+                          // Access the native chart object to simulate a mouse event at the segment position
+                          const meta = chart.getDatasetMeta(0);
+                          if (meta.data[targetIndex]) {
+                            const arc = meta.data[targetIndex];
+                            
+                            // Get the position of the arc to place the tooltip
+                            const centerX = arc.x;
+                            const centerY = arc.y;
+                            
+                            // Show the tooltip by manually updating its position and active elements
+                            chart.tooltip.setActiveElements([{
+                              datasetIndex: 0,
+                              index: targetIndex
+                            }], {
+                              x: centerX,
+                              y: centerY
+                            });
+                          }
+                          
+                          chart.update();
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        setActiveSegment(null);
+                        
+                        // Remove highlighting AND tooltip from the chart
+                        if (chartRef.current) {
+                          const chart = chartRef.current;
+                          chart.setActiveElements([]);
+                          
+                          // Also hide the tooltip
+                          chart.tooltip.setActiveElements([], {});
+                          chart.tooltip.active = false;
+                          
+                          chart.update();
+                        }
+                      }}
+                    >
+                      <div className="flex justify-between mb-1">
+                        {/* Higher contrast for category names */}
+                        <span className="font-code text-navy font-medium dark:text-cream flex items-center">
+                          <span 
+                            className={`rounded-full mr-2 transition-all duration-200
+                              ${activeSegment === (isAdditionalItem ? otherIndex : index) ? 'w-4 h-4 ring-1 ring-navy/30 dark:ring-cream/30' : 'w-3 h-3'}`}
+                            style={{
+                              backgroundColor: isAdditionalItem 
+                                ? chartColors[4 % chartColors.length].toString() // Use "Other" color
+                                : chartColors[index % chartColors.length].toString()
+                            }}
+                          ></span>
+                          {stat.name}
+                          {isAdditionalItem && (
+                            <span className="ml-1.5 text-xs italic text-navy-light dark:text-cream/70">(in Other)</span>
+                          )}
+                        </span>
+                        
+                        {/* Percentage with cleaner tooltip */}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="px-2 py-1 -my-1 rounded transition-colors cursor-help hover:bg-cream/50 dark:hover:bg-navy-light/30">
+                              <span className={`font-semibold ${
+                                activeSegment === (isAdditionalItem ? otherIndex : index)
+                                  ? 'text-navy dark:text-cream' 
+                                  : 'text-navy-light dark:text-cream'
+                              }`}>
+                                {stat.percentage.toFixed(1)}%
+                              </span>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="left" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
+                            <p className="font-medium text-cream dark:text-navy">
+                              {`${stat.commits || 0} commits containing ${stat.name} (${stat.percentage.toFixed(1)}% of total)`}
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
                       
-                      {/* Percentage with tooltip */}
+                      {/* Bar with tooltip - enhanced for active state */}
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div className="px-2 py-1 -my-1 rounded transition-colors cursor-help hover:bg-cream/50 dark:hover:bg-navy-light/30">
-                            <span className="text-navy-light font-semibold dark:text-cream">
-                              {stat.percentage.toFixed(1)}%
-                            </span>
+                          <div className="overflow-hidden relative h-3 rounded-full transition-colors cursor-help bg-cream-dark/50 dark:bg-navy-light/40 group-hover:bg-cream-dark/70 dark:group-hover:bg-navy-light/60">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-300 ${
+                                activeSegment === (isAdditionalItem ? otherIndex : index) ? 'h-4 -mt-0.5' : ''
+                              }`}
+                              style={{ 
+                                width: `${stat.percentage}%`,
+                                backgroundColor: isAdditionalItem 
+                                  ? `${chartColors[4 % chartColors.length].toString()}` // Use "Other" color with opacity
+                                  : chartColors[index % chartColors.length].toString()
+                              }}
+                            />
+                            {/* Invisible larger hit area */}
+                            <div className="absolute inset-0 -my-3" />
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent side="left" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
+                        <TooltipContent side="top" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10 max-w-sm">
                           <p className="font-medium text-cream dark:text-navy">
-                            {`${stat.commits || 0} commits containing ${stat.name} (${stat.percentage.toFixed(1)}% of total)`}
+                            {type === 'languages'
+                              ? `${stat.commits || 0} commits contain ${stat.name}${stat.name !== "Other" ? " code" : ""} across ${stat.repositories} repos${stat.bytes ? `, ${formatBytes(stat.bytes)}` : ""}`
+                              : `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
+                            }
+                            {isAdditionalItem && (
+                              <span className="block text-xs mt-1 italic">Part of the "Other" category in the donut chart</span>
+                            )}
                           </p>
                         </TooltipContent>
                       </Tooltip>
+                      
+                      {/* Additional stats with improved contrast */}
+                      <div className="text-xs text-navy/80 dark:text-cream/80 mt-1 flex justify-between font-medium">
+                        <span>{stat.commits.toLocaleString()} commits</span>
+                        <span>{stat.repositories} repositories</span>
+                      </div>
                     </div>
-                    
-                    {/* Bar with tooltip */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="overflow-hidden relative h-3 rounded-full transition-colors cursor-help bg-cream-dark/50 dark:bg-navy-light/40 group-hover:bg-cream-dark/70 dark:group-hover:bg-navy-light/60">
-                          <div 
-                            className="h-full rounded-full" 
-                            style={{ 
-                              width: `${stat.percentage}%`,
-                              backgroundColor: chartColors[index].toString()
-                            }}
-                          />
-                          {/* Invisible larger hit area */}
-                          <div className="absolute inset-0 -my-3" />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
-                        <p className="font-medium text-cream dark:text-navy">
-                          {type === 'languages'
-                            ? `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
-                            : `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
-                          }
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                    
-                    {/* Additional stats with improved contrast */}
-                    <div className="text-xs text-navy dark:text-cream mt-1 flex justify-between font-medium">
-                      <span>{stat.commits} commits</span>
-                      <span>{stat.repositories} repositories</span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </TooltipProvider>
           </div>
