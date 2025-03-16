@@ -187,7 +187,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
         font: {
           weight: 'bold',
           size: 13,
-          family: "'Fira Sans', sans-serif",
+          family: "'Inter', system-ui, sans-serif",
         },
         textStrokeColor: 'rgba(0, 0, 0, 0.7)',
         textStrokeWidth: 3,
@@ -205,6 +205,15 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
         padding: 10,
         cornerRadius: 6,
         boxPadding: 5,
+        titleFont: {
+          family: "'Inter', system-ui, sans-serif",
+          size: 14,
+          weight: 'bold',
+        },
+        bodyFont: {
+          family: "'Inter', system-ui, sans-serif",
+          size: 13,
+        },
         callbacks: {
           // Streamlined tooltip content
           label: function(context: any) {
@@ -233,35 +242,118 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
   // Update for improved layout and visual hierarchy
   if (showBoth) {
     return (
-      <div className="bg-white/95 dark:bg-navy-darkest/95 rounded-xl border border-navy/10 dark:border-cream/10 shadow-sm p-6">
-        <h4 className="text-lg font-medium mb-4 text-navy-dark dark:text-cream-dark flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-          <div className="font-code">
-            {type.charAt(0).toUpperCase() + type.slice(1)} Distribution
-          </div>
+      <div className="p-6 rounded-xl border shadow-sm bg-white/95 dark:bg-navy-darkest/95 border-navy/10 dark:border-cream/10">
+        <h4 className="mb-6 text-lg font-medium text-center text-navy-dark dark:text-cream-dark">
+          {type.charAt(0).toUpperCase() + type.slice(1)} Distribution
         </h4>
         
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
+        <div className="grid grid-cols-1 gap-8 items-start md:grid-cols-5">
           {/* Visual summary section */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-medium mb-3 text-navy dark:text-cream font-code">
-              Visual Overview <span className="text-xs text-navy-light italic ml-2">Top {topItems.length} + Other</span>
+          <div className="flex flex-col h-full md:col-span-2">
+            <h4 className="mb-3 text-sm font-medium text-center text-navy dark:text-cream">
+              Visual Overview
+              <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Top {topItems.length} + Other</span>
             </h4>
-            <div className="flex flex-col items-center justify-center h-72">
-              <Doughnut 
-                data={chartData} 
-                options={donutOptions} 
-                ref={chartRef}
-              />
+            
+            {/* Center the donut and legend in the available space */}
+            <div className="flex flex-col flex-1 justify-center items-center">
+              {/* Fixed height container for the donut */}
+              <div className="flex justify-center items-center mb-2 w-full h-64">
+                <Doughnut 
+                  data={chartData} 
+                  options={donutOptions} 
+                  ref={chartRef}
+                />
+              </div>
+              
+              {/* Compact legend with better typography */}
+              <div className="flex flex-wrap gap-2 justify-center mt-2">
+                {finalDonutStats.map((stat, index) => (
+                  <div 
+                    key={stat.name} 
+                    className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md cursor-pointer transition-colors
+                      ${activeSegment === index
+                        ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm'
+                        : 'hover:bg-cream/40 dark:hover:bg-navy-light/30'}`}
+                    onMouseEnter={() => {
+                      // For additional items, highlight the "Other" slice in the donut
+                      const targetIndex = stat.name === "Other" ? finalDonutStats.findIndex(item => item.name === "Other") : index;
+                      setActiveSegment(targetIndex);
+                      
+                      // Update the donut chart to highlight the segment AND show tooltip
+                      if (chartRef.current) {
+                        const chart = chartRef.current;
+                        
+                        // Manually trigger hover effect on the appropriate segment
+                        chart.setActiveElements([{
+                          datasetIndex: 0,
+                          index: targetIndex
+                        }]);
+                        
+                        // Access the native chart object to simulate a mouse event at the segment position
+                        const meta = chart.getDatasetMeta(0);
+                        if (meta.data[targetIndex]) {
+                          const arc = meta.data[targetIndex];
+                          
+                          // Get the position of the arc to place the tooltip
+                          const centerX = arc.x;
+                          const centerY = arc.y;
+                          
+                          // Show the tooltip by manually updating its position and active elements
+                          chart.tooltip.setActiveElements([{
+                            datasetIndex: 0,
+                            index: targetIndex
+                          }], {
+                            x: centerX,
+                            y: centerY
+                          });
+                        }
+                        
+                        chart.update();
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setActiveSegment(null);
+                      
+                      // Remove highlighting AND tooltip from the chart
+                      if (chartRef.current) {
+                        const chart = chartRef.current;
+                        chart.setActiveElements([]);
+                        
+                        // Also hide the tooltip
+                        chart.tooltip.setActiveElements([], {});
+                        chart.tooltip.active = false;
+                        
+                        chart.update();
+                      }
+                    }}
+                  >
+                    <span 
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{backgroundColor: chartColors[index % chartColors.length]}}
+                    ></span>
+                    <span className="text-xs font-medium text-navy dark:text-cream">
+                      {stat.name}
+                    </span>
+                    {stat.name === "Other" && (
+                      <span className="text-xs text-navy-light/80 dark:text-cream/60">
+                        {stat.percentage.toFixed(1)}%
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           
           {/* Detailed breakdown section */}
           <div className="md:col-span-3">
-            <h4 className="text-sm font-medium mb-3 text-navy dark:text-cream font-code">
-              Detailed Breakdown <span className="text-xs text-navy-light italic ml-2">Top {barStats.length} Categories</span>
+            <h4 className="mb-3 text-sm font-medium text-center text-navy dark:text-cream">
+              Detailed Breakdown
+              <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Top {barStats.length} Categories</span>
             </h4>
             <TooltipProvider delayDuration={100}>
-              <div className="space-y-4 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-3 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar">
                 {barStats.map((stat, index) => {
                   // Check if this is one of the additional items (beyond the top 4)
                   const isAdditionalItem = index >= topItems.length;
@@ -271,10 +363,10 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                   return (
                     <div 
                       key={stat.name} 
-                      className={`group p-2 rounded-md transition-colors duration-200 
+                      className={`group p-2.5 rounded-lg transition-all duration-200 
                         ${activeSegment === (isAdditionalItem ? otherIndex : index) 
-                          ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm' 
-                          : 'hover:bg-cream/40 dark:hover:bg-navy-light/30'}`}
+                          ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm transform scale-[1.01]' 
+                          : 'hover:bg-cream/40 dark:hover:bg-navy-light/30 hover:shadow-sm'}`}
                       onMouseEnter={() => {
                         // For additional items, highlight the "Other" slice in the donut
                         const targetIndex = isAdditionalItem ? otherIndex : index;
@@ -328,43 +420,32 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                         }
                       }}
                     >
-                      <div className="flex justify-between mb-1">
-                        {/* Higher contrast for category names */}
-                        <span className="font-code text-navy font-medium dark:text-cream flex items-center">
+                      <div className="flex justify-between mb-1.5 items-center">
+                        {/* Category name with icon color matching the donut slice */}
+                        <div className="flex items-center">
                           <span 
                             className={`rounded-full mr-2 transition-all duration-200
-                              ${activeSegment === (isAdditionalItem ? otherIndex : index) ? 'w-4 h-4 ring-1 ring-navy/30 dark:ring-cream/30' : 'w-3 h-3'}`}
-                            style={{
-                              backgroundColor: isAdditionalItem 
-                                ? chartColors[4 % chartColors.length].toString() // Use "Other" color
-                                : chartColors[index % chartColors.length].toString()
-                            }}
+                              ${activeSegment === (isAdditionalItem ? otherIndex : index) ? 'w-3.5 h-3.5' : 'w-3 h-3'}`}
+                            style={{backgroundColor: chartColors[index % chartColors.length]}}
                           ></span>
-                          {stat.name}
-                          {isAdditionalItem && (
-                            <span className="ml-1.5 text-xs italic text-navy-light dark:text-cream/70">(in Other)</span>
-                          )}
-                        </span>
-                        
-                        {/* Percentage with cleaner tooltip */}
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="px-2 py-1 -my-1 rounded transition-colors cursor-help hover:bg-cream/50 dark:hover:bg-navy-light/30">
-                              <span className={`font-semibold ${
-                                activeSegment === (isAdditionalItem ? otherIndex : index)
-                                  ? 'text-navy dark:text-cream' 
-                                  : 'text-navy-light dark:text-cream'
-                              }`}>
-                                {stat.percentage.toFixed(1)}%
+                          <span className={`font-code text-navy font-medium dark:text-cream ${isAdditionalItem ? 'text-sm' : ''}`}>
+                            {stat.name}
+                            {isAdditionalItem && (
+                              <span className="ml-1.5 text-xs text-navy-light/70 dark:text-cream/60 italic normal-font">
+                                (in Other)
                               </span>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent side="left" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
-                            <p className="font-medium text-cream dark:text-navy">
-                              {`${stat.commits || 0} commits containing ${stat.name} (${stat.percentage.toFixed(1)}% of total)`}
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
+                            )}
+                          </span>
+                        </div>
+                        
+                        {/* Percentage with cleaner display */}
+                        <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
+                          activeSegment === (isAdditionalItem ? otherIndex : index)
+                            ? 'bg-cream/50 dark:bg-navy-light/50 text-navy dark:text-cream' 
+                            : 'text-navy-light dark:text-cream'
+                        }`}>
+                          {stat.percentage.toFixed(1)}%
+                        </span>
                       </div>
                       
                       {/* Bar with tooltip - enhanced for active state */}
@@ -386,21 +467,21 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                             <div className="absolute inset-0 -my-3" />
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent side="top" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10 max-w-sm">
+                        <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                           <p className="font-medium text-cream dark:text-navy">
                             {type === 'languages'
-                              ? `${stat.commits || 0} commits contain ${stat.name}${stat.name !== "Other" ? " code" : ""} across ${stat.repositories} repos${stat.bytes ? `, ${formatBytes(stat.bytes)}` : ""}`
+                              ? `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
                               : `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
                             }
                             {isAdditionalItem && (
-                              <span className="block text-xs mt-1 italic">Part of the "Other" category in the donut chart</span>
+                              <span className="block mt-1 text-xs italic">Part of the "Other" category in the donut chart</span>
                             )}
                           </p>
                         </TooltipContent>
                       </Tooltip>
                       
                       {/* Additional stats with improved contrast */}
-                      <div className="text-xs text-navy/80 dark:text-cream/80 mt-1 flex justify-between font-medium">
+                      <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
                         <span>{stat.commits.toLocaleString()} commits</span>
                         <span>{stat.repositories} repositories</span>
                       </div>

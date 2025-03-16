@@ -76,7 +76,7 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		fontFamily: {
-  			sans: ['Fira Sans', 'var(--font-oxanium)', 'Arial', 'sans-serif'],
+  			sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
   			code: ['Fira Code', 'monospace'],
   		},
   	}
