@@ -558,6 +558,25 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
           // Streamlined tooltip content
           label: function(context: any) {
             const stat = finalDonutStats[context.dataIndex];
+            
+            // For CSS, show the vanilla vs tailwind breakdown
+            if (stat.name === 'CSS' && 'variants' in stat && stat.variants) {
+              const { variants } = stat;
+              const vanillaCommits = variants.vanilla?.commits || 0;
+              const tailwindCommits = variants.tailwind?.commits || 0;
+              const vanillaPercentage = (vanillaCommits / (vanillaCommits + tailwindCommits)) * 100;
+              const tailwindPercentage = (tailwindCommits / (vanillaCommits + tailwindCommits)) * 100;
+              
+              return [
+                `${stat.percentage.toFixed(1)}% of all commits`,
+                `Used in ${stat.repositories} repositories`,
+                ``,
+                `Vanilla: ${vanillaPercentage.toFixed(1)}% (${vanillaCommits} commits)`,
+                `Tailwind: ${tailwindPercentage.toFixed(1)}% (${tailwindCommits} commits)`
+              ];
+            }
+            
+            // Default tooltip for other languages
             return [
               `${stat.percentage.toFixed(1)}% of all commits`,
               `Used in ${stat.repositories} repositories`
@@ -707,7 +726,7 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                       let vanillaPercentage = 0;
                       let tailwindPercentage = 0;
                       
-                      if (isCSS && 'variants' in stat) {
+                      if (isCSS && 'variants' in stat && stat.variants) {
                         const cssVariants = stat.variants as CSSStats['variants'];
                         vanillaCommits = cssVariants.vanilla?.commits || 0;
                         tailwindCommits = cssVariants.tailwind?.commits || 0;
