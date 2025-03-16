@@ -138,7 +138,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-48 text-red dark:text-red-bright">
+      <div className="flex justify-center items-center h-48 text-blue dark:text-blue-accent">
         <p className="text-sm">{error}</p>
       </div>
     )
@@ -146,14 +146,14 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
 
   // High-contrast, more distinct color palette
   const chartColors = [
-    'rgba(151, 73, 81, 0.95)',    // red
-    'rgba(26, 35, 126, 0.95)',    // navy
-    'rgba(215, 203, 169, 0.95)',  // tan
-    'rgba(48, 63, 159, 0.95)',    // navy-light
-    'rgba(178, 93, 101, 0.95)',   // red-bright (for "Other")
+    'rgba(30, 136, 229, 0.95)',   // blue (#1E88E5)
+    'rgba(100, 181, 246, 0.95)',  // blue-light (#64B5F6)
+    'rgba(13, 71, 161, 0.95)',    // blue-dark (#0D47A1)
+    'rgba(79, 195, 247, 0.95)',   // blue-accent (#4FC3F7)
+    'rgba(3, 169, 244, 0.95)',    // lighter blue (#03A9F4)
   ]
 
-  const chartBorderColors = Array(5).fill('rgba(255, 255, 255, 1)')  // white borders for all segments
+  const chartBorderColors = Array(5).fill(isDarkMode ? 'rgba(11, 14, 41, 0.7)' : 'rgba(255, 255, 255, 0.7)')  // dark/light borders for better separation
 
   const chartData = {
     labels: finalDonutStats.map(stat => stat.name),
@@ -185,7 +185,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
       datalabels: {
         color: '#FFFFFF',
         font: {
-          weight: 'bold',
+          weight: 'bold' as 'bold',
           size: 13,
           family: "'Inter', system-ui, sans-serif",
         },
@@ -195,8 +195,8 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
           // Only show percentage for larger slices (>10%)
           return value > 10 ? `${value.toFixed(0)}%` : '';
         },
-        align: 'center',
-        anchor: 'center'
+        align: 'center' as const,
+        anchor: 'center' as const
       },
       tooltip: {
         backgroundColor: isDarkMode ? 'rgba(227, 222, 200, 0.95)' : 'rgba(26, 35, 126, 0.95)',
@@ -208,7 +208,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
         titleFont: {
           family: "'Inter', system-ui, sans-serif",
           size: 14,
-          weight: 'bold',
+          weight: 'bold' as const,
         },
         bodyFont: {
           family: "'Inter', system-ui, sans-serif",
@@ -523,7 +523,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
               <TooltipTrigger asChild>
                 <div className="overflow-hidden relative h-2 rounded-full transition-colors cursor-help bg-cream/50 dark:bg-navy-light/30 group-hover:bg-cream/70 dark:group-hover:bg-navy-light/50">
                   <div 
-                    className="h-full rounded-full transition-all duration-500 bg-red/80 dark:bg-red-bright/80 group-hover:bg-red dark:group-hover:bg-red-bright" 
+                    className="h-full rounded-full transition-all duration-500 bg-blue/80 dark:bg-blue-accent/80 group-hover:bg-blue dark:group-hover:bg-blue-accent" 
                     style={{ width: `${stat.percentage}%` }}
                   />
                   {/* Invisible larger hit area */}

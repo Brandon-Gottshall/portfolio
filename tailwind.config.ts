@@ -12,10 +12,11 @@ export default {
   				DEFAULT: '#1A237E',
   				light: '#303F9F',
   			},
-  			red: {
-  				DEFAULT: '#974951',
-  				bright: '#B25D65',
-  				dark: '#7A3A41',
+  			blue: {
+  				DEFAULT: '#1E88E5',
+  				light: '#64B5F6',
+  				dark: '#0D47A1',
+  				accent: '#4FC3F7',
   			},
   			gray: {
   				DEFAULT: '#959991',

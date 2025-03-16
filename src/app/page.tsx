@@ -60,7 +60,7 @@ export default function Home() {
                 web applications that users love.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-6 py-3 bg-red hover:bg-red-bright text-cream font-medium rounded-lg flex items-center gap-2 transition-colors">
+                <button className="px-6 py-3 bg-blue hover:bg-blue-light text-cream font-medium rounded-lg flex items-center gap-2 transition-colors">
                   View My Work <ArrowRight className="h-4 w-4" />
                 </button>
                 <button className="px-6 py-3 bg-transparent border border-navy/20 dark:border-cream/20 text-navy dark:text-cream font-medium rounded-lg hover:bg-navy/5 dark:hover:bg-cream/5 transition-colors">
@@ -207,7 +207,7 @@ export default function Home() {
                 A selection of my recent work building modern web applications
               </p>
             </div>
-            <button className="text-navy dark:text-cream flex items-center gap-1 hover:text-red dark:hover:text-red-bright transition-colors">
+            <button className="text-navy dark:text-cream flex items-center gap-1 hover:text-blue dark:hover:text-blue-accent transition-colors">
               View All Projects <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -230,7 +230,7 @@ export default function Home() {
                 <div className="p-6">
                   <h3 className="text-xl font-light mb-2 text-navy dark:text-cream">{project.title}</h3>
                   <p className="text-gray-dark dark:text-tan text-sm mb-4">{project.description}</p>
-                  <p className="text-sm mb-4 text-red/90 dark:text-red-bright/90">{project.challenge}</p>
+                  <p className="text-sm mb-4 text-blue/90 dark:text-blue-accent/90">{project.challenge}</p>
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.map((tech) => (
@@ -241,7 +241,7 @@ export default function Home() {
                   </div>
 
                   <div className="flex justify-between">
-                    <button className="text-navy dark:text-cream text-sm flex items-center gap-1 hover:text-red dark:hover:text-red-bright transition-colors">
+                    <button className="text-navy dark:text-cream text-sm flex items-center gap-1 hover:text-blue dark:hover:text-blue-accent transition-colors">
                       View Case Study <ArrowRight className="h-3 w-3" />
                     </button>
                     <button className="text-gray-dark dark:text-tan text-sm flex items-center gap-1 hover:text-navy dark:hover:text-cream transition-colors">
@@ -266,7 +266,7 @@ export default function Home() {
                 how I can help bring your ideas to life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-4 bg-red hover:bg-red-bright text-cream font-medium rounded-lg flex items-center justify-center gap-2 transition-colors">
+                <button className="px-8 py-4 bg-blue hover:bg-blue-light text-cream font-medium rounded-lg flex items-center justify-center gap-2 transition-colors">
                   Schedule a Call
                 </button>
                 <button className="px-8 py-4 bg-transparent border border-navy/20 dark:border-cream/20 text-navy dark:text-cream font-medium rounded-lg hover:bg-navy/5 dark:hover:bg-cream/5 transition-colors flex items-center justify-center gap-2">

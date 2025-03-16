@@ -19,7 +19,7 @@ export default function ContactPage() {
               hover:border-navy/30 dark:hover:border-cream/30 
               transition-all group"
           >
-            <Mail className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-red dark:group-hover:text-red-bright transition-colors" />
+            <Mail className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-blue dark:group-hover:text-blue-accent transition-colors" />
             <div>
               <h2 className="text-xl font-light tracking-tight text-navy dark:text-cream mb-1">Email</h2>
               <p className="text-gray dark:text-tan/80 font-code">blgottshall@gmail.com</p>
@@ -36,7 +36,7 @@ export default function ContactPage() {
               hover:border-navy/30 dark:hover:border-cream/30 
               transition-all group"
           >
-            <Linkedin className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-red dark:group-hover:text-red-bright transition-colors" />
+            <Linkedin className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-blue dark:group-hover:text-blue-accent transition-colors" />
             <div>
               <h2 className="text-xl font-light tracking-tight text-navy dark:text-cream mb-1">LinkedIn</h2>
               <p className="text-gray dark:text-tan/80">Connect with me professionally</p>
@@ -53,7 +53,7 @@ export default function ContactPage() {
               hover:border-navy/30 dark:hover:border-cream/30 
               transition-all group"
           >
-            <Github className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-red dark:group-hover:text-red-bright transition-colors" />
+            <Github className="w-6 h-6 mr-4 text-navy dark:text-cream group-hover:text-blue dark:group-hover:text-blue-accent transition-colors" />
             <div>
               <h2 className="text-xl font-light tracking-tight text-navy dark:text-cream mb-1">GitHub</h2>
               <p className="text-gray dark:text-tan/80">Check out my <span className="font-code">code</span> and contributions</p>

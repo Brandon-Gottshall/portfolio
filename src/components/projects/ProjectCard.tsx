@@ -17,7 +17,7 @@ export default function ProjectCard({
 }: Omit<Project, '_id' | 'slug' | 'description' | 'featured'>) {
   const statusColors = {
     'in-development': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream',
-    'completed': 'bg-red/5 text-red dark:bg-red/5 dark:text-red',
+    'completed': 'bg-blue/5 text-blue dark:bg-blue/5 dark:text-blue-accent',
     'archived': 'bg-gray/5 text-gray dark:bg-gray/5 dark:text-gray',
     'planned-update': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream'
   }
@@ -74,7 +74,7 @@ export default function ProjectCard({
             <Button 
               asChild
               size="sm"
-              className="flex-1 bg-red-bright hover:bg-red-bright/90 text-cream font-medium tracking-wide"
+              className="flex-1 bg-blue hover:bg-blue/90 text-cream font-medium tracking-wide"
             >
               <a
                 href={projectUrl}
