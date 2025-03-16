@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-03-16T02:35:11Z",
+  "lastUpdated": "2025-03-16T05:28:55Z",
   "summary": {
     "total_repos": 111,
     "owned_repos": 69,
     "contributed_repos": 95,
-    "total_commits": 3114,
+    "total_commits": 3091,
     "public_repos": 68,
     "private_repos": 42,
     "forks": 7
@@ -17,9 +17,124 @@
       "commits": 1100
     },
     "CSS": {
-      "repositories": 40,
-      "bytes": 192453,
-      "commits": 163
+      "summary": {
+        "repositories": 24,
+        "bytes": 192453,
+        "commits": 487,
+        "percentage_of_all_commits": 15.76
+      },
+      "variants": {
+        "vanilla": {
+          "repositories": 10,
+          "bytes": 367671,
+          "commits": 157,
+          "percentage_of_css": 32.24,
+          "file_types": {
+            "css": {
+              "files": 103,
+              "bytes": 0,
+              "commits": 155
+            },
+            "scss": {
+              "files": 0,
+              "bytes": 0,
+              "commits": 0
+            },
+            "sass": {
+              "files": 0,
+              "bytes": 0,
+              "commits": 0
+            },
+            "less": {
+              "files": 0,
+              "bytes": 0,
+              "commits": 0
+            }
+          }
+        },
+        "tailwind": {
+          "repositories": 23,
+          "bytes": 43593219,
+          "commits": 330,
+          "percentage_of_css": 67.76,
+          "usage": {
+            "utility_classes": 0,
+            "config_files": 0,
+            "with_plugins": 0
+          },
+          "file_types": {
+            "css": {
+              "files": 163,
+              "bytes": 0,
+              "commits": 306
+            },
+            "scss": {
+              "files": 1,
+              "bytes": 0,
+              "commits": 1
+            },
+            "jsx_tsx": {
+              "files": 293,
+              "bytes": 0,
+              "commits": 289
+            },
+            "html": {
+              "files": 28,
+              "bytes": 0,
+              "commits": 132
+            }
+          }
+        }
+      },
+      "timeline": {
+        "first_used": "2019-12-08 13:52:02 -0500",
+        "first_tailwind": null,
+        "recent_activity": [
+
+        ]
+      },
+      "top_repos": [
+        {
+          "name": "Solomonbutler13/NutriBuddy-",
+          "commits": 206,
+          "bytes": 422725,
+          "has_tailwind": true,
+          "tailwind_commits": 85,
+          "vanilla_commits": 121
+        },
+        {
+          "name": "Brandon-Gottshall/dogPark",
+          "commits": 119,
+          "bytes": 42755963,
+          "has_tailwind": true,
+          "tailwind_commits": 119,
+          "vanilla_commits": 0
+        },
+        {
+          "name": "Brandon-Gottshall/company-site",
+          "commits": 23,
+          "bytes": 33939,
+          "has_tailwind": true,
+          "tailwind_commits": 23,
+          "vanilla_commits": 0
+        },
+        {
+          "name": "Brandon-Gottshall/next-learn-starter",
+          "commits": 21,
+          "bytes": 12233,
+          "has_tailwind": true,
+          "tailwind_commits": 19,
+          "vanilla_commits": 2
+        },
+        {
+          "name": "Brandon-Gottshall/sev9-not-netflix",
+          "commits": 18,
+          "bytes": 30009,
+          "has_tailwind": true,
+          "tailwind_commits": 18,
+          "vanilla_commits": 0
+        }
+      ]
     },
     "TypeScript": {
       "repositories": 16,
@@ -131,7 +246,7 @@
       "bytes": 16,
       "commits": 1
     },
-    "Java Properties": {
+    "SCSS": {
       "repositories": 0,
       "bytes": 0,
       "commits": 1
@@ -146,7 +261,7 @@
       "bytes": 0,
       "commits": 1
     },
-    "SCSS": {
+    "Java Properties": {
       "repositories": 0,
       "bytes": 0,
       "commits": 1
@@ -225,13 +340,13 @@
       "repositories": 42,
       "commits": 452
     },
+    "Rails": {
+      "repositories": 0,
+      "commits": 46
+    },
     "Express": {
       "repositories": 11,
       "commits": 33
-    },
-    "Rails": {
-      "repositories": 0,
-      "commits": 26
     },
     "Flutter": {
       "repositories": 10,
@@ -245,51 +360,23 @@
   "tools": {
     "Markdown": {
       "repositories": 0,
-      "commits": 5748
+      "commits": 2884
     },
     "JSON": {
       "repositories": 0,
-      "commits": 2452
-    },
-    "Kubernetes": {
-      "repositories": 0,
-      "commits": 13
-    },
-    "Firebase": {
-      "repositories": 1,
-      "commits": 6
+      "commits": 1223
     },
     "XML": {
       "repositories": 0,
-      "commits": 6
-    },
-    "Chai": {
-      "repositories": 0,
-      "commits": 6
-    },
-    "Redis": {
-      "repositories": 0,
-      "commits": 6
-    },
-    "Docker": {
-      "repositories": 0,
-      "commits": 5
-    },
-    "Vercel": {
-      "repositories": 2,
-      "commits": 4
-    },
-    "ESLint": {
-      "repositories": 38,
       "commits": 3
     },
     "YAML": {
       "repositories": 0,
-      "commits": 2
-    },
-    "Jupyter": {
-      "repositories": 0,
       "commits": 1
+    },
+    "ESLint": {
+      "repositories": 38,
+      "commits": 0
     },
     "Prettier": {
       "repositories": 9,
@@ -297,6 +384,14 @@
     },
     "Jest": {
       "repositories": 6,
+      "commits": 0
+    },
+    "Vercel": {
+      "repositories": 2,
+      "commits": 0
+    },
+    "Firebase": {
+      "repositories": 1,
       "commits": 0
     },
     "PM2": {
@@ -765,7 +860,9 @@
   ],
   "notes": [
     "Languages with high byte counts but in few repositories might be due to generated code or dependency files.",
-    "Commit-level analysis now processes diffs using Linguist to exclude generated files before counting language contributions."
+    "Commit-level analysis processes diffs using Linguist to exclude generated files before counting language contributions.",
+    "CSS stats now include a comprehensive breakdown of vanilla CSS vs Tailwind usage patterns.",
+    "Memory optimizations have been added to prevent out-of-memory errors during processing."
   ],
   "found_emails": [
     "brandon@effortlessdevelopment.com",

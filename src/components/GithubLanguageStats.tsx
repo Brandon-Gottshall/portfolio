@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import {
@@ -30,9 +31,63 @@ interface DetailedStats {
   commits: number       // Commit count for all types
 }
 
+// New interface for CSS complex structure
+interface CSSStats {
+  summary: {
+    repositories: number;
+    bytes: number;
+    commits: number;
+    percentage_of_all_commits: number;
+  };
+  variants: {
+    vanilla: {
+      repositories: number;
+      bytes: number;
+      commits: number;
+      percentage_of_css: number;
+      file_types: Record<string, { files: number; bytes: number; commits: number }>;
+    };
+    tailwind: {
+      repositories: number;
+      bytes: number;
+      commits: number;
+      percentage_of_css: number;
+      file_types: {
+        css: { files: number; bytes: number; commits: number };
+        scss: { files: number; bytes: number; commits: number };
+        jsx_tsx: { files: number; bytes: number; commits: number };
+        html: { files: number; bytes: number; commits: number };
+      };
+    };
+  };
+}
+
 interface StatsItem extends DetailedStats {
   name: string
   percentage: number
+  // Add optional CSS properties
+  summary?: {
+    repositories: number;
+    bytes: number;
+    commits: number;
+    percentage_of_all_commits: number;
+  };
+  variants?: {
+    vanilla: {
+      repositories: number;
+      bytes: number;
+      commits: number;
+      percentage_of_css: number;
+      file_types: Record<string, { files: number; bytes: number; commits: number }>;
+    };
+    tailwind: {
+      repositories: number;
+      bytes: number;
+      commits: number;
+      percentage_of_css: number;
+      file_types: Record<string, { files: number; bytes: number; commits: number }>;
+    };
+  };
 }
 
 interface Props {
@@ -43,13 +98,250 @@ interface Props {
 interface CachedStats {
   lastUpdated: string
   repoCount: number
-  languages: Record<string, DetailedStats>
+  languages: Record<string, DetailedStats | CSSStats>
   frameworks: Record<string, DetailedStats>
   tools: Record<string, DetailedStats>
 }
 
-export default function GithubLanguageStats({ type, showBoth = false }: Props) {
-  const [stats, setStats] = useState<Record<string, DetailedStats>>({})
+// Type guard to check if a stat is the complex CSS structure
+const isCSSStats = (stat: DetailedStats | CSSStats): stat is CSSStats => {
+  return 'summary' in stat && 'variants' in stat;
+};
+
+// Add this as a new component just before the GithubLanguageStats component definition
+interface CSSBreakdownProps {
+  cssStats: CSSStats;
+  isDarkMode: boolean;
+}
+
+const CSSBreakdown = ({ cssStats, isDarkMode }: CSSBreakdownProps) => {
+  const { summary, variants } = cssStats;
+  const { vanilla, tailwind } = variants;
+  
+  // Colors that match the main chart but specific for CSS variants
+  const cssColors = {
+    vanilla: 'rgba(13, 71, 161, 0.95)',  // blue-dark 
+    tailwind: 'rgba(79, 195, 247, 0.95)', // blue-accent
+  };
+  
+  return (
+    <div className="pt-2 mt-4 border-t border-navy/10 dark:border-cream/10">
+      <h5 className="mb-2 text-sm font-medium text-navy dark:text-cream">
+        CSS Usage Breakdown
+      </h5>
+      
+      {/* Variant distribution */}
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        {/* Vanilla CSS card */}
+        <div className="p-2 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10">
+          <div className="flex items-center mb-1.5">
+            <div 
+              className="w-3 h-3 rounded-full mr-1.5"
+              style={{ backgroundColor: cssColors.vanilla }}
+            ></div>
+            <span className="text-xs font-medium text-navy dark:text-cream">Vanilla CSS</span>
+          </div>
+          <div className="space-y-1">
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Commits:</span>
+              <span className="font-medium">{vanilla.commits.toLocaleString()} ({vanilla.percentage_of_css.toFixed(1)}%)</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Repos:</span>
+              <span className="font-medium">{vanilla.repositories}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Size:</span>
+              <span className="font-medium">{formatBytes(vanilla.bytes)}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Tailwind CSS card */}
+        <div className="p-2 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10">
+          <div className="flex items-center mb-1.5">
+            <div 
+              className="w-3 h-3 rounded-full mr-1.5"
+              style={{ backgroundColor: cssColors.tailwind }}
+            ></div>
+            <span className="text-xs font-medium text-navy dark:text-cream">Tailwind CSS</span>
+          </div>
+          <div className="space-y-1">
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Commits:</span>
+              <span className="font-medium">{tailwind.commits.toLocaleString()} ({tailwind.percentage_of_css.toFixed(1)}%)</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Repos:</span>
+              <span className="font-medium">{tailwind.repositories}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Size:</span>
+              <span className="font-medium">{formatBytes(tailwind.bytes)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* File type breakdown */}
+      <div className="mb-3">
+        <h6 className="text-xs font-medium mb-1.5 text-navy/80 dark:text-cream/80">File Type Distribution</h6>
+        <div className="overflow-hidden h-6 rounded-md bg-cream-dark/50 dark:bg-navy-light/40">
+          {/* CSS files */}
+          {tailwind.file_types.css.files > 0 && (
+            <div 
+              className="float-left h-3" 
+              style={{ 
+                width: `${(tailwind.file_types.css.files / (
+                  tailwind.file_types.css.files + 
+                  tailwind.file_types.scss.files + 
+                  tailwind.file_types.jsx_tsx.files + 
+                  tailwind.file_types.html.files +
+                  vanilla.file_types.css.files + 
+                  vanilla.file_types.scss.files + 
+                  vanilla.file_types.sass.files + 
+                  vanilla.file_types.less.files
+                )) * 100}%`,
+                backgroundColor: cssColors.tailwind,
+              }}
+            ></div>
+          )}
+          {/* Tailwind in JSX/TSX */}
+          {tailwind.file_types.jsx_tsx.files > 0 && (
+            <div 
+              className="float-left h-3" 
+              style={{ 
+                width: `${(tailwind.file_types.jsx_tsx.files / (
+                  tailwind.file_types.css.files + 
+                  tailwind.file_types.scss.files + 
+                  tailwind.file_types.jsx_tsx.files + 
+                  tailwind.file_types.html.files +
+                  vanilla.file_types.css.files + 
+                  vanilla.file_types.scss.files + 
+                  vanilla.file_types.sass.files + 
+                  vanilla.file_types.less.files
+                )) * 100}%`,
+                backgroundColor: cssColors.tailwind,
+                opacity: 0.8,
+              }}
+            ></div>
+          )}
+          {/* Tailwind in HTML */}
+          {tailwind.file_types.html.files > 0 && (
+            <div 
+              className="float-left h-3" 
+              style={{ 
+                width: `${(tailwind.file_types.html.files / (
+                  tailwind.file_types.css.files + 
+                  tailwind.file_types.scss.files + 
+                  tailwind.file_types.jsx_tsx.files + 
+                  tailwind.file_types.html.files +
+                  vanilla.file_types.css.files + 
+                  vanilla.file_types.scss.files + 
+                  vanilla.file_types.sass.files + 
+                  vanilla.file_types.less.files
+                )) * 100}%`,
+                backgroundColor: cssColors.tailwind,
+                opacity: 0.6,
+              }}
+            ></div>
+          )}
+          {/* Vanilla CSS files */}
+          {vanilla.file_types.css.files > 0 && (
+            <div 
+              className="float-left h-3" 
+              style={{ 
+                width: `${(vanilla.file_types.css.files / (
+                  tailwind.file_types.css.files + 
+                  tailwind.file_types.scss.files + 
+                  tailwind.file_types.jsx_tsx.files + 
+                  tailwind.file_types.html.files +
+                  vanilla.file_types.css.files + 
+                  vanilla.file_types.scss.files + 
+                  vanilla.file_types.sass.files + 
+                  vanilla.file_types.less.files
+                )) * 100}%`,
+                backgroundColor: cssColors.vanilla,
+              }}
+            ></div>
+          )}
+        </div>
+        
+        {/* Legend for file types */}
+        <div className="flex flex-wrap gap-y-1 gap-x-4 mt-2">
+          {tailwind.file_types.css.files > 0 && (
+            <div className="flex items-center">
+              <div 
+                className="mr-1 w-2 h-2 rounded-sm"
+                style={{ backgroundColor: cssColors.tailwind }}
+              ></div>
+              <span className="text-xs text-navy/80 dark:text-cream/80">
+                Tailwind CSS: {tailwind.file_types.css.files} files
+              </span>
+            </div>
+          )}
+          {tailwind.file_types.jsx_tsx.files > 0 && (
+            <div className="flex items-center">
+              <div 
+                className="mr-1 w-2 h-2 rounded-sm"
+                style={{ backgroundColor: cssColors.tailwind, opacity: 0.8 }}
+              ></div>
+              <span className="text-xs text-navy/80 dark:text-cream/80">
+                In JSX/TSX: {tailwind.file_types.jsx_tsx.files} files
+              </span>
+            </div>
+          )}
+          {tailwind.file_types.html.files > 0 && (
+            <div className="flex items-center">
+              <div 
+                className="mr-1 w-2 h-2 rounded-sm"
+                style={{ backgroundColor: cssColors.tailwind, opacity: 0.6 }}
+              ></div>
+              <span className="text-xs text-navy/80 dark:text-cream/80">
+                In HTML: {tailwind.file_types.html.files} files
+              </span>
+            </div>
+          )}
+          {vanilla.file_types.css.files > 0 && (
+            <div className="flex items-center">
+              <div 
+                className="mr-1 w-2 h-2 rounded-sm"
+                style={{ backgroundColor: cssColors.vanilla }}
+              ></div>
+              <span className="text-xs text-navy/80 dark:text-cream/80">
+                Vanilla CSS: {vanilla.file_types.css.files} files
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Key metrics in a condensed format */}
+      <div className="grid grid-cols-2 gap-2 text-xs text-navy/70 dark:text-cream/70">
+        <div className="flex justify-between">
+          <span>Component files:</span>
+          <span className="font-medium">
+            {tailwind.file_types.jsx_tsx.files + tailwind.file_types.html.files}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span>Total CSS files:</span>
+          <span className="font-medium">
+            {vanilla.file_types.css.files + 
+             vanilla.file_types.scss.files + 
+             vanilla.file_types.sass.files + 
+             vanilla.file_types.less.files +
+             tailwind.file_types.css.files + 
+             tailwind.file_types.scss.files}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
+  const [stats, setStats] = useState<Record<string, DetailedStats | CSSStats>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -103,16 +395,55 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
 
   // Process stats and group small slices into "Other"
   const processedStats = Object.entries(stats)
-    .map(([name, stat]) => ({
-      name,
-      ...stat,
-      percentage: (stat.commits / Object.values(stats).reduce((sum, s) => sum + (s.commits || 0), 0)) * 100
-    }))
+    .map(([name, stat]) => {
+      // Handle both regular stats and CSS complex stats
+      const commits = isCSSStats(stat) ? stat.summary.commits : stat.commits;
+      const repositories = isCSSStats(stat) ? stat.summary.repositories : stat.repositories;
+      const bytes = isCSSStats(stat) ? stat.summary.bytes : stat.bytes;
+      
+      // Base stats item that all languages will have
+      const baseStatsItem = {
+        name,
+        commits,
+        repositories,
+        bytes,
+        percentage: (commits / Object.values(stats).reduce((sum, s) => {
+          return sum + (isCSSStats(s) ? s.summary.commits : (s.commits || 0));
+        }, 0)) * 100
+      };
+      
+      // If this is CSS, preserve the original complex structure
+      if (isCSSStats(stat)) {
+        return {
+          ...baseStatsItem,
+          summary: stat.summary,
+          variants: stat.variants
+        };
+      }
+      
+      return baseStatsItem;
+    })
     .sort((a, b) => b.percentage - a.percentage)
 
   // Only show top 4 for donut chart, group the rest into "Other"
   const topItems = processedStats.slice(0, 4)
   const smallItems = processedStats.slice(4)
+
+  // Ensure CSS is always visible and not in "Other"
+  const cssIndex = processedStats.findIndex(item => item.name === 'CSS');
+  if (cssIndex > -1) {
+    // If CSS is found but would be grouped in "Other"
+    if (cssIndex >= 4) {
+      // Remove CSS from its current position
+      const cssItem = processedStats.splice(cssIndex, 1)[0];
+      // Add it to position 4 (it will be visible in the detailed list)
+      processedStats.splice(3, 0, cssItem);
+      
+      // Recreate topItems and smallItems with CSS now in top items
+      const topItems = processedStats.slice(0, 4);
+      const smallItems = processedStats.slice(4);
+    }
+  }
 
   // Add "Other" category if there are small items
   const othersPercentage = smallItems.reduce((sum, item) => sum + item.percentage, 0)
@@ -133,6 +464,9 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
   // For bar chart, show top 4 plus next 5 items individually
   const nextFiveItems = smallItems.slice(0, 5)
   const barStats = [...topItems, ...nextFiveItems]
+
+  // Calculate total commits once for percentage calculations
+  const totalCommits = processedStats.reduce((sum, item) => sum + item.commits, 0);
 
   if (loading) {
     return (
@@ -350,7 +684,7 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
           </div>
           
           {/* Detailed breakdown section wrapped in accordion */}
-          <Accordion type="single" collapsible defaultValue="" className="dark:border-cream/10">
+          <Accordion type="single" collapsible defaultValue="details" className="dark:border-cream/10">
             <AccordionItem value="details" className="border-navy/10 dark:border-cream/10">
               <AccordionTrigger className="text-sm font-medium text-navy dark:text-cream py-2 [&>svg]:text-navy dark:[&>svg]:text-cream">
                 Detailed Breakdown
@@ -360,69 +694,43 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                 <TooltipProvider delayDuration={100}>
                   <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar mt-2">
                     {barStats.map((stat, index) => {
-                      // Check if this is one of the additional items (beyond the top 4)
-                      const isAdditionalItem = index >= topItems.length;
-                      // For additional items, we need to find the index of "Other" in finalDonutStats
-                      const otherIndex = finalDonutStats.findIndex(item => item.name === "Other");
+                      // First, let's safely get the commit and repo counts
+                      const commitCount = stat && stat.summary ? stat.summary.commits : (stat.commits || 0);
+                      const repoCount = stat && stat.summary ? stat.summary.repositories : (stat.repositories || 0);
+                      
+                      // Check if this is CSS with the complex structure
+                      const isCSS = stat.name === 'CSS' && 'summary' in stat;
+                      
+                      // For CSS, let's safely access the variant data
+                      let vanillaCommits = 0;
+                      let tailwindCommits = 0;
+                      let vanillaPercentage = 0;
+                      let tailwindPercentage = 0;
+                      
+                      if (isCSS && 'variants' in stat) {
+                        const cssVariants = stat.variants as CSSStats['variants'];
+                        vanillaCommits = cssVariants.vanilla?.commits || 0;
+                        tailwindCommits = cssVariants.tailwind?.commits || 0;
+                        const totalVariantCommits = vanillaCommits + tailwindCommits;
+                        
+                        if (totalVariantCommits > 0) {
+                          vanillaPercentage = (vanillaCommits / totalVariantCommits) * 100;
+                          tailwindPercentage = (tailwindCommits / totalVariantCommits) * 100;
+                        }
+                      }
                       
                       return (
                         <div 
                           key={stat.name} 
                           className={`group p-2.5 rounded-lg transition-all duration-200 
-                            ${activeSegment === (isAdditionalItem ? otherIndex : index) 
+                            ${activeSegment === index 
                               ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm transform scale-[1.01]' 
                               : 'hover:bg-cream/40 dark:hover:bg-navy-light/30 hover:shadow-sm'}`}
                           onMouseEnter={() => {
-                            // For additional items, highlight the "Other" slice in the donut
-                            const targetIndex = isAdditionalItem ? otherIndex : index;
-                            setActiveSegment(targetIndex);
-                            
-                            // Update the donut chart to highlight the segment AND show tooltip
-                            if (chartRef.current) {
-                              const chart = chartRef.current;
-                              
-                              // Manually trigger hover effect on the appropriate segment
-                              chart.setActiveElements([{
-                                datasetIndex: 0,
-                                index: targetIndex
-                              }]);
-                              
-                              // Access the native chart object to simulate a mouse event at the segment position
-                              const meta = chart.getDatasetMeta(0);
-                              if (meta.data[targetIndex]) {
-                                const arc = meta.data[targetIndex];
-                                
-                                // Get the position of the arc to place the tooltip
-                                const centerX = arc.x;
-                                const centerY = arc.y;
-                                
-                                // Show the tooltip by manually updating its position and active elements
-                                chart.tooltip.setActiveElements([{
-                                  datasetIndex: 0,
-                                  index: targetIndex
-                                }], {
-                                  x: centerX,
-                                  y: centerY
-                                });
-                              }
-                              
-                              chart.update();
-                            }
+                            setActiveSegment(index);
                           }}
                           onMouseLeave={() => {
                             setActiveSegment(null);
-                            
-                            // Remove highlighting AND tooltip from the chart
-                            if (chartRef.current) {
-                              const chart = chartRef.current;
-                              chart.setActiveElements([]);
-                              
-                              // Also hide the tooltip
-                              chart.tooltip.setActiveElements([], {});
-                              chart.tooltip.active = false;
-                              
-                              chart.update();
-                            }
                           }}
                         >
                           <div className="flex justify-between mb-1.5 items-center">
@@ -430,12 +738,12 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                             <div className="flex items-center">
                               <span 
                                 className={`rounded-full mr-2 transition-all duration-200
-                                  ${activeSegment === (isAdditionalItem ? otherIndex : index) ? 'w-3.5 h-3.5' : 'w-3 h-3'}`}
+                                  ${activeSegment === index ? 'w-3.5 h-3.5' : 'w-3 h-3'}`}
                                 style={{backgroundColor: chartColors[index % chartColors.length]}}
                               ></span>
-                              <span className={`font-code text-navy font-medium dark:text-cream ${isAdditionalItem ? 'text-sm' : ''}`}>
+                              <span className={`font-code text-navy font-medium dark:text-cream ${index >= topItems.length ? 'text-sm' : ''}`}>
                                 {stat.name}
-                                {isAdditionalItem && (
+                                {index >= topItems.length && (
                                   <span className="ml-1.5 text-xs text-navy-light/70 dark:text-cream/60 italic normal-font">
                                     (in Other)
                                   </span>
@@ -445,11 +753,13 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                             
                             {/* Percentage with cleaner display */}
                             <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
-                              activeSegment === (isAdditionalItem ? otherIndex : index)
+                              activeSegment === index
                                 ? 'bg-cream/50 dark:bg-navy-light/50 text-navy dark:text-cream' 
                                 : 'text-navy-light dark:text-cream'
                             }`}>
-                              {stat.percentage.toFixed(1)}%
+                              {isCSS && 'summary' in stat ? 
+                                `${((stat.summary as CSSStats['summary']).percentage_of_all_commits || 0).toFixed(1)}%` : 
+                                `${Math.round(((stat.commits || 0) / totalCommits) * 100)}%`}
                             </span>
                           </div>
                           
@@ -459,11 +769,11 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                               <div className="overflow-hidden relative h-3 rounded-full transition-colors cursor-help bg-cream-dark/50 dark:bg-navy-light/40 group-hover:bg-cream-dark/70 dark:group-hover:bg-navy-light/60">
                                 <div 
                                   className={`h-full rounded-full transition-all duration-300 ${
-                                    activeSegment === (isAdditionalItem ? otherIndex : index) ? 'h-4 -mt-0.5' : ''
+                                    activeSegment === index ? 'h-4 -mt-0.5' : ''
                                   }`}
                                   style={{ 
                                     width: `${stat.percentage}%`,
-                                    backgroundColor: isAdditionalItem 
+                                    backgroundColor: isCSS 
                                       ? `${chartColors[4 % chartColors.length].toString()}` // Use "Other" color with opacity
                                       : chartColors[index % chartColors.length].toString()
                                   }}
@@ -474,12 +784,10 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                             </TooltipTrigger>
                             <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                               <p className="font-medium text-cream dark:text-navy">
-                                {type === 'languages'
-                                  ? `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
-                                  : `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
-                                }
-                                {isAdditionalItem && (
-                                  <span className="block mt-1 text-xs italic">Part of the "Other" category in the donut chart</span>
+                                {isCSS ? (
+                                  `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
+                                ) : (
+                                  `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
                                 )}
                               </p>
                             </TooltipContent>
@@ -487,9 +795,20 @@ export default function GithubLanguageStats({ type, showBoth = false }: Props) {
                           
                           {/* Additional stats with improved contrast */}
                           <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
-                            <span>{stat.commits.toLocaleString()} commits</span>
-                            <span>{stat.repositories} repositories</span>
+                            <span>{commitCount.toLocaleString()} commits</span>
+                            <span>{repoCount} repositories</span>
                           </div>
+
+                          {/* Add CSS breakdown for CSS items */}
+                          {isCSS && 'variants' in stat && (
+                            <CSSBreakdown 
+                              cssStats={{
+                                summary: stat.summary as CSSStats['summary'],
+                                variants: stat.variants as CSSStats['variants']
+                              }}
+                              isDarkMode={false} 
+                            />
+                          )}
                         </div>
                       );
                     })}
@@ -559,4 +878,13 @@ function formatBytes(bytes: number): string {
   const sizes = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`
-} 
+}
+
+// Add this helper function in your component
+const getSafePercentage = (value: number, total: number): number => {
+  if (!total || isNaN(total) || total === 0) return 0;
+  if (!value || isNaN(value)) return 0;
+  return (value / total) * 100;
+};
+
+export default GithubLanguageStats 

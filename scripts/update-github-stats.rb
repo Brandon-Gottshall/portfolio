@@ -376,16 +376,101 @@ def flutter_repo?(repo_path)
   end
 end
 
+# Special CSS structure with nested objects for tracking different CSS variants
+def create_css_stats_structure
+  {
+    # Top-level summary stats
+    summary: {
+      repositories: 0,
+      bytes: 0,
+      commits: 0,
+      percentage_of_all_commits: 0.0 # Will be calculated later
+    },
+    # Breakdown by variants
+    variants: {
+      # Vanilla CSS variant tracking
+      vanilla: {
+        repositories: 0,
+        bytes: 0,
+        commits: 0,
+        percentage_of_css: 0.0, # Will be calculated later
+        file_types: {  # Track by file extension
+          css: { files: 0, bytes: 0, commits: 0 },
+          scss: { files: 0, bytes: 0, commits: 0 },
+          sass: { files: 0, bytes: 0, commits: 0 },
+          less: { files: 0, bytes: 0, commits: 0 }
+        }
+      },
+      # Tailwind variant tracking
+      tailwind: {
+        repositories: 0,
+        bytes: 0,
+        commits: 0,
+        percentage_of_css: 0.0, # Will be calculated later
+        # Track Tailwind specific metrics
+        usage: {
+          utility_classes: 0,  # Count of files using utility classes
+          config_files: 0,     # Count of tailwind config files
+          with_plugins: 0      # Count of repos using Tailwind plugins
+        },
+        file_types: {  # Track by file extension
+          css: { files: 0, bytes: 0, commits: 0 },
+          scss: { files: 0, bytes: 0, commits: 0 },
+          jsx_tsx: { files: 0, bytes: 0, commits: 0 }, # Tailwind in JSX/TSX
+          html: { files: 0, bytes: 0, commits: 0 }     # Tailwind in HTML
+        }
+      }
+    },
+    # Historical tracking - could be used if you want to track changes over time
+    timeline: {
+      first_used: nil,        # When you first used CSS 
+      first_tailwind: nil,    # When you first used Tailwind
+      recent_activity: []     # Could store recent CSS activity
+    },
+    # Repository-specific tracking (limited to avoid memory issues)
+    top_repos: []  # Will store data about top 5 CSS-heavy repos
+  }
+end
+
 # Process commits in a repository
 def process_commits(repo_path, repo, username)
   language_commits = Hash.new(0)
-  framework_commits = Hash.new(0)  # Use simple counters during processing
+  framework_commits = Hash.new(0)
   tool_commits = Hash.new(0)
   skipped_files = { generated: 0, vendored: 0, documentation: 0, no_language: 0 }
   processed_files = 0
   
-  # Check if this repo has React in package.json (to improve React detection)
+  # Per-repo CSS stats tracker
+  repo_css_stats = {
+    repo_name: repo.full_name,
+    total_css_files: 0,
+    total_css_commits: 0,
+    total_css_bytes: 0,
+    has_tailwind: false,
+    tailwind_files: 0,
+    tailwind_commits: 0,
+    tailwind_bytes: 0,
+    vanilla_files: 0,
+    vanilla_commits: 0,
+    vanilla_bytes: 0,
+    # Track individual file extensions
+    extensions: {
+      css: 0,
+      scss: 0,
+      sass: 0,
+      less: 0,
+      jsx_tsx_with_css: 0,
+      html_with_css: 0
+    },
+    first_css_commit_date: nil,
+    latest_css_commit_date: nil
+  }
+  
+  # Check if this repo has React in package.json
   is_react_repo = false
+  has_tailwind_dep = false
+  has_tailwind_plugins = false
+  
   begin
     package_json_path = File.join(repo_path, "package.json")
     if File.exist?(package_json_path)
@@ -398,6 +483,20 @@ def process_commits(repo_path, repo, username)
       if is_next_repo
         is_react_repo = true  # Next.js implies React
       end
+      
+      # Check for Tailwind CSS in dependencies
+      has_tailwind_dep = deps.keys.any? { |k| k.include?('tailwind') }
+      
+      # Check for Tailwind plugins
+      has_tailwind_plugins = deps.keys.any? { |k| k.include?('@tailwindcss/') }
+      
+      if has_tailwind_dep
+        repo_css_stats[:has_tailwind] = true
+      end
+      
+      # Free some memory
+      deps = nil
+      package_json = nil
     end
   rescue => e
     log_with_timestamp("Error checking package.json for React in #{repo_path}: #{e.message}")
@@ -406,7 +505,20 @@ def process_commits(repo_path, repo, username)
   # Check if this is a Flutter repo
   is_flutter_repo = flutter_repo?(repo_path)
   
-  log_with_timestamp("Repository #{repo_path} detected as React repo: #{is_react_repo}, Flutter repo: #{is_flutter_repo}")
+  # Check for tailwind config files
+  tailwind_config_js = File.join(repo_path, "tailwind.config.js")
+  tailwind_config_ts = File.join(repo_path, "tailwind.config.ts")
+  postcss_config = File.join(repo_path, "postcss.config.js")
+  
+  has_tailwind_config = File.exist?(tailwind_config_js) || 
+                        File.exist?(tailwind_config_ts) ||
+                        File.exist?(postcss_config)
+                        
+  if has_tailwind_config
+    repo_css_stats[:has_tailwind] = true
+  end
+  
+  log_with_timestamp("Repository #{repo_path} detected as React repo: #{is_react_repo}, Flutter repo: #{is_flutter_repo}, Has Tailwind: #{has_tailwind_config || has_tailwind_dep}")
   
   begin
     r_repo = Rugged::Repository.new(repo_path)
@@ -422,7 +534,7 @@ def process_commits(repo_path, repo, username)
       end
     end
 
-    # If it's a Flutter repo, count all commits from you toward Flutter framework
+    # If it's a Flutter repo, handle Flutter-specific processing
     if is_flutter_repo
       flutter_commits = 0
       dart_files = 0
@@ -468,6 +580,7 @@ def process_commits(repo_path, repo, username)
       # Regular processing for non-Flutter repos
       walker.each do |commit|
         author_email = commit.author[:email].to_s.downcase
+        commit_date = commit.time  # Get commit timestamp
         
         # Track any new email addresses we find
         if commit.author[:name].to_s.downcase.include?('brandon') || 
@@ -485,6 +598,9 @@ def process_commits(repo_path, repo, username)
                  commit.diff(commit.parents.first)
                end
 
+        # Track if this commit modified CSS
+        modified_css = false
+
         # Process each changed file in the commit
         diff.each_delta do |delta|
           next if delta.status == :deleted
@@ -495,105 +611,131 @@ def process_commits(repo_path, repo, username)
             blob_data = r_repo.read(delta.new_file[:oid]).data
             linguist_blob = Linguist::Blob.new(path, blob_data)
             
-            # Enhanced filtering for generated/vendor/documentation files with detailed logging
-            if linguist_blob.generated?
-              skipped_files[:generated] += 1
-              log_with_timestamp("Skipping generated file in commit: #{path}") if DEBUG_HEURISTICS
-              next
-            end
-            
-            if linguist_blob.vendored?
-              skipped_files[:vendored] += 1
-              log_with_timestamp("Skipping vendored file in commit: #{path}") if DEBUG_HEURISTICS
-              next
-            end
-            
-            if linguist_blob.documentation?
-              skipped_files[:documentation] += 1
-              log_with_timestamp("Skipping documentation file in commit: #{path}") if DEBUG_HEURISTICS
-              next
-            end
+            # Skip generated/vendor/documentation files
+            next if linguist_blob.generated? || linguist_blob.vendored? || linguist_blob.documentation?
             
             language_name = nil
             
             # Try to get language from Linguist
             if linguist_blob.language
               language_name = LANGUAGE_NORMALIZE[linguist_blob.language.name] || linguist_blob.language.name
-              log_with_timestamp("Linguist detected: #{linguist_blob.language.name} -> #{language_name} for #{path}") if DEBUG_LANGUAGE_DETECTION
             end
             
-            # If no language detected or it's a markup language we want to count as a tool,
-            # try to detect using file extension
+            # Fallback to extension-based detection if needed
             if language_name.nil? || MARKUP_TOOLS.include?(language_name)
               fallback_language = LANG_MAP[ext]
               
               if fallback_language && !MARKUP_TOOLS.include?(fallback_language)
                 language_name = fallback_language
-                log_with_timestamp("Fallback counting commit for #{language_name} in file #{path}") if DEBUG_LANGUAGE_DETECTION
               elsif fallback_language && MARKUP_TOOLS.include?(fallback_language)
                 # Count markup languages as tools
                 tool_commits[fallback_language] += 1
-                log_with_timestamp("Counting markup tool commit for #{fallback_language} in file #{path}") if DEBUG_LANGUAGE_DETECTION
+                next
               else
                 # No language detected even with fallback
-                skipped_files[:no_language] += 1
-                log_with_timestamp("No language detected for file in commit: #{path}") if DEBUG_LANGUAGE_DETECTION
+                next
+              end
+            end
+            
+            # Enhanced CSS tracking - process any CSS-related file
+            is_css_file = (language_name == 'CSS' || 
+                          ['css', 'scss', 'sass', 'less'].include?(ext) ||
+                          (path.end_with?('.jsx') && blob_data.include?('className=')) ||
+                          (path.end_with?('.tsx') && blob_data.include?('className=')) ||
+                          (path.end_with?('.html') && blob_data.include?('class="')))
+            
+            if is_css_file
+              modified_css = true
+              file_size = blob_data.size
+              
+              # Update repo CSS stats
+              repo_css_stats[:total_css_files] += 1
+              repo_css_stats[:total_css_commits] += 1
+              repo_css_stats[:total_css_bytes] += file_size
+              
+              # Track first/latest CSS commit dates
+              if repo_css_stats[:first_css_commit_date].nil? || commit_date < repo_css_stats[:first_css_commit_date]
+                repo_css_stats[:first_css_commit_date] = commit_date
+              end
+              if repo_css_stats[:latest_css_commit_date].nil? || commit_date > repo_css_stats[:latest_css_commit_date]
+                repo_css_stats[:latest_css_commit_date] = commit_date
+              end
+              
+              # Update extension-specific counters
+              if ['css', 'scss', 'sass', 'less'].include?(ext)
+                repo_css_stats[:extensions][ext.to_sym] += 1
+              elsif ['jsx', 'tsx'].include?(ext)
+                repo_css_stats[:extensions][:jsx_tsx_with_css] += 1
+              elsif ['html', 'htm'].include?(ext)
+                repo_css_stats[:extensions][:html_with_css] += 1
+              end
+              
+              # Check if it's Tailwind CSS
+              uses_tailwind = tailwind_used?(blob_data) || 
+                             has_tailwind_config || 
+                             has_tailwind_dep || 
+                             path.end_with?('tailwind.config.js') ||
+                             path.end_with?('tailwind.config.ts')
+              
+              if uses_tailwind
+                repo_css_stats[:has_tailwind] = true
+                repo_css_stats[:tailwind_files] += 1
+                repo_css_stats[:tailwind_commits] += 1
+                repo_css_stats[:tailwind_bytes] += file_size
+                log_with_timestamp("Counting Tailwind CSS commit for file #{path}")
+              else
+                repo_css_stats[:vanilla_files] += 1
+                repo_css_stats[:vanilla_commits] += 1
+                repo_css_stats[:vanilla_bytes] += file_size
+                log_with_timestamp("Counting vanilla CSS commit for file #{path}")
               end
             end
             
             # Add language commit if we found a language
             if language_name && !MARKUP_TOOLS.include?(language_name)
               language_commits[language_name] += 1
-              log_with_timestamp("Counting commit for #{language_name} in file #{path}") if DEBUG_LANGUAGE_DETECTION
               processed_files += 1
               
               # Check for frameworks based on language and file content
               check_for_frameworks(language_name, path, ext, blob_data, framework_commits, is_react_repo)
             end
             
-            # Check for Flutter framework in pubspec.yaml
-            if path == 'pubspec.yaml' && blob_data.include?('flutter:')
-              framework_commits['Flutter'] += 1
-              language_commits['Dart'] += 1  # Count pubspec.yaml changes as Dart commits
-            end
-
-            # Process tool commits
-            TOOL_MAP.each do |tool, patterns|
-              if patterns.any? { |pattern| path.downcase.include?(pattern.downcase.gsub(/^[@]/, "")) }
-                tool_commits[tool] += 1
-                log_with_timestamp("Counting tool commit for #{tool} in file #{path}") if DEBUG_LANGUAGE_DETECTION
-                break
-              end
-            end
+            # Free memory
+            blob_data = nil
+            linguist_blob = nil
+            
           rescue => e
             log_with_timestamp("Error processing file in commit: #{path}, error: #{e.message}") if DEBUG_HEURISTICS
             next
           end
         end
+        
+        # Free memory after processing each commit
+        diff = nil
+        GC.start if rand < 0.1  # Occasionally force garbage collection to avoid memory issues
       end
     end
 
-    # Log summary of processed and skipped files in commits
-    log_with_timestamp("Commit processing summary for #{repo_path}:")
-    log_with_timestamp("  Processed files in commits: #{processed_files}")
-    log_with_timestamp("  Skipped files in commits: #{skipped_files.inspect}")
-    log_with_timestamp("  Languages in commits: #{language_commits.keys.join(', ')}")
-    log_with_timestamp("  Frameworks in commits: #{framework_commits.keys.join(', ')}")
+    # Log CSS summary for this repo
+    if repo_css_stats[:total_css_commits] > 0
+      log_with_timestamp("CSS stats for #{repo_path}:")
+      log_with_timestamp("  Total CSS files: #{repo_css_stats[:total_css_files]}")
+      log_with_timestamp("  Total CSS commits: #{repo_css_stats[:total_css_commits]}")
+      log_with_timestamp("  Has Tailwind: #{repo_css_stats[:has_tailwind]}")
+      log_with_timestamp("  Tailwind files: #{repo_css_stats[:tailwind_files]}")
+      log_with_timestamp("  Vanilla files: #{repo_css_stats[:vanilla_files]}")
+    end
     
   rescue => e
     log_with_timestamp("Error processing commits for #{repo_path}: #{e.message}")
   end
 
-  # Convert simple counters to structured data for frameworks
-  framework_commit_stats = {}
-  framework_commits.each do |framework, count|
-    framework_commit_stats[framework] = { repositories: 0, commits: count }
-  end
-
+  # Return the stats
   {
     languages: language_commits,
-    frameworks: framework_commit_stats,
-    tools: tool_commits
+    frameworks: framework_commits.transform_values { |count| { repositories: 0, commits: count } },
+    tools: tool_commits,
+    css_stats: repo_css_stats
   }
 end
 
@@ -1035,92 +1177,227 @@ summary = {
   private_repos: 0,
   forks: 0
 }
-# languages_stats will include repository count, byte counts, and commit counts
+
+# Regular language stats
 languages_stats = {}
+
+# Create the complex CSS stats structure
+css_complex_stats = create_css_stats_structure
+
+# Track top CSS repositories
+top_css_repos = []
+
 frameworks_stats = {}
 tools_stats = {}
 unrecognized_deps = {}
 
+# Process repositories with memory efficiency in mind
 valid_repos.each do |repo|
   summary[:forks] += 1 if repo.fork
-  if repo.private
-    summary[:private_repos] += 1
-  else
-    summary[:public_repos] += 1
-  end
+  summary[:private_repos] += 1 if repo.private
+  summary[:public_repos] += 1 unless repo.private
 
-  # Use Octokit to get a rough total commit count (contributors API)
+  # Get contributors for total commit count
   begin
     contributors = client.contributors(repo.full_name)
     if contributors.is_a?(Array)
       repo_commit_count = contributors.map(&:contributions).sum
       summary[:total_commits] += repo_commit_count
-    else
-      log_with_timestamp("Unexpected contributors response format for #{repo.full_name}")
     end
-  rescue Octokit::NotFound
-    log_with_timestamp("Could not fetch contributors for #{repo.full_name}")
   rescue => e
     log_with_timestamp("Error fetching contributors for #{repo.full_name}: #{e.message}")
   end
 
-  # Clone repository locally and analyze with Linguist
+  # Clone and analyze repository
   repo_path = clone_repo(repo)
+  
+  # Process language bytes with Linguist
   analysis = analyze_repo(repo_path)
   repo_languages = analysis[:languages]
+  
+  # Track CSS bytes separately in our complex structure
+  css_bytes = repo_languages.delete('CSS') || 0
+  if css_bytes > 0
+    css_complex_stats[:summary][:bytes] += css_bytes
+  end
+  
+  # Process other languages normally
   repo_languages.each do |lang, bytes|
     languages_stats[lang] ||= { repositories: 0, bytes: 0, commits: 0 }
     languages_stats[lang][:repositories] += 1
     languages_stats[lang][:bytes] += bytes
   end
 
-  # Process commit-level analysis
+  # Process commit-level analysis with detailed CSS tracking
   commit_stats = process_commits(repo_path, repo, username)
   
-  # Update language stats with commit counts
+  # Process regular language commits
   commit_stats[:languages].each do |lang, commit_count|
+    next if lang == 'CSS' # Skip CSS
     languages_stats[lang] ||= { repositories: 0, bytes: 0, commits: 0 }
     languages_stats[lang][:commits] += commit_count
   end
   
-  # Update framework stats with commit counts
+  # Process the detailed CSS stats from this repo
+  repo_css = commit_stats[:css_stats]
+  if repo_css && repo_css[:total_css_commits] > 0
+    # Update the complex CSS structure
+    
+    # Update summary stats
+    css_complex_stats[:summary][:repositories] += 1
+    css_complex_stats[:summary][:commits] += repo_css[:total_css_commits]
+    
+    # Update variants data
+    if repo_css[:has_tailwind]
+      # Tailwind variant
+      css_complex_stats[:variants][:tailwind][:repositories] += 1
+      css_complex_stats[:variants][:tailwind][:bytes] += repo_css[:tailwind_bytes]
+      css_complex_stats[:variants][:tailwind][:commits] += repo_css[:tailwind_commits]
+      
+      # Update Tailwind usage stats
+      if repo_css[:extensions][:css] > 0
+        css_complex_stats[:variants][:tailwind][:file_types][:css][:files] += repo_css[:extensions][:css]
+        css_complex_stats[:variants][:tailwind][:file_types][:css][:commits] += repo_css[:tailwind_commits]
+      end
+      
+      if repo_css[:extensions][:scss] > 0
+        css_complex_stats[:variants][:tailwind][:file_types][:scss][:files] += repo_css[:extensions][:scss]
+        css_complex_stats[:variants][:tailwind][:file_types][:scss][:commits] += repo_css[:tailwind_commits]
+      end
+      
+      if repo_css[:extensions][:jsx_tsx_with_css] > 0
+        css_complex_stats[:variants][:tailwind][:file_types][:jsx_tsx][:files] += repo_css[:extensions][:jsx_tsx_with_css]
+        css_complex_stats[:variants][:tailwind][:file_types][:jsx_tsx][:commits] += repo_css[:tailwind_commits]
+      end
+      
+      if repo_css[:extensions][:html_with_css] > 0
+        css_complex_stats[:variants][:tailwind][:file_types][:html][:files] += repo_css[:extensions][:html_with_css]
+        css_complex_stats[:variants][:tailwind][:file_types][:html][:commits] += repo_css[:tailwind_commits]
+      end
+    end
+    
+    if repo_css[:vanilla_commits] > 0
+      # Vanilla variant
+      css_complex_stats[:variants][:vanilla][:repositories] += 1
+      css_complex_stats[:variants][:vanilla][:bytes] += repo_css[:vanilla_bytes]
+      css_complex_stats[:variants][:vanilla][:commits] += repo_css[:vanilla_commits]
+      
+      # Update file type stats for vanilla CSS
+      ['css', 'scss', 'sass', 'less'].each do |ext|
+        if repo_css[:extensions][ext.to_sym] > 0
+          css_complex_stats[:variants][:vanilla][:file_types][ext.to_sym][:files] += repo_css[:extensions][ext.to_sym]
+          css_complex_stats[:variants][:vanilla][:file_types][ext.to_sym][:commits] += repo_css[:vanilla_commits]
+        end
+      end
+    end
+    
+    # Update timeline data
+    if repo_css[:first_css_commit_date]
+      if css_complex_stats[:timeline][:first_used].nil? || 
+         repo_css[:first_css_commit_date] < css_complex_stats[:timeline][:first_used]
+        css_complex_stats[:timeline][:first_used] = repo_css[:first_css_commit_date]
+      end
+    end
+    
+    # Keep track of top CSS repositories
+    if top_css_repos.size < 5 || repo_css[:total_css_commits] > top_css_repos.last[:commits]
+      top_repo_entry = {
+        name: repo.full_name,
+        commits: repo_css[:total_css_commits],
+        bytes: repo_css[:total_css_bytes],
+        has_tailwind: repo_css[:has_tailwind],
+        tailwind_commits: repo_css[:tailwind_commits],
+        vanilla_commits: repo_css[:vanilla_commits]
+      }
+      
+      # Add to top repos and keep sorted by commit count (descending)
+      top_css_repos << top_repo_entry
+      top_css_repos.sort_by! { |r| -r[:commits] }
+      top_css_repos = top_css_repos.take(5) # Keep only top 5
+    end
+  end
+  
+  # Update framework and tool stats
   commit_stats[:frameworks].each do |framework, stats|
     frameworks_stats[framework] ||= { repositories: 0, commits: 0 }
     frameworks_stats[framework][:commits] += stats[:commits]
   end
   
-  # Update tool stats with commit counts
   commit_stats[:tools].each do |tool, commit_count|
     tools_stats[tool] ||= { repositories: 0, commits: 0 }
     tools_stats[tool][:commits] += commit_count
   end
 
   # Process package.json for framework and tool dependencies
-  package_json = fetch_package_json(repo, client)
-  process_dependencies(package_json, repo.full_name, frameworks_stats, tools_stats, unrecognized_deps)
+  begin
+    package_json = fetch_package_json(repo, client)
+    process_dependencies(package_json, repo.full_name, frameworks_stats, tools_stats, unrecognized_deps)
+    package_json = nil # Free memory
+  rescue => e
+    log_with_timestamp("Error processing package.json for #{repo.full_name}: #{e.message}")
+  end
+  
+  # Explicitly clean up variables and force garbage collection occasionally
+  analysis = nil
+  repo_languages = nil
+  commit_stats = nil
+  repo_path = nil
+  GC.start if rand < 0.2 # Occasionally force garbage collection
 end
 
-# Sort unrecognized dependencies by count and take top 50
+# Calculate percentages in the CSS complex structure
+if css_complex_stats[:summary][:commits] > 0
+  total_commits = summary[:total_commits]
+  css_complex_stats[:summary][:percentage_of_all_commits] = (css_complex_stats[:summary][:commits].to_f / total_commits * 100).round(2)
+  
+  # Calculate variant percentages
+  variant_commits = css_complex_stats[:variants][:vanilla][:commits] + css_complex_stats[:variants][:tailwind][:commits]
+  if variant_commits > 0
+    css_complex_stats[:variants][:vanilla][:percentage_of_css] = 
+      (css_complex_stats[:variants][:vanilla][:commits].to_f / variant_commits * 100).round(2)
+    
+    css_complex_stats[:variants][:tailwind][:percentage_of_css] = 
+      (css_complex_stats[:variants][:tailwind][:commits].to_f / variant_commits * 100).round(2)
+  end
+end
+
+# Finalize top CSS repositories
+css_complex_stats[:top_repos] = top_css_repos
+
+# Add the complex CSS structure to languages stats
+languages_stats['CSS'] = css_complex_stats
+
+# Sort unrecognized dependencies
 sorted_unrecognized = unrecognized_deps.sort_by { |_, data| -data[:count] }[0, 50].map do |dep, data|
   { name: dep, count: data[:count], repos: data[:repos] }
 end
 
-# Build final stats hash
+# Build final stats hash with memory efficiency in mind
 cached_stats = {
   lastUpdated: Time.now.utc.iso8601,
   summary: summary,
   repoCount: valid_repos.size,
-  languages: languages_stats.sort_by { |_, stats| [-stats[:commits], -stats[:bytes]] }.to_h,
+  languages: languages_stats.sort_by { |lang, stats| 
+    # Special handling for CSS with its complex structure
+    if lang == 'CSS'
+      [-stats[:summary][:commits], -stats[:summary][:bytes]]
+    else
+      [-stats[:commits], -stats[:bytes]]
+    end
+  }.to_h,
   frameworks: frameworks_stats.sort_by { |_, stats| [-stats[:commits], -stats[:repositories]] }.to_h,
   tools: tools_stats.sort_by { |_, stats| [-stats[:commits], -stats[:repositories]] }.to_h,
   unrecognizedDependencies: sorted_unrecognized,
   notes: [
     "Languages with high byte counts but in few repositories might be due to generated code or dependency files.",
-    "Commit-level analysis now processes diffs using Linguist to exclude generated files before counting language contributions."
+    "Commit-level analysis processes diffs using Linguist to exclude generated files before counting language contributions.",
+    "CSS stats now include a comprehensive breakdown of vanilla CSS vs Tailwind usage patterns.",
+    "Memory optimizations have been added to prevent out-of-memory errors during processing."
   ],
   found_emails: FOUND_EMAILS.to_a
 }
 
+# Write the cached stats to disk
 cache_path = File.join(Dir.pwd, 'src', 'data', 'github-stats.json')
 FileUtils.mkdir_p(File.dirname(cache_path))
 File.write(cache_path, JSON.pretty_generate(cached_stats))
