@@ -14,6 +14,29 @@ Dotenv.load('.env.local')
 
 # --- Configuration & Helper Functions ---
 
+# Languages to exclude from stats (generated or not actually written)
+LANGUAGES_TO_EXCLUDE = [
+  'SVG',
+  'JSON with Comments',
+  'Dotenv',
+  'Diff',
+  'Prisma',
+  'Gemfile.lock',
+  'Gradle',
+  'Objective-C',
+  'Starlark',
+  'Java',
+  'robots.txt',
+  'INI',
+  'XML Property List',
+  'Procfile',
+  'Java Properties',
+  'vCard',
+  'PLpgSQL',
+  'C++',
+  'HTML+ERB'
+]
+
 # Ensure these environment variables are set:
 #   GITHUB_USERNAME and GITHUB_TOKEN
 username = ENV['NEXT_PUBLIC_GITHUB_USERNAME']
@@ -132,11 +155,95 @@ LANGUAGE_NORMALIZE = {
 
 # --- Debug flags ---
 # Set to true to enable detailed debug logging
-DEBUG_HEURISTICS = true 
-DEBUG_LANGUAGE_DETECTION = true
+DEBUG_HEURISTICS = ENV['DEBUG_HEURISTICS'] == 'true'
+DEBUG_LANGUAGE_DETECTION = ENV['DEBUG_LANGUAGE_DETECTION'] == 'true'
 
-def log_with_timestamp(message)
-  puts "[#{Time.now.strftime('%H:%M:%S')}] #{message}"
+# Logging configuration
+LOG_LEVELS = {
+  debug: 0,
+  info: 1,
+  warn: 2,
+  error: 3
+}
+
+# Set the minimum log level (adjust as needed)
+MIN_LOG_LEVEL = :info
+
+# Counters for grouped logs
+LOG_COUNTERS = {
+  skipped_files: Hash.new(0),
+  detected_languages: Hash.new(0),
+  framework_detections: Hash.new(0),
+  tailwind_detections: 0,
+  vanilla_css_detections: 0,
+  cloned_repos: 0,
+  processed_files: 0,
+  css_stats: {
+    total_files: 0,
+    tailwind_files: 0,
+    vanilla_files: 0,
+    total_commits: 0,
+    tailwind_repos: 0,
+    vanilla_repos: 0
+  }
+}
+
+def log_with_timestamp(message, level = :info)
+  # Skip logs below the minimum level, but always log errors
+  return if level != :error && LOG_LEVELS[level] < LOG_LEVELS[MIN_LOG_LEVEL]
+  
+  # Format based on level
+  if level == :error
+    puts "[#{Time.now.strftime('%H:%M:%S')}] ERROR: #{message}"
+  else
+    puts "[#{Time.now.strftime('%H:%M:%S')}] #{message}"
+  end
+end
+
+# Log summary data periodically or at the end
+def log_summary(title = "Summary")
+  log_with_timestamp("=== #{title} ===")
+  log_with_timestamp("  Cloned repositories: #{LOG_COUNTERS[:cloned_repos]}")
+  log_with_timestamp("  Processed files: #{LOG_COUNTERS[:processed_files]}")
+  
+  if LOG_COUNTERS[:skipped_files].any?
+    log_with_timestamp("  Skipped files:")
+    LOG_COUNTERS[:skipped_files].each do |reason, count|
+      log_with_timestamp("    - #{reason}: #{count}")
+    end
+  end
+  
+  if LOG_COUNTERS[:detected_languages].any?
+    log_with_timestamp("  Top detected languages:")
+    LOG_COUNTERS[:detected_languages].sort_by { |_, count| -count }.take(5).each do |lang, count|
+      log_with_timestamp("    - #{lang}: #{count} files")
+    end
+  end
+  
+  if LOG_COUNTERS[:framework_detections].any?
+    log_with_timestamp("  Framework detections:")
+    LOG_COUNTERS[:framework_detections].sort_by { |_, count| -count }.take(5).each do |framework, count|
+      log_with_timestamp("    - #{framework}: #{count} files")
+    end
+  end
+  
+  # CSS breakdowns
+  css = LOG_COUNTERS[:css_stats]
+  if css[:total_files] > 0
+    log_with_timestamp("  CSS Usage:")
+    log_with_timestamp("    - Total files: #{css[:total_files]}")
+    log_with_timestamp("    - Tailwind: #{css[:tailwind_files]} files across #{css[:tailwind_repos]} repos")
+    log_with_timestamp("    - Vanilla: #{css[:vanilla_files]} files across #{css[:vanilla_repos]} repos")
+  end
+end
+
+# Function to increment grouped counters
+def increment_counter(counter_group, key = nil, amount = 1)
+  if key.nil?
+    LOG_COUNTERS[counter_group] += amount
+  else
+    LOG_COUNTERS[counter_group][key] += amount
+  end
 end
 
 # --- GitHub Client Setup ---
@@ -242,10 +349,9 @@ def clone_repo(repo)
   unless Dir.exist?(dir)
     log_with_timestamp("Cloning #{repo.full_name} into #{dir}...")
     unless system("git clone #{repo.clone_url} #{dir}")
-      log_with_timestamp("Error cloning #{repo.full_name}")
+      log_with_timestamp("Error cloning #{repo.full_name}", :error)
     end
-  else
-    log_with_timestamp("Repository #{repo.full_name} already cloned.")
+    increment_counter(:cloned_repos)
   end
   dir
 end
@@ -254,7 +360,7 @@ end
 def analyze_repo(repo_path)
   begin
     languages = {}
-    skipped_files = { generated: 0, vendored: 0, documentation: 0, no_language: 0 }
+    skipped_files = { generated: 0, vendored: 0, documentation: 0, no_language: 0, excluded_language: 0 }
     processed_files = 0
     
     # Walk through all files in the repository
@@ -270,19 +376,19 @@ def analyze_repo(repo_path)
         # Enhanced filtering for generated/vendor/documentation files with detailed logging
         if blob.generated?
           skipped_files[:generated] += 1
-          log_with_timestamp("Skipping generated file: #{relative_path}") if DEBUG_HEURISTICS
+          increment_counter(:skipped_files, :generated)
           next
         end
         
         if blob.vendored?
           skipped_files[:vendored] += 1
-          log_with_timestamp("Skipping vendored file: #{relative_path}") if DEBUG_HEURISTICS
+          increment_counter(:skipped_files, :vendored)
           next
         end
         
         if blob.documentation?
           skipped_files[:documentation] += 1
-          log_with_timestamp("Skipping documentation file: #{relative_path}") if DEBUG_HEURISTICS
+          increment_counter(:skipped_files, :documentation)
           next
         end
         
@@ -291,7 +397,15 @@ def analyze_repo(repo_path)
         # Try to get language from Linguist
         if blob.language
           language_name = LANGUAGE_NORMALIZE[blob.language.name] || blob.language.name
-          log_with_timestamp("Linguist detected: #{blob.language.name} -> #{language_name} for #{relative_path}") if DEBUG_LANGUAGE_DETECTION
+          
+          # Skip excluded languages
+          if LANGUAGES_TO_EXCLUDE.include?(language_name)
+            skipped_files[:excluded_language] += 1
+            increment_counter(:skipped_files, :excluded_language)
+            next
+          end
+          
+          increment_counter(:detected_languages, language_name)
         end
         
         # If no language detected or it's a markup language we want to count as a tool,
@@ -303,15 +417,15 @@ def analyze_repo(repo_path)
           # Skip markup languages counted as tools
           if fallback_language && !MARKUP_TOOLS.include?(fallback_language)
             language_name = fallback_language
-            log_with_timestamp("Fallback detected #{language_name} for file #{relative_path}") if DEBUG_LANGUAGE_DETECTION
+            increment_counter(:detected_languages, language_name)
           elsif fallback_language && MARKUP_TOOLS.include?(fallback_language)
             # If it's a markup language, we'll count it as a tool later
-            log_with_timestamp("Skipping markup file (will count as tool): #{relative_path}") if DEBUG_LANGUAGE_DETECTION
+            increment_counter(:skipped_files, :markup_language)
             next
           else
             # No language detected even with fallback
             skipped_files[:no_language] += 1
-            log_with_timestamp("No language detected for file: #{relative_path}") if DEBUG_LANGUAGE_DETECTION
+            increment_counter(:skipped_files, :no_language)
             next
           end
         end
@@ -321,6 +435,7 @@ def analyze_repo(repo_path)
         languages[language_name] ||= 0
         languages[language_name] += blob.size
         processed_files += 1
+        increment_counter(:processed_files)
         
         # Check for Flutter framework in pubspec.yaml
         if relative_path == 'pubspec.yaml' && data.include?('flutter:')
@@ -328,21 +443,20 @@ def analyze_repo(repo_path)
           languages['Dart'] += blob.size  # Count pubspec.yaml size towards Dart
         end
       rescue => file_error
-        log_with_timestamp("Error processing file #{relative_path}: #{file_error.message}") if DEBUG_HEURISTICS
+        log_with_timestamp("Error processing file #{relative_path}: #{file_error.message}", :error)
         next
       end
     end
     
-    # Log summary of processed and skipped files
+    # Log summary instead of detailed file-by-file logs
     log_with_timestamp("Repository analysis summary for #{repo_path}:")
     log_with_timestamp("  Processed files: #{processed_files}")
     log_with_timestamp("  Skipped files: #{skipped_files.inspect}")
-    log_with_timestamp("  Languages detected: #{languages.keys.join(', ')}")
     
     { languages: languages, non_generated_files: [] }
   rescue => e
-    log_with_timestamp("ERROR in analyze_repo for #{repo_path}: #{e.message}")
-    log_with_timestamp("Stack trace: #{e.backtrace.join("\n")}")
+    log_with_timestamp("ERROR in analyze_repo for #{repo_path}: #{e.message}", :error)
+    log_with_timestamp("Stack trace: #{e.backtrace.join("\n")}", :error)
     { languages: {}, non_generated_files: [] }
   end
 end
@@ -682,12 +796,16 @@ def process_commits(repo_path, repo, username)
                 repo_css_stats[:tailwind_files] += 1
                 repo_css_stats[:tailwind_commits] += 1
                 repo_css_stats[:tailwind_bytes] += file_size
-                log_with_timestamp("Counting Tailwind CSS commit for file #{path}")
+                
+                # Count as a tool (not a framework)
+                tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+                tools_stats['Tailwind CSS'][:commits] += 1
+                increment_counter(:tailwind_detections)
               else
                 repo_css_stats[:vanilla_files] += 1
                 repo_css_stats[:vanilla_commits] += 1
                 repo_css_stats[:vanilla_bytes] += file_size
-                log_with_timestamp("Counting vanilla CSS commit for file #{path}")
+                increment_counter(:skipped_files, :vanilla_css)
               end
             end
             
@@ -720,10 +838,7 @@ def process_commits(repo_path, repo, username)
     if repo_css_stats[:total_css_commits] > 0
       log_with_timestamp("CSS stats for #{repo_path}:")
       log_with_timestamp("  Total CSS files: #{repo_css_stats[:total_css_files]}")
-      log_with_timestamp("  Total CSS commits: #{repo_css_stats[:total_css_commits]}")
-      log_with_timestamp("  Has Tailwind: #{repo_css_stats[:has_tailwind]}")
-      log_with_timestamp("  Tailwind files: #{repo_css_stats[:tailwind_files]}")
-      log_with_timestamp("  Vanilla files: #{repo_css_stats[:vanilla_files]}")
+      log_with_timestamp("  Has Tailwind: #{repo_css_stats[:has_tailwind]} (Tailwind: #{repo_css_stats[:tailwind_files]}, Vanilla: #{repo_css_stats[:vanilla_files]})")
     end
     
   rescue => e
@@ -793,19 +908,23 @@ def check_for_frameworks(language_name, path, ext, content, framework_commits, i
     
     if is_react_file && !path.include?('node_modules')
       framework_commits['React'] += 1
-      log_with_timestamp("Counting React framework commit for file #{path}")
+      increment_counter(:framework_detections, 'React')
       
       # Check for Tailwind utility classes
       if tailwind_used?(content)
-        framework_commits['Tailwind CSS'] += 1
-        log_with_timestamp("Counting Tailwind CSS framework commit for file #{path} (detected utility classes)")
+        tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+        tools_stats['Tailwind CSS'][:commits] += 1
+        increment_counter(:tailwind_detections)
       end
       
       # Check if this is also Next.js
       if path.include?('next/') || path.include?('/pages/') || path.include?('/app/')
         framework_commits['Next.js'] += 1
-        log_with_timestamp("Counting Next.js framework commit for file #{path}")
+        increment_counter(:framework_detections, 'Next.js')
       end
+      
+      # Express detection by file content
+      check_for_express(content, framework_commits, path)
     end
     
     # Express detection by file content
@@ -820,16 +939,18 @@ def check_for_frameworks(language_name, path, ext, content, framework_commits, i
   # HTML files - Check for Tailwind classes directly
   if language_name == 'HTML' || path.end_with?('.html', '.htm')
     if tailwind_used?(content)
-      framework_commits['Tailwind CSS'] += 1
-      log_with_timestamp("Counting Tailwind CSS framework commit for HTML file #{path}")
+      tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+      tools_stats['Tailwind CSS'][:commits] += 1
+      increment_counter(:tailwind_detections)
     end
   end
   
   # CSS files - Check for Tailwind directives
   if language_name == 'CSS' || ['.css', '.scss', '.sass', '.less'].any? { |ext_name| path.end_with?(ext_name) }
     if content.include?('@tailwind') || content.include?('@apply')
-      framework_commits['Tailwind CSS'] += 1
-      log_with_timestamp("Counting Tailwind CSS framework commit for CSS file #{path}")
+      tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+      tools_stats['Tailwind CSS'][:commits] += 1
+      increment_counter(:tailwind_detections)
     end
   end
   
@@ -837,12 +958,12 @@ def check_for_frameworks(language_name, path, ext, content, framework_commits, i
   FRAMEWORK_MAP.each do |framework, patterns|
     if patterns.any? { |pattern| path.downcase.include?(pattern.downcase.gsub(/^[@]/, "")) }
       framework_commits[framework] += 1
-      log_with_timestamp("Counting framework commit for #{framework} in file #{path}") if DEBUG_LANGUAGE_DETECTION
+      increment_counter(:framework_detections, framework)
       
       # If this is a Next.js file, also count as React
       if framework == 'Next.js'
         framework_commits['React'] += 1
-        log_with_timestamp("Counting Next.js file as React for #{path}") if DEBUG_LANGUAGE_DETECTION
+        increment_counter(:framework_detections, 'React')
       end
     end
   end
@@ -870,7 +991,7 @@ def check_for_express(content, framework_commits, path)
   # Check if any pattern is found in the content
   if express_import_patterns.any? { |pattern| content.include?(pattern) }
     framework_commits['Express'] += 1
-    log_with_timestamp("Counting Express framework commit for file #{path} (detected import/require)")
+    increment_counter(:framework_detections, 'Express')
     return true
   end
   
@@ -892,7 +1013,7 @@ def check_for_express(content, framework_commits, path)
   
   if express_route_patterns.any? { |pattern| content.include?(pattern) }
     framework_commits['Express'] += 1
-    log_with_timestamp("Counting Express framework commit for file #{path} (detected Express routes)")
+    increment_counter(:framework_detections, 'Express')
     return true
   end
   
@@ -926,7 +1047,7 @@ def check_for_rails(content, framework_commits, path, ext)
   # Check if any pattern is found in the content
   if rails_patterns.any? { |pattern| content.include?(pattern) }
     framework_commits['Rails'] += 1
-    log_with_timestamp("Counting Rails framework commit for file #{path} (detected Rails patterns)")
+    increment_counter(:framework_detections, 'Rails')
     return true
   end
   
@@ -942,7 +1063,7 @@ def check_for_rails(content, framework_commits, path, ext)
   
   if rails_paths.any? { |rail_path| path.include?(rail_path) }
     framework_commits['Rails'] += 1
-    log_with_timestamp("Counting Rails framework commit for file #{path} (detected Rails file path)")
+    increment_counter(:framework_detections, 'Rails')
     return true
   end
   
@@ -966,9 +1087,7 @@ FRAMEWORK_MAP = {
   "FastAPI" => ['fastapi'],
   "tRPC" => ['@trpc/'],
   "Flutter" => ['flutter', 'flutter_bloc', 'flutter_riverpod', 'flutter_hooks'],
-  "Tailwind CSS" => ['tailwindcss', '@tailwindcss/'],
   "Shadcn UI" => ['@shadcn/ui', 'shadcn-ui'],
-  "Drizzle" => ['drizzle-orm', '@drizzle/'],
   "MongoDB" => ['mongodb', 'mongoose'],
   "PyTorch" => ['torch', 'pytorch'],
   "TensorFlow" => ['tensorflow'],
@@ -978,21 +1097,34 @@ FRAMEWORK_MAP = {
               'config/routes.rb', 'app/controllers/', 'app/models/', 'app/views/', 'db/migrate/']
 }
 
+# Group tools by category
 TOOL_MAP = {
+  # Testing tools
   "Jest" => ['jest', '@jest/', '@testing-library/react', '@testing-library/dom', '@testing-library/user-event'],
   "Cypress" => ['cypress'],
   "PyTest" => ['pytest'],
   "Vitest" => ['@vitest/'],
   "Mocha" => ['mocha'],
   "Chai" => ['chai'],
+  
+  # Linting tools
   "ESLint" => ['eslint', '@eslint/'],
   "Prettier" => ['prettier'],
+  
+  # UI development tools
   "Storybook" => ['@storybook/', 'storybook'],
   "Jupyter" => ['jupyter', 'notebook', 'ipykernel', '.ipynb'],
+  
+  # Infrastructure tools
   "Docker" => ['docker', 'docker-compose'],
+  "Kubernetes" => ['kubernetes', 'k8s'],
   "GitHub Actions" => ['.github/workflows/', 'actions/', '@actions/'],
   "Terraform" => ['terraform', '.tf'],
-  "Kubernetes" => ['kubernetes', 'k8s'],
+  
+  # Database tools
+  "Drizzle" => ['drizzle-orm', '@drizzle/'],
+  
+  # Cloud/hosting tools
   "AWS" => ['@aws-sdk/', 'aws-sdk'],
   "Vercel" => ['@vercel/', 'vercel'],
   "Netlify" => ['netlify', '@netlify/'],
@@ -1000,12 +1132,30 @@ TOOL_MAP = {
   "Supabase" => ['@supabase/', 'supabase-js'],
   "Redis" => ['redis', 'ioredis'],
   "PM2" => ['pm2'],
+  
+  # CSS tools
+  "Tailwind CSS" => ['tailwindcss', '@tailwindcss/'],
+  
+  # Editor tools
   "VS Code" => ['@vscode/', 'vscode', '.vscode/'],
+  
+  # Markup & config formats
   "Markdown" => ['.md', '.markdown'],
   "YAML" => ['.yml', '.yaml'],
   "JSON" => ['.json'],
   "XML" => ['.xml'],
   "TOML" => ['.toml']
+}
+
+# Tool groupings for final output
+TOOL_GROUPS = {
+  "Markup & Configuration" => ["Markdown", "YAML", "JSON", "XML", "TOML"],
+  "Linting & Formatting" => ["ESLint", "Prettier"],
+  "Hosting & Deployment" => ["Vercel", "PM2", "Netlify"],
+  "Infrastructure" => ["Firebase", "Kubernetes", "Docker", "Terraform", "AWS"],
+  "Testing" => ["Jest", "Cypress", "PyTest", "Vitest", "Mocha", "Chai"],
+  "CSS Frameworks" => ["Tailwind CSS"],
+  "Database Tools" => ["Drizzle", "Supabase"]
 }
 
 # Fetch and decode package.json from the repository using Octokit.
@@ -1061,7 +1211,7 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
     if is_flutter_repo
       frameworks['Flutter'] ||= { repositories: 0, commits: 0 }
       frameworks['Flutter'][:repositories] += 1
-      log_with_timestamp("Marked #{repo_name} as a Flutter repository")
+      increment_counter(:framework_detections, 'Flutter')
     end
   end
   
@@ -1097,7 +1247,7 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
     if is_rails_repo
       frameworks['Rails'] ||= { repositories: 0, commits: 0 }
       frameworks['Rails'][:repositories] += 1
-      log_with_timestamp("Marked #{repo_name} as a Rails repository")
+      increment_counter(:framework_detections, 'Rails')
     end
   end
   
@@ -1105,6 +1255,13 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
   if package_json
     dependencies = (package_json["dependencies"] || {}).keys + (package_json["devDependencies"] || {}).keys
     process_dependency_list(dependencies, repo_name, frameworks, tools, unrecognized)
+    
+    # Check for Drizzle ORM
+    if dependencies.any? { |d| d.include?('drizzle') }
+      tools_stats['Drizzle'] ||= { repositories: 0, commits: 0 }
+      tools_stats['Drizzle'][:repositories] += 1
+      increment_counter(:framework_detections, 'Drizzle')
+    end
     
     # Enhanced framework detection based on package.json
     tailwind_config_exists = false
@@ -1115,9 +1272,9 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
       tailwind_config_exists = File.exist?(tailwind_config_path) || File.exist?(postcss_config_path)
       
       if tailwind_config_exists || dependencies.any? { |d| d.include?('tailwind') }
-        frameworks['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
-        frameworks['Tailwind CSS'][:repositories] += 1
-        log_with_timestamp("Detected Tailwind CSS in repository #{repo_name}")
+        tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+        tools_stats['Tailwind CSS'][:repositories] += 1
+        increment_counter(:framework_detections, 'Tailwind CSS')
       end
     rescue => e
       log_with_timestamp("Error checking for Tailwind config in #{repo_name}: #{e.message}")
@@ -1127,22 +1284,21 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
     if frameworks['Next.js']
       frameworks['React'] ||= { repositories: 0, commits: 0 }
       frameworks['React'][:repositories] += 1
-      log_with_timestamp("Counting Next.js repository #{repo_name} as React framework")
+      increment_counter(:framework_detections, 'React')
     end
     
     # Verify Express detection from package.json is working
     if dependencies.any? { |d| d == 'express' }
       frameworks['Express'] ||= { repositories: 0, commits: 0 }
       frameworks['Express'][:repositories] += 1
-      log_with_timestamp("Detected Express in repository #{repo_name} from package.json")
+      increment_counter(:framework_detections, 'Express')
       
       # Check for common Express app structure files
       express_app_files = ['app.js', 'server.js', 'index.js', 'api.js']
       express_app_files.each do |file|
         file_path = File.join("tmp_repos", repo_name.gsub('/', '_'), file)
         if File.exist?(file_path)
-          log_with_timestamp("Found potential Express app entry point: #{file} in #{repo_name}")
-          # We don't need to do anything else here, just logging for visibility
+          increment_counter(:skipped_files, :express_app)
         end
       end
     end
@@ -1158,6 +1314,7 @@ def process_dependencies(package_json, repo_name, frameworks, tools, unrecognize
         if pubspec_content.include?('flutter:')
           frameworks['Flutter'] ||= { repositories: 0, commits: 0 }
           frameworks['Flutter'][:repositories] += 1
+          increment_counter(:framework_detections, 'Flutter')
         end
       end
     rescue => e
@@ -1192,7 +1349,7 @@ tools_stats = {}
 unrecognized_deps = {}
 
 # Process repositories with memory efficiency in mind
-valid_repos.each do |repo|
+valid_repos.each_with_index do |repo, index|
   summary[:forks] += 1 if repo.fork
   summary[:private_repos] += 1 if repo.private
   summary[:public_repos] += 1 unless repo.private
@@ -1205,7 +1362,7 @@ valid_repos.each do |repo|
       summary[:total_commits] += repo_commit_count
     end
   rescue => e
-    log_with_timestamp("Error fetching contributors for #{repo.full_name}: #{e.message}")
+    log_with_timestamp("Error fetching contributors for #{repo.full_name}: #{e.message}", :error)
   end
 
   # Clone and analyze repository
@@ -1343,7 +1500,15 @@ valid_repos.each do |repo|
   commit_stats = nil
   repo_path = nil
   GC.start if rand < 0.2 # Occasionally force garbage collection
+
+  # Log summary every 10 repos
+  if (index + 1) % 10 == 0 || index == valid_repos.size - 1
+    log_summary("Progress after #{index + 1}/#{valid_repos.size} repositories")
+  end
 end
+
+# Final log summary at the end
+log_summary("Final Statistics")
 
 # Calculate percentages in the CSS complex structure
 if css_complex_stats[:summary][:commits] > 0
@@ -1372,6 +1537,35 @@ sorted_unrecognized = unrecognized_deps.sort_by { |_, data| -data[:count] }[0, 5
   { name: dep, count: data[:count], repos: data[:repos] }
 end
 
+# Group tools according to defined categories
+grouped_tools = {}
+
+# First, add each tool group as a category
+TOOL_GROUPS.each do |group_name, tools|
+  grouped_tools[group_name] = {
+    repositories: 0,
+    commits: 0,
+    tools: {}
+  }
+  
+  # Add each tool's stats to its group
+  tools.each do |tool|
+    if tools_stats[tool]
+      grouped_tools[group_name][:repositories] += tools_stats[tool][:repositories]
+      grouped_tools[group_name][:commits] += tools_stats[tool][:commits]
+      grouped_tools[group_name][:tools][tool] = tools_stats[tool]
+      
+      # Remove the tool from the original stats since it's now in a group
+      tools_stats.delete(tool)
+    end
+  end
+end
+
+# Add any remaining tools that aren't part of a group
+tools_stats.each do |tool, stats|
+  grouped_tools[tool] = stats
+end
+
 # Build final stats hash with memory efficiency in mind
 cached_stats = {
   lastUpdated: Time.now.utc.iso8601,
@@ -1386,13 +1580,14 @@ cached_stats = {
     end
   }.to_h,
   frameworks: frameworks_stats.sort_by { |_, stats| [-stats[:commits], -stats[:repositories]] }.to_h,
-  tools: tools_stats.sort_by { |_, stats| [-stats[:commits], -stats[:repositories]] }.to_h,
+  tools: grouped_tools,
   unrecognizedDependencies: sorted_unrecognized,
   notes: [
     "Languages with high byte counts but in few repositories might be due to generated code or dependency files.",
     "Commit-level analysis processes diffs using Linguist to exclude generated files before counting language contributions.",
     "CSS stats now include a comprehensive breakdown of vanilla CSS vs Tailwind usage patterns.",
-    "Memory optimizations have been added to prevent out-of-memory errors during processing."
+    "Tools are now grouped into categories for better organization.",
+    "Excluded generated languages and files that aren't actual contributions."
   ],
   found_emails: FOUND_EMAILS.to_a
 }

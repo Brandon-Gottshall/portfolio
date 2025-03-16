@@ -62,6 +62,17 @@ interface CSSStats {
   };
 }
 
+interface FrameworkStats {
+  repositories: number;
+  commits: number;
+}
+
+interface ToolCategory {
+  repositories: number;
+  commits: number;
+  tools: Record<string, { repositories: number; commits: number }>;
+}
+
 interface StatsItem extends DetailedStats {
   name: string
   percentage: number
@@ -88,6 +99,8 @@ interface StatsItem extends DetailedStats {
       file_types: Record<string, { files: number; bytes: number; commits: number }>;
     };
   };
+  // Add optional properties for tools categories
+  tools?: Record<string, { repositories: number; commits: number }>;
 }
 
 interface Props {
@@ -106,6 +119,29 @@ interface CachedStats {
 // Type guard to check if a stat is the complex CSS structure
 const isCSSStats = (stat: DetailedStats | CSSStats): stat is CSSStats => {
   return 'summary' in stat && 'variants' in stat;
+};
+
+// Update the hasDetailedTools function to better handle the tools structure
+const hasDetailedTools = (stat: any): boolean => {
+  // First, check if it's one of the specific tool categories we know exists in the data
+  const isToolCategory = [
+    'Markup & Configuration', 
+    'Linting & Formatting', 
+    'Hosting & Deployment',
+    'Infrastructure', 
+    'Testing', 
+    'CSS Frameworks',
+    'Database Tools'
+  ].includes(stat.name);
+  
+  // Then check if the object actually has a tools property
+  const hasToolsProperty = 
+    stat && 
+    'tools' in stat && 
+    typeof stat.tools === 'object' &&
+    Object.keys(stat.tools).length > 0;
+  
+  return isToolCategory || hasToolsProperty;
 };
 
 // Add this as a new component just before the GithubLanguageStats component definition
@@ -336,6 +372,190 @@ const CSSBreakdown = ({ cssStats, isDarkMode }: CSSBreakdownProps) => {
           </span>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Add this new component for framework breakdowns
+interface FrameworkBreakdownProps {
+  name: string;
+  stats: FrameworkStats;
+  isDarkMode: boolean;
+}
+
+const FrameworkBreakdown = ({ name, stats, isDarkMode }: FrameworkBreakdownProps) => {
+  // Framework-specific colors that complement the main chart colors
+  const frameworkColor = 'rgba(13, 71, 161, 0.95)'; // blue-dark
+  
+  return (
+    <div className="pt-2 mt-4 border-t border-navy/10 dark:border-cream/10">
+      <h5 className="mb-2 text-sm font-medium text-navy dark:text-cream">
+        {name} Usage Details
+      </h5>
+      
+      <div className="p-2 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10">
+        <div className="flex items-center mb-1.5">
+          <div 
+            className="w-3 h-3 rounded-full mr-1.5"
+            style={{ backgroundColor: frameworkColor }}
+          ></div>
+          <span className="text-xs font-medium text-navy dark:text-cream">{name} Projects</span>
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs">
+            <span className="text-navy/70 dark:text-cream/70">Commits:</span>
+            <span className="font-medium">{stats.commits.toLocaleString()}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-navy/70 dark:text-cream/70">Repos:</span>
+            <span className="font-medium">{stats.repositories}</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Project metrics in a condensed format */}
+      <div className="grid grid-cols-2 gap-2 mt-3 text-xs text-navy/70 dark:text-cream/70">
+        <div className="flex justify-between">
+          <span>Avg commits per repo:</span>
+          <span className="font-medium">
+            {(stats.commits / Math.max(stats.repositories, 1)).toFixed(1)}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span>Contribution %:</span>
+          <span className="font-medium">
+            {((stats.repositories / Math.max(stats.commits, 1)) * 100).toFixed(1)}%
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Add this new component for tool category breakdown only when needed
+interface ToolCategoryBreakdownProps {
+  name: string;
+  stats: {
+    repositories: number;
+    commits: number;
+    tools: Record<string, { repositories: number; commits: number }>;
+  };
+  isDarkMode: boolean;
+}
+
+const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdownProps) => {
+  // Tool category colors
+  const toolColors = {
+    primary: 'rgba(30, 136, 229, 0.95)',    // blue
+    secondary: 'rgba(79, 195, 247, 0.85)',  // blue-accent
+    accent: 'rgba(13, 71, 161, 0.95)',      // blue-dark
+  };
+  
+  // Sort tools by commits (descending), then by repositories
+  const sortedTools = Object.entries(stats.tools)
+    .sort(([, a], [, b]) => b.commits - a.commits || b.repositories - a.repositories);
+  
+  // Display top tools and calculate total usage percentages
+  const totalCommits = sortedTools.reduce((sum, [, tool]) => sum + tool.commits, 0) || 1;
+  const topTools = sortedTools.slice(0, 4); // Limit to top 4 tools
+  
+  const totalTools = Object.keys(stats.tools).length;
+  const hasMoreTools = totalTools > 4;
+  
+  // Calculate how much screen space we have for the grid
+  const useNarrowLayout = totalTools > 6;
+  
+  return (
+    <div className="pt-2 mt-4 border-t border-navy/10 dark:border-cream/10">
+      <h5 className="mb-2 text-sm font-medium text-navy dark:text-cream">
+        {name} Breakdown
+        {hasMoreTools && <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Showing top 4 of {totalTools}</span>}
+      </h5>
+      
+      {/* Summary card with improved metrics */}
+      <div className="p-2 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10 mb-3">
+        <div className="flex items-center mb-1.5">
+          <div 
+            className="w-3 h-3 rounded-full mr-1.5"
+            style={{ backgroundColor: toolColors.primary }}
+          ></div>
+          <span className="text-xs font-medium text-navy dark:text-cream">{name} Summary</span>
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs">
+            <span className="text-navy/70 dark:text-cream/70">Tools:</span>
+            <span className="font-medium">{totalTools}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-navy/70 dark:text-cream/70">Total Repos:</span>
+            <span className="font-medium">{stats.repositories}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-navy/70 dark:text-cream/70">Total Commits:</span>
+            <span className="font-medium">{stats.commits.toLocaleString()}</span>
+          </div>
+          {topTools.length > 0 && (
+            <div className="flex justify-between text-xs">
+              <span className="text-navy/70 dark:text-cream/70">Top Tool:</span>
+              <span className="font-medium">{topTools[0][0]} ({getSafePercentage(topTools[0][1].commits, totalCommits).toFixed(0)}%)</span>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Individual tools grid - responsive layout based on number of tools */}
+      <div className={`grid ${useNarrowLayout ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+        {topTools.map(([toolName, toolStats], index) => (
+          <div key={toolName} className="p-2 rounded-lg border bg-cream/20 dark:bg-navy-light/20 border-navy/10 dark:border-cream/10">
+            <div className="flex items-center mb-1">
+              <div 
+                className="w-2.5 h-2.5 rounded-full mr-1.5"
+                style={{ backgroundColor: toolColors.secondary, opacity: 0.9 - (index * 0.15) }}
+              ></div>
+              <span className="text-xs font-medium text-navy dark:text-cream truncate">{toolName}</span>
+              <span className="ml-auto text-2xs font-medium bg-cream/40 dark:bg-navy-light/40 px-1.5 py-0.5 rounded">
+                {getSafePercentage(toolStats.commits, totalCommits).toFixed(0)}%
+              </span>
+            </div>
+            
+            {/* Tool usage bar */}
+            <div className="mt-1 mb-1.5 w-full h-1.5 rounded-full bg-cream-dark/30 dark:bg-navy-dark/30 overflow-hidden">
+              <div 
+                className="h-full rounded-full" 
+                style={{ 
+                  width: `${getSafePercentage(toolStats.commits, totalCommits)}%`,
+                  backgroundColor: toolColors.accent,
+                  opacity: 0.7 + (0.3 * (index === 0 ? 1 : 0)), // First item is more prominent
+                }}
+              />
+            </div>
+            
+            <div className="flex justify-between text-xs text-navy/70 dark:text-cream/70">
+              <div>
+                <span className="font-medium">{toolStats.repositories}</span> repos
+              </div>
+              {toolStats.commits > 0 && (
+                <div>
+                  <span className="font-medium">{toolStats.commits.toLocaleString()}</span> commits
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* If there are more tools, show a summary row */}
+      {hasMoreTools && (
+        <div className="mt-2 p-2 text-xs text-navy/70 dark:text-cream/70 bg-cream/10 dark:bg-navy-light/10 rounded border border-navy/5 dark:border-cream/5">
+          <span className="font-medium">{totalTools - 4}</span> more tools account for 
+          <span className="font-medium ml-1">
+            {getSafePercentage(
+              sortedTools.slice(4).reduce((sum, [, tool]) => sum + tool.commits, 0), 
+              totalCommits
+            ).toFixed(0)}%
+          </span> of commits in this category
+        </div>
+      )}
     </div>
   );
 };
@@ -576,7 +796,24 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
               ];
             }
             
-            // Default tooltip for other languages
+            // For tool categories, show summary of tools
+            if (hasDetailedTools(stat)) {
+              const toolCount = Object.keys(stat.tools || {}).length;
+              const topTools = Object.entries(stat.tools || {})
+                .sort(([, a], [, b]) => b.commits - a.commits || b.repositories - a.repositories)
+                .slice(0, 3)
+                .map(([name, data]) => `${name}: ${data.commits} commits`);
+              
+              return [
+                `${stat.percentage.toFixed(1)}% of all commits`,
+                `Contains ${toolCount} tools across ${stat.repositories} repos`,
+                ``,
+                ...topTools,
+                toolCount > 3 ? `+ ${toolCount - 3} more tools` : ''
+              ].filter(Boolean);
+            }
+            
+            // Default tooltip for other items
             return [
               `${stat.percentage.toFixed(1)}% of all commits`,
               `Used in ${stat.repositories} repositories`
@@ -720,23 +957,8 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                       // Check if this is CSS with the complex structure
                       const isCSS = stat.name === 'CSS' && 'summary' in stat;
                       
-                      // For CSS, let's safely access the variant data
-                      let vanillaCommits = 0;
-                      let tailwindCommits = 0;
-                      let vanillaPercentage = 0;
-                      let tailwindPercentage = 0;
-                      
-                      if (isCSS && 'variants' in stat && stat.variants) {
-                        const cssVariants = stat.variants as CSSStats['variants'];
-                        vanillaCommits = cssVariants.vanilla?.commits || 0;
-                        tailwindCommits = cssVariants.tailwind?.commits || 0;
-                        const totalVariantCommits = vanillaCommits + tailwindCommits;
-                        
-                        if (totalVariantCommits > 0) {
-                          vanillaPercentage = (vanillaCommits / totalVariantCommits) * 100;
-                          tailwindPercentage = (tailwindCommits / totalVariantCommits) * 100;
-                        }
-                      }
+                      // Check if this is a tool category with detailed information
+                      const isToolData = hasDetailedTools(stat);
                       
                       return (
                         <div 
@@ -805,6 +1027,8 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                               <p className="font-medium text-cream dark:text-navy">
                                 {isCSS ? (
                                   `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
+                                ) : isToolData ? (
+                                  `${stat.commits || 0} commits across ${Object.keys(stat.tools || {}).length} tools in ${stat.repositories} repos`
                                 ) : (
                                   `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
                                 )}
@@ -818,14 +1042,27 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                             <span>{repoCount} repositories</span>
                           </div>
 
-                          {/* Add CSS breakdown for CSS items */}
+                          {/* Conditionally add detailed breakdowns only when the data structure supports it */}
                           {isCSS && 'variants' in stat && (
                             <CSSBreakdown 
                               cssStats={{
                                 summary: stat.summary as CSSStats['summary'],
                                 variants: stat.variants as CSSStats['variants']
                               }}
-                              isDarkMode={false} 
+                              isDarkMode={isDarkMode} 
+                            />
+                          )}
+
+                          {/* Add Tool Category breakdown for tools */}
+                          {isToolData && (
+                            <ToolCategoryBreakdown
+                              name={stat.name}
+                              stats={{
+                                repositories: repoCount,
+                                commits: commitCount,
+                                tools: stat.tools || {} // Add fallback for empty tools
+                              }}
+                              isDarkMode={isDarkMode}
                             />
                           )}
                         </div>
@@ -875,7 +1112,7 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                   <div className="absolute inset-0 -my-3" />
                 </div>
               </TooltipTrigger>
-              <TooltipContent side="top" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
+              <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                 <p className="font-medium text-cream dark:text-navy">
                   {type === 'languages'
                     ? `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
@@ -904,6 +1141,11 @@ const getSafePercentage = (value: number, total: number): number => {
   if (!total || isNaN(total) || total === 0) return 0;
   if (!value || isNaN(value)) return 0;
   return (value / total) * 100;
+};
+
+// Add helper function to check if a stat is a tool category
+const isToolCategory = (stat: any): stat is ToolCategory => {
+  return 'tools' in stat && typeof stat.tools === 'object';
 };
 
 export default GithubLanguageStats 

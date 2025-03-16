@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-03-16T05:28:55Z",
+  "lastUpdated": "2025-03-16T06:36:25Z",
   "summary": {
     "total_repos": 111,
     "owned_repos": 69,
     "contributed_repos": 95,
-    "total_commits": 3091,
+    "total_commits": 3114,
     "public_repos": 68,
     "private_repos": 42,
     "forks": 7
@@ -14,14 +14,14 @@
     "JavaScript": {
       "repositories": 57,
       "bytes": 754301,
-      "commits": 1100
+      "commits": 995
     },
     "CSS": {
       "summary": {
         "repositories": 24,
         "bytes": 192453,
         "commits": 487,
-        "percentage_of_all_commits": 15.76
+        "percentage_of_all_commits": 15.64
       },
       "variants": {
         "vanilla": {
@@ -136,20 +136,20 @@
         }
       ]
     },
-    "TypeScript": {
-      "repositories": 16,
-      "bytes": 2001105,
-      "commits": 73
-    },
     "HTML": {
       "repositories": 27,
       "bytes": 95506,
-      "commits": 58
+      "commits": 42
     },
     "Ruby": {
       "repositories": 6,
       "bytes": 52879,
       "commits": 39
+    },
+    "TypeScript": {
+      "repositories": 16,
+      "bytes": 2001105,
+      "commits": 24
     },
     "Dart": {
       "repositories": 11,
@@ -157,13 +157,13 @@
       "commits": 20
     },
     "SVG": {
-      "repositories": 31,
-      "bytes": 40712248,
+      "repositories": 0,
+      "bytes": 0,
       "commits": 11
     },
     "JSON with Comments": {
-      "repositories": 16,
-      "bytes": 16246,
+      "repositories": 0,
+      "bytes": 0,
       "commits": 10
     },
     "Shell": {
@@ -172,8 +172,8 @@
       "commits": 6
     },
     "Gemfile.lock": {
-      "repositories": 1,
-      "bytes": 4420,
+      "repositories": 0,
+      "bytes": 0,
       "commits": 6
     },
     "Text": {
@@ -186,29 +186,29 @@
       "bytes": 46209,
       "commits": 3
     },
-    "Gradle": {
-      "repositories": 10,
-      "bytes": 29190,
-      "commits": 3
-    },
-    "Objective-C": {
-      "repositories": 11,
-      "bytes": 28753,
-      "commits": 3
-    },
     "Rich Text Format": {
       "repositories": 1,
       "bytes": 8347,
       "commits": 3
     },
     "Starlark": {
-      "repositories": 1,
-      "bytes": 434,
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 3
+    },
+    "Objective-C": {
+      "repositories": 0,
+      "bytes": 0,
       "commits": 3
     },
     "Java": {
-      "repositories": 1,
-      "bytes": 364,
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 3
+    },
+    "Gradle": {
+      "repositories": 0,
+      "bytes": 0,
       "commits": 3
     },
     "MDX": {
@@ -222,13 +222,13 @@
       "commits": 2
     },
     "robots.txt": {
-      "repositories": 6,
-      "bytes": 1161,
+      "repositories": 0,
+      "bytes": 0,
       "commits": 2
     },
     "INI": {
-      "repositories": 10,
-      "bytes": 908,
+      "repositories": 0,
+      "bytes": 0,
       "commits": 2
     },
     "Jupyter Notebook": {
@@ -236,17 +236,7 @@
       "bytes": 78444,
       "commits": 1
     },
-    "XML Property List": {
-      "repositories": 12,
-      "bytes": 36668,
-      "commits": 1
-    },
-    "Procfile": {
-      "repositories": 1,
-      "bytes": 16,
-      "commits": 1
-    },
-    "SCSS": {
+    "Diff": {
       "repositories": 0,
       "bytes": 0,
       "commits": 1
@@ -256,7 +246,7 @@
       "bytes": 0,
       "commits": 1
     },
-    "Diff": {
+    "Procfile": {
       "repositories": 0,
       "bytes": 0,
       "commits": 1
@@ -266,24 +256,14 @@
       "bytes": 0,
       "commits": 1
     },
+    "XML Property List": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 1
+    },
     "GraphQL": {
       "repositories": 2,
       "bytes": 1730274,
-      "commits": 0
-    },
-    "vCard": {
-      "repositories": 1,
-      "bytes": 592163,
-      "commits": 0
-    },
-    "PLpgSQL": {
-      "repositories": 2,
-      "bytes": 201887,
-      "commits": 0
-    },
-    "C++": {
-      "repositories": 4,
-      "bytes": 69774,
       "commits": 0
     },
     "CMake": {
@@ -306,11 +286,6 @@
       "bytes": 10994,
       "commits": 0
     },
-    "Prisma": {
-      "repositories": 1,
-      "bytes": 1678,
-      "commits": 0
-    },
     "Kotlin": {
       "repositories": 9,
       "bytes": 1159,
@@ -320,25 +295,16 @@
       "repositories": 1,
       "bytes": 543,
       "commits": 0
-    },
-    "HTML+ERB": {
-      "repositories": 1,
-      "bytes": 242,
-      "commits": 0
     }
   },
   "frameworks": {
     "React": {
-      "repositories": 167,
-      "commits": 1287
-    },
-    "Tailwind CSS": {
-      "repositories": 41,
-      "commits": 607
+      "repositories": 166,
+      "commits": 1017
     },
     "Next.js": {
       "repositories": 42,
-      "commits": 452
+      "commits": 252
     },
     "Rails": {
       "repositories": 0,
@@ -351,52 +317,98 @@
     "Flutter": {
       "repositories": 10,
       "commits": 25
-    },
-    "Drizzle": {
-      "repositories": 1,
-      "commits": 0
     }
   },
   "tools": {
-    "Markdown": {
+    "Markup & Configuration": {
       "repositories": 0,
-      "commits": 2884
+      "commits": 4111,
+      "tools": {
+        "Markdown": {
+          "repositories": 0,
+          "commits": 2884
+        },
+        "YAML": {
+          "repositories": 0,
+          "commits": 1
+        },
+        "JSON": {
+          "repositories": 0,
+          "commits": 1223
+        },
+        "XML": {
+          "repositories": 0,
+          "commits": 3
+        }
+      }
     },
-    "JSON": {
-      "repositories": 0,
-      "commits": 1223
+    "Linting & Formatting": {
+      "repositories": 49,
+      "commits": 0,
+      "tools": {
+        "ESLint": {
+          "repositories": 38,
+          "commits": 0
+        },
+        "Prettier": {
+          "repositories": 11,
+          "commits": 0
+        }
+      }
     },
-    "XML": {
-      "repositories": 0,
-      "commits": 3
+    "Hosting & Deployment": {
+      "repositories": 3,
+      "commits": 0,
+      "tools": {
+        "Vercel": {
+          "repositories": 2,
+          "commits": 0
+        },
+        "PM2": {
+          "repositories": 1,
+          "commits": 0
+        }
+      }
     },
-    "YAML": {
-      "repositories": 0,
-      "commits": 1
+    "Infrastructure": {
+      "repositories": 1,
+      "commits": 0,
+      "tools": {
+        "Firebase": {
+          "repositories": 1,
+          "commits": 0
+        }
+      }
     },
-    "ESLint": {
-      "repositories": 38,
-      "commits": 0
-    },
-    "Prettier": {
-      "repositories": 9,
-      "commits": 0
-    },
-    "Jest": {
+    "Testing": {
       "repositories": 6,
-      "commits": 0
+      "commits": 0,
+      "tools": {
+        "Jest": {
+          "repositories": 6,
+          "commits": 0
+        }
+      }
     },
-    "Vercel": {
-      "repositories": 2,
-      "commits": 0
+    "CSS Frameworks": {
+      "repositories": 22,
+      "commits": 0,
+      "tools": {
+        "Tailwind CSS": {
+          "repositories": 22,
+          "commits": 0
+        }
+      }
     },
-    "Firebase": {
+    "Database Tools": {
       "repositories": 1,
-      "commits": 0
-    },
-    "PM2": {
-      "repositories": 1,
-      "commits": 0
+      "commits": 0,
+      "tools": {
+        "Drizzle": {
+          "repositories": 1,
+          "commits": 0
+        }
+      }
     }
   },
   "unrecognizedDependencies": [
@@ -862,7 +874,8 @@
     "Languages with high byte counts but in few repositories might be due to generated code or dependency files.",
     "Commit-level analysis processes diffs using Linguist to exclude generated files before counting language contributions.",
     "CSS stats now include a comprehensive breakdown of vanilla CSS vs Tailwind usage patterns.",
-    "Memory optimizations have been added to prevent out-of-memory errors during processing."
+    "Tools are now grouped into categories for better organization.",
+    "Excluded generated languages and files that aren't actual contributions."
   ],
   "found_emails": [
     "brandon@effortlessdevelopment.com",
