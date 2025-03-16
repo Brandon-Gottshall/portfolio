@@ -121,6 +121,16 @@ const isCSSStats = (stat: DetailedStats | CSSStats): stat is CSSStats => {
   return 'summary' in stat && 'variants' in stat;
 };
 
+// Add this function to correctly check for tool categories
+const isToolCategory = (stat: any): boolean => {
+  // Check if it's one of the known tool categories with the correct structure
+  return stat && 
+         typeof stat === 'object' &&
+         'tools' in stat && 
+         typeof stat.tools === 'object' &&
+         Object.keys(stat.tools).length > 0;
+};
+
 // Update the hasDetailedTools function to better handle the tools structure
 const hasDetailedTools = (stat: any): boolean => {
   // First, check if it's one of the specific tool categories we know exists in the data
@@ -142,6 +152,18 @@ const hasDetailedTools = (stat: any): boolean => {
     Object.keys(stat.tools).length > 0;
   
   return isToolCategory || hasToolsProperty;
+};
+
+// Add this function after isCSSStats and before the components
+
+// Helper function to check if a stat has detailed data (either CSS variants or tools)
+const hasDetailedData = (stat: any): boolean => {
+  return stat && (
+    // Check for CSS structure with variants
+    ('variants' in stat && typeof stat.variants === 'object') ||
+    // Check for tools structure
+    ('tools' in stat && typeof stat.tools === 'object' && Object.keys(stat.tools || {}).length > 0)
+  );
 };
 
 // Add this as a new component just before the GithubLanguageStats component definition
@@ -411,6 +433,7 @@ const FrameworkBreakdown = ({ name, stats, isDarkMode }: FrameworkBreakdownProps
             <span className="font-medium">{stats.repositories}</span>
           </div>
         </div>
+
       </div>
       
       {/* Project metrics in a condensed format */}
@@ -451,19 +474,22 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
     accent: 'rgba(13, 71, 161, 0.95)',      // blue-dark
   };
   
-  // Sort tools by commits (descending), then by repositories
-  const sortedTools = Object.entries(stats.tools)
-    .sort(([, a], [, b]) => b.commits - a.commits || b.repositories - a.repositories);
+  // Get the tools from the nested structure
+  const toolsObject = stats.tools || {};
   
-  // Display top tools and calculate total usage percentages
-  const totalCommits = sortedTools.reduce((sum, [, tool]) => sum + tool.commits, 0) || 1;
+  // Sort tools by commits (descending)
+  const sortedTools = Object.entries(toolsObject)
+    .sort(([, a], [, b]) => {
+      // First by commits, then by repositories if commits are equal
+      if (b.commits !== a.commits) return b.commits - a.commits;
+      return b.repositories - a.repositories;
+    });
+  
+  const totalCommits = sortedTools.reduce((sum, [, tool]) => sum + (tool.commits || 0), 0) || 1;
   const topTools = sortedTools.slice(0, 4); // Limit to top 4 tools
   
-  const totalTools = Object.keys(stats.tools).length;
+  const totalTools = sortedTools.length;
   const hasMoreTools = totalTools > 4;
-  
-  // Calculate how much screen space we have for the grid
-  const useNarrowLayout = totalTools > 6;
   
   return (
     <div className="pt-2 mt-4 border-t border-navy/10 dark:border-cream/10">
@@ -472,8 +498,8 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
         {hasMoreTools && <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Showing top 4 of {totalTools}</span>}
       </h5>
       
-      {/* Summary card with improved metrics */}
-      <div className="p-2 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10 mb-3">
+      {/* Summary card */}
+      <div className="p-2 mb-3 rounded-lg border bg-cream/30 dark:bg-navy-light/30 border-navy/10 dark:border-cream/10">
         <div className="flex items-center mb-1.5">
           <div 
             className="w-3 h-3 rounded-full mr-1.5"
@@ -483,36 +509,30 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
-            <span className="text-navy/70 dark:text-cream/70">Tools:</span>
+            <span className="text-navy/70 dark:text-cream/70">Total Tools:</span>
             <span className="font-medium">{totalTools}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-navy/70 dark:text-cream/70">Total Repos:</span>
+            <span className="text-navy/70 dark:text-cream/70">Repositories:</span>
             <span className="font-medium">{stats.repositories}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-navy/70 dark:text-cream/70">Total Commits:</span>
+            <span className="text-navy/70 dark:text-cream/70">Commits:</span>
             <span className="font-medium">{stats.commits.toLocaleString()}</span>
           </div>
-          {topTools.length > 0 && (
-            <div className="flex justify-between text-xs">
-              <span className="text-navy/70 dark:text-cream/70">Top Tool:</span>
-              <span className="font-medium">{topTools[0][0]} ({getSafePercentage(topTools[0][1].commits, totalCommits).toFixed(0)}%)</span>
-            </div>
-          )}
         </div>
       </div>
       
-      {/* Individual tools grid - responsive layout based on number of tools */}
-      <div className={`grid ${useNarrowLayout ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+      {/* Individual tools grid */}
+      <div className="grid grid-cols-2 gap-2">
         {topTools.map(([toolName, toolStats], index) => (
           <div key={toolName} className="p-2 rounded-lg border bg-cream/20 dark:bg-navy-light/20 border-navy/10 dark:border-cream/10">
             <div className="flex items-center mb-1">
               <div 
-                className="w-2.5 h-2.5 rounded-full mr-1.5"
+                className="mr-1 w-2 h-2 rounded-full"
                 style={{ backgroundColor: toolColors.secondary, opacity: 0.9 - (index * 0.15) }}
               ></div>
-              <span className="text-xs font-medium text-navy dark:text-cream truncate">{toolName}</span>
+              <span className="text-xs font-medium truncate text-navy dark:text-cream">{toolName}</span>
               <span className="ml-auto text-2xs font-medium bg-cream/40 dark:bg-navy-light/40 px-1.5 py-0.5 rounded">
                 {getSafePercentage(toolStats.commits, totalCommits).toFixed(0)}%
               </span>
@@ -532,7 +552,11 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
             
             <div className="flex justify-between text-xs text-navy/70 dark:text-cream/70">
               <div>
-                <span className="font-medium">{toolStats.repositories}</span> repos
+                {toolStats.repositories === 0 && toolStats.commits > 0 ? (
+                  <TinyRepoWarning />
+                ) : (
+                  <span className="font-medium">{toolStats.repositories} repos</span>
+                )}
               </div>
               {toolStats.commits > 0 && (
                 <div>
@@ -546,9 +570,9 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
       
       {/* If there are more tools, show a summary row */}
       {hasMoreTools && (
-        <div className="mt-2 p-2 text-xs text-navy/70 dark:text-cream/70 bg-cream/10 dark:bg-navy-light/10 rounded border border-navy/5 dark:border-cream/5">
+        <div className="p-2 mt-2 text-xs rounded border text-navy/70 dark:text-cream/70 bg-cream/10 dark:bg-navy-light/10 border-navy/5 dark:border-cream/5">
           <span className="font-medium">{totalTools - 4}</span> more tools account for 
-          <span className="font-medium ml-1">
+          <span className="ml-1 font-medium">
             {getSafePercentage(
               sortedTools.slice(4).reduce((sum, [, tool]) => sum + tool.commits, 0), 
               totalCommits
@@ -558,6 +582,59 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
       )}
     </div>
   );
+};
+
+// Add this tiny inline warning specifically for card layouts
+const TinyRepoWarning = () => (
+  <span className="inline-flex items-center text-red-600 dark:text-red-400">
+    <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    Repo issue
+  </span>
+);
+
+// Add this new component after TinyRepoWarning
+const RepositoryError = () => (
+  <div className="p-2 mt-2 bg-red-50 rounded-md border border-red-200 dark:bg-red-900/20 dark:border-red-700/30">
+    <div className="flex items-center">
+      <svg className="w-4 h-4 mr-1.5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <span className="text-sm font-medium text-red-700 dark:text-red-400">Repository Issue Detected</span>
+    </div>
+    <p className="mt-1 text-xs text-red-600/90 dark:text-red-300/90">
+      Commits were detected but couldn't be associated with any repository. This usually happens with generated code or when repository detection fails.
+    </p>
+  </div>
+);
+
+// Add a helper function to fix percentage calculation
+// This ensures percentages never exceed 100% and fixes double-counting issues
+const calculateSafePercentage = (commits: number, totalCommits: number): number => {
+  if (!totalCommits || totalCommits <= 0) return 0;
+  
+  // Calculate raw percentage
+  let percentage = (commits / totalCommits) * 100;
+  
+  // Cap at 100% to prevent invalid display
+  return Math.min(percentage, 100);
+};
+
+// Add a specialized percentage calculation for different category types
+const calculateCategoryPercentage = (
+  type: 'languages' | 'frameworks' | 'tools',
+  stat: StatsItem, 
+  totalCommits: number,
+  totalRepos: number
+): number => {
+  // For tools, base percentage on repository count rather than commits
+  if (type === 'tools') {
+    return totalRepos > 0 ? (stat.repositories / totalRepos) * 100 : 0;
+  }
+  
+  // For languages and frameworks, continue using commit-based percentage
+  return totalCommits > 0 ? Math.min((stat.commits / totalCommits) * 100, 100) : 0;
 };
 
 const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
@@ -613,31 +690,43 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
     return () => observer.disconnect()
   }, [type])
 
+  // Calculate total commits ONCE outside the map function
+  const totalCommitCount = Object.values(stats).reduce((sum, s) => {
+    // For category items with subcategories, avoid double-counting
+    // by using only the top-level commit count
+    return sum + (s.summary?.commits || s.commits || 0);
+  }, 0);
+
   // Process stats and group small slices into "Other"
   const processedStats = Object.entries(stats)
     .map(([name, stat]) => {
-      // Handle both regular stats and CSS complex stats
-      const commits = isCSSStats(stat) ? stat.summary.commits : stat.commits;
-      const repositories = isCSSStats(stat) ? stat.summary.repositories : stat.repositories;
-      const bytes = isCSSStats(stat) ? stat.summary.bytes : stat.bytes;
+      // Use a consistent approach to get commits/repos whether from summary or direct
+      const commits = stat.summary?.commits || stat.commits || 0;
+      const repositories = stat.summary?.repositories || stat.repositories || 0;
+      const bytes = stat.summary?.bytes || stat.bytes || 0;
       
-      // Base stats item that all languages will have
+      // Base stats item that all types will have
       const baseStatsItem = {
         name,
         commits,
         repositories,
         bytes,
-        percentage: (commits / Object.values(stats).reduce((sum, s) => {
-          return sum + (isCSSStats(s) ? s.summary.commits : (s.commits || 0));
-        }, 0)) * 100
+        // Use different percentage calculation based on type
+        percentage: calculateCategoryPercentage(
+          type, 
+          { name, commits, repositories, bytes, percentage: 0 }, 
+          totalCommitCount,
+          totalCommitCount
+        )
       };
       
-      // If this is CSS, preserve the original complex structure
-      if (isCSSStats(stat)) {
+      // Pass through the detailed structure if it exists
+      if (stat.summary) {
         return {
           ...baseStatsItem,
           summary: stat.summary,
-          variants: stat.variants
+          ...(stat.variants && { variants: stat.variants }),
+          ...(stat.tools && { tools: stat.tools })
         };
       }
       
@@ -775,10 +864,19 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
           size: 13,
         },
         callbacks: {
-          // Streamlined tooltip content
           label: function(context: any) {
             const stat = finalDonutStats[context.dataIndex];
             
+            // Add different descriptions based on category type
+            if (type === 'tools') {
+              return [
+                `${stat.percentage.toFixed(1)}% of repositories`,
+                `Used in ${stat.repositories} repositories`,
+                `${stat.commits} commits total`
+              ];
+            }
+            
+            // Original label functions for other types
             // For CSS, show the vanilla vs tailwind breakdown
             if (stat.name === 'CSS' && 'variants' in stat && stat.variants) {
               const { variants } = stat;
@@ -797,7 +895,7 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
             }
             
             // For tool categories, show summary of tools
-            if (hasDetailedTools(stat)) {
+            if (isToolCategory(stat)) {
               const toolCount = Object.keys(stat.tools || {}).length;
               const topTools = Object.entries(stat.tools || {})
                 .sort(([, a], [, b]) => b.commits - a.commits || b.repositories - a.repositories)
@@ -954,11 +1052,10 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                       const commitCount = stat && stat.summary ? stat.summary.commits : (stat.commits || 0);
                       const repoCount = stat && stat.summary ? stat.summary.repositories : (stat.repositories || 0);
                       
-                      // Check if this is CSS with the complex structure
-                      const isCSS = stat.name === 'CSS' && 'summary' in stat;
-                      
-                      // Check if this is a tool category with detailed information
-                      const isToolData = hasDetailedTools(stat);
+                      // Determine if this has details and what type 
+                      const hasDetails = hasDetailedData(stat);
+                      const isCSS = stat.name === 'CSS' && 'variants' in stat;
+                      const hasTool = 'tools' in stat && Object.keys(stat.tools || {}).length > 0;
                       
                       return (
                         <div 
@@ -992,15 +1089,16 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                               </span>
                             </div>
                             
-                            {/* Percentage with cleaner display */}
+                            {/* Percentage with type-specific descriptor */}
                             <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
                               activeSegment === index
                                 ? 'bg-cream/50 dark:bg-navy-light/50 text-navy dark:text-cream' 
                                 : 'text-navy-light dark:text-cream'
                             }`}>
-                              {isCSS && 'summary' in stat ? 
-                                `${((stat.summary as CSSStats['summary']).percentage_of_all_commits || 0).toFixed(1)}%` : 
-                                `${Math.round(((stat.commits || 0) / totalCommits) * 100)}%`}
+                              {`${Math.round(stat.percentage)}%`}
+                              {type === 'tools' && (
+                                <span className="ml-1 opacity-70 text-2xs">of repos</span>
+                              )}
                             </span>
                           </div>
                           
@@ -1026,41 +1124,234 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                             <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                               <p className="font-medium text-cream dark:text-navy">
                                 {isCSS ? (
-                                  `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
-                                ) : isToolData ? (
-                                  `${stat.commits || 0} commits across ${Object.keys(stat.tools || {}).length} tools in ${stat.repositories} repos`
+                                  `${commitCount} commits contain ${stat.name} code across ${repoCount} repos, ${formatBytes(stat.summary?.bytes || 0)} total`
+                                ) : hasTool ? (
+                                  `${commitCount} commits across ${Object.keys(stat.tools || {}).length} tools in ${repoCount} repos`
                                 ) : (
-                                  `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
+                                  `${commitCount} commits use ${stat.name} across ${repoCount} repos`
                                 )}
                               </p>
                             </TooltipContent>
                           </Tooltip>
                           
-                          {/* Additional stats with improved contrast */}
+                          {/* Add the repository error when appropriate */}
+                          {repoCount === 0 && commitCount > 0 && (
+                            <RepositoryError />
+                          )}
+
+                          {/* Existing additional stats section */}
                           <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
                             <span>{commitCount.toLocaleString()} commits</span>
-                            <span>{repoCount} repositories</span>
+                            {repoCount === 0 && commitCount > 0 ? (
+                              <TinyRepoWarning />
+                            ) : (
+                              <span>{repoCount} repositories</span>
+                            )}
                           </div>
 
-                          {/* Conditionally add detailed breakdowns only when the data structure supports it */}
+                          {/* Unified approach to showing detailed breakdowns */}
                           {isCSS && 'variants' in stat && (
                             <CSSBreakdown 
-                              cssStats={{
-                                summary: stat.summary as CSSStats['summary'],
-                                variants: stat.variants as CSSStats['variants']
-                              }}
+                              cssStats={stat as CSSStats}
                               isDarkMode={isDarkMode} 
                             />
                           )}
-
-                          {/* Add Tool Category breakdown for tools */}
-                          {isToolData && (
+                          
+                          {hasTool && (
                             <ToolCategoryBreakdown
                               name={stat.name}
                               stats={{
                                 repositories: repoCount,
                                 commits: commitCount,
-                                tools: stat.tools || {} // Add fallback for empty tools
+                                tools: stat.tools
+                              }}
+                              isDarkMode={isDarkMode}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </TooltipProvider>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </div>
+    )
+  }
+
+  // Add this conditional rendering for tool-specific visualization
+  if (type === 'tools' && showBoth) {
+    return (
+      <div className="p-6 rounded-xl border shadow-sm bg-white/95 dark:bg-navy-darkest/95 border-navy/10 dark:border-cream/10">
+        <h4 className="mb-6 text-lg font-medium text-center text-navy-dark dark:text-cream-dark">
+          Tool Usage by Repository
+        </h4>
+        
+        <div className="flex flex-col gap-8">
+          {/* Tool category adoption section */}
+          <div className="flex flex-col">
+            <h4 className="mb-3 text-sm font-medium text-center text-navy dark:text-cream">
+              Repository Adoption
+              <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Top {topItems.length} Tools</span>
+            </h4>
+            
+            {/* Horizontal bar chart better represents adoption rates */}
+            <div className="mt-2 space-y-3">
+              {topItems.map((stat, index) => (
+                <div key={stat.name} className="group">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-sm font-medium text-navy dark:text-cream">{stat.name}</span>
+                    <span className="text-xs font-medium text-navy-light dark:text-cream-light">
+                      {stat.repositories} repos ({Math.round(stat.percentage)}%)
+                    </span>
+                  </div>
+                  
+                  <div className="overflow-hidden relative h-7 rounded-md bg-cream-dark/30 dark:bg-navy-light/30 group-hover:bg-cream-dark/40 dark:group-hover:bg-navy-light/40">
+                    <div 
+                      className="flex absolute inset-y-0 left-0 items-center px-2 text-xs font-medium text-white"
+                      style={{ 
+                        width: `${Math.max(stat.percentage, 0)}%`,
+                        backgroundColor: chartColors[index % chartColors.length], 
+                        minWidth: stat.percentage > 0 ? '40px' : '0'
+                      }}
+                    >
+                      {stat.percentage > 15 && stat.name}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Detailed breakdown section in accordion - keep this from original */}
+          <Accordion type="single" collapsible defaultValue="details" className="dark:border-cream/10">
+            <AccordionItem value="details" className="border-navy/10 dark:border-cream/10">
+              <AccordionTrigger className="text-sm font-medium text-navy dark:text-cream py-2 [&>svg]:text-navy dark:[&>svg]:text-cream">
+                Detailed Breakdown
+                <span className="ml-2 text-xs italic text-navy-light/80 dark:text-cream/60">Top {barStats.length} Categories</span>
+              </AccordionTrigger>
+              <AccordionContent className="dark:text-cream">
+                <TooltipProvider delayDuration={100}>
+                  <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar mt-2">
+                    {barStats.map((stat, index) => {
+                      // First, let's safely get the commit and repo counts
+                      const commitCount = stat && stat.summary ? stat.summary.commits : (stat.commits || 0);
+                      const repoCount = stat && stat.summary ? stat.summary.repositories : (stat.repositories || 0);
+                      
+                      // Determine if this has details and what type 
+                      const hasDetails = hasDetailedData(stat);
+                      const isCSS = stat.name === 'CSS' && 'variants' in stat;
+                      const hasTool = 'tools' in stat && Object.keys(stat.tools || {}).length > 0;
+                      
+                      return (
+                        <div 
+                          key={stat.name} 
+                          className={`group p-2.5 rounded-lg transition-all duration-200 
+                            ${activeSegment === index 
+                              ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm transform scale-[1.01]' 
+                              : 'hover:bg-cream/40 dark:hover:bg-navy-light/30 hover:shadow-sm'}`}
+                          onMouseEnter={() => {
+                            setActiveSegment(index);
+                          }}
+                          onMouseLeave={() => {
+                            setActiveSegment(null);
+                          }}
+                        >
+                          <div className="flex justify-between mb-1.5 items-center">
+                            {/* Category name with icon color matching the donut slice */}
+                            <div className="flex items-center">
+                              <span 
+                                className={`rounded-full mr-2 transition-all duration-200
+                                  ${activeSegment === index ? 'w-3.5 h-3.5' : 'w-3 h-3'}`}
+                                style={{backgroundColor: chartColors[index % chartColors.length]}}
+                              ></span>
+                              <span className={`font-code text-navy font-medium dark:text-cream ${index >= topItems.length ? 'text-sm' : ''}`}>
+                                {stat.name}
+                                {index >= topItems.length && (
+                                  <span className="ml-1.5 text-xs text-navy-light/70 dark:text-cream/60 italic normal-font">
+                                    (in Other)
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                            
+                            {/* Percentage with type-specific descriptor */}
+                            <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
+                              activeSegment === index
+                                ? 'bg-cream/50 dark:bg-navy-light/50 text-navy dark:text-cream' 
+                                : 'text-navy-light dark:text-cream'
+                            }`}>
+                              {`${Math.round(stat.percentage)}%`}
+                              {type === 'tools' && (
+                                <span className="ml-1 opacity-70 text-2xs">of repos</span>
+                              )}
+                            </span>
+                          </div>
+                          
+                          {/* Bar with tooltip - enhanced for active state */}
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="overflow-hidden relative h-3 rounded-full transition-colors cursor-help bg-cream-dark/50 dark:bg-navy-light/40 group-hover:bg-cream-dark/70 dark:group-hover:bg-navy-light/60">
+                                <div 
+                                  className={`h-full rounded-full transition-all duration-300 ${
+                                    activeSegment === index ? 'h-4 -mt-0.5' : ''
+                                  }`}
+                                  style={{ 
+                                    width: `${stat.percentage}%`,
+                                    backgroundColor: isCSS 
+                                      ? `${chartColors[4 % chartColors.length].toString()}` // Use "Other" color with opacity
+                                      : chartColors[index % chartColors.length].toString()
+                                  }}
+                                />
+                                {/* Invisible larger hit area */}
+                                <div className="absolute inset-0 -my-3" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
+                              <p className="font-medium text-cream dark:text-navy">
+                                {isCSS ? (
+                                  `${commitCount} commits contain ${stat.name} code across ${repoCount} repos, ${formatBytes(stat.summary?.bytes || 0)} total`
+                                ) : hasTool ? (
+                                  `${commitCount} commits across ${Object.keys(stat.tools || {}).length} tools in ${repoCount} repos`
+                                ) : (
+                                  `${commitCount} commits use ${stat.name} across ${repoCount} repos`
+                                )}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                          
+                          {/* Add the repository error when appropriate */}
+                          {repoCount === 0 && commitCount > 0 && (
+                            <RepositoryError />
+                          )}
+
+                          {/* Existing additional stats section */}
+                          <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
+                            <span>{commitCount.toLocaleString()} commits</span>
+                            {repoCount === 0 && commitCount > 0 ? (
+                              <TinyRepoWarning />
+                            ) : (
+                              <span>{repoCount} repositories</span>
+                            )}
+                          </div>
+
+                          {/* Unified approach to showing detailed breakdowns */}
+                          {isCSS && 'variants' in stat && (
+                            <CSSBreakdown 
+                              cssStats={stat as CSSStats}
+                              isDarkMode={isDarkMode} 
+                            />
+                          )}
+                          
+                          {hasTool && (
+                            <ToolCategoryBreakdown
+                              name={stat.name}
+                              stats={{
+                                repositories: repoCount,
+                                commits: commitCount,
+                                tools: stat.tools
                               }}
                               isDarkMode={isDarkMode}
                             />
@@ -1096,7 +1387,11 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                 </TooltipTrigger>
                 <TooltipContent side="left" className="bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                   <p className="font-medium text-cream dark:text-navy">
-                    {`${stat.commits || 0} commits containing ${stat.name} (${stat.percentage.toFixed(1)}% of total)`}
+                    {`${stat.commits || 0} commits containing ${stat.name}`}
+                    {stat.percentage > 100 ? 
+                      " (percentage exceeds 100% due to shared commits)" : 
+                      ` (${stat.percentage.toFixed(1)}% of total)`
+                    }
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -1115,12 +1410,31 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
               <TooltipContent side="top" className="max-w-sm bg-navy dark:bg-cream border-navy/10 dark:border-cream/10">
                 <p className="font-medium text-cream dark:text-navy">
                   {type === 'languages'
-                    ? `${stat.commits || 0} commits contain ${stat.name} code across ${stat.repositories} repos, ${formatBytes(stat.bytes || 0)} total`
-                    : `${stat.commits || 0} commits use ${stat.name} across ${stat.repositories} repos`
+                    ? `${stat.commits || 0} commits contain ${stat.name} code ${
+                        stat.repositories === 0 && stat.commits > 0 
+                          ? "with no recognized repositories" 
+                          : `across ${stat.repositories} repos`
+                      }, ${formatBytes(stat.bytes || 0)} total`
+                    : `${stat.commits || 0} commits use ${stat.name} ${
+                        stat.repositories === 0 && stat.commits > 0 
+                          ? "with no recognized repositories" 
+                          : `across ${stat.repositories} repos`
+                      }`
                   }
+                  {stat.repositories === 0 && stat.commits > 0 && " (repository detection issue)"}
                 </p>
               </TooltipContent>
             </Tooltip>
+            
+            {/* Display commits and repository information */}
+            <div className="flex justify-between mt-1.5 text-xs text-navy/80 dark:text-cream/80">
+              <span>{stat.commits || 0} commits</span>
+              {stat.repositories === 0 && stat.commits > 0 ? (
+                <TinyRepoWarning />
+              ) : (
+                <span>{stat.repositories} repositories</span>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -1141,11 +1455,6 @@ const getSafePercentage = (value: number, total: number): number => {
   if (!total || isNaN(total) || total === 0) return 0;
   if (!value || isNaN(value)) return 0;
   return (value / total) * 100;
-};
-
-// Add helper function to check if a stat is a tool category
-const isToolCategory = (stat: any): stat is ToolCategory => {
-  return 'tools' in stat && typeof stat.tools === 'object';
 };
 
 export default GithubLanguageStats 

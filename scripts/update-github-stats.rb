@@ -1537,33 +1537,83 @@ sorted_unrecognized = unrecognized_deps.sort_by { |_, data| -data[:count] }[0, 5
   { name: dep, count: data[:count], repos: data[:repos] }
 end
 
-# Group tools according to defined categories
+# Create standardized tool category structure that mirrors the CSS structure
+def create_tool_category_structure(name, tools_hash)
+  {
+    # Top-level summary stats
+    summary: {
+      repositories: tools_hash[:repositories] || 0,
+      commits: tools_hash[:commits] || 0,
+      percentage_of_all_commits: 0.0 # Will be calculated later
+    },
+    # Tools details (similar to variants in CSS)
+    tools: tools_hash[:tools] || {},
+    # Add a top tools section like CSS has top_repos
+    top_tools: [],
+    # You could add other metadata sections here if desired
+    metadata: {
+      category_type: name
+    }
+  }
+end
+
+# Replace this section (around line 1800) where grouped_tools is created
 grouped_tools = {}
 
-# First, add each tool group as a category
+# First, add each tool group as a category with standardized structure
 TOOL_GROUPS.each do |group_name, tools|
   grouped_tools[group_name] = {
-    repositories: 0,
-    commits: 0,
+    # Top-level summary stats
+    summary: {
+      repositories: 0,
+      commits: 0,
+      percentage_of_all_commits: 0.0
+    },
+    # Tools details
     tools: {}
   }
   
   # Add each tool's stats to its group
   tools.each do |tool|
     if tools_stats[tool]
-      grouped_tools[group_name][:repositories] += tools_stats[tool][:repositories]
-      grouped_tools[group_name][:commits] += tools_stats[tool][:commits]
+      # Update summary counts
+      grouped_tools[group_name][:summary][:repositories] += tools_stats[tool][:repositories]
+      grouped_tools[group_name][:summary][:commits] += tools_stats[tool][:commits]
+      
+      # Add individual tool stats
       grouped_tools[group_name][:tools][tool] = tools_stats[tool]
       
       # Remove the tool from the original stats since it's now in a group
       tools_stats.delete(tool)
     end
   end
+  
+  # Calculate percentage if possible
+  total_commits = summary[:total_commits]
+  if total_commits > 0 && grouped_tools[group_name][:summary][:commits] > 0
+    grouped_tools[group_name][:summary][:percentage_of_all_commits] = 
+      (grouped_tools[group_name][:summary][:commits].to_f / total_commits * 100).round(2)
+  end
+  
+  # Get top tools for this category
+  top_tools = grouped_tools[group_name][:tools].sort_by { |_, data| -data[:commits] }[0, 3]
+                .map { |name, data| { name: name, commits: data[:commits], repositories: data[:repositories] } }
+  
+  grouped_tools[group_name][:top_tools] = top_tools
 end
 
 # Add any remaining tools that aren't part of a group
 tools_stats.each do |tool, stats|
-  grouped_tools[tool] = stats
+  # Create a single-tool category with the standardized structure
+  grouped_tools[tool] = {
+    summary: {
+      repositories: stats[:repositories],
+      commits: stats[:commits],
+      percentage_of_all_commits: (stats[:commits].to_f / summary[:total_commits] * 100).round(2)
+    },
+    tools: { tool => stats },
+    top_tools: [{ name: tool, commits: stats[:commits], repositories: stats[:repositories] }]
+  }
 end
 
 # Build final stats hash with memory efficiency in mind

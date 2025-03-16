@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2025-03-16T06:36:25Z",
+  "lastUpdated": "2025-03-16T07:03:09Z",
   "summary": {
     "total_repos": 111,
     "owned_repos": 69,
     "contributed_repos": 95,
-    "total_commits": 3114,
+    "total_commits": 3110,
     "public_repos": 68,
     "private_repos": 42,
     "forks": 7
@@ -21,7 +21,7 @@
         "repositories": 24,
         "bytes": 192453,
         "commits": 487,
-        "percentage_of_all_commits": 15.64
+        "percentage_of_all_commits": 15.66
       },
       "variants": {
         "vanilla": {
@@ -321,8 +321,11 @@
   },
   "tools": {
     "Markup & Configuration": {
-      "repositories": 0,
-      "commits": 4111,
+      "summary": {
+        "repositories": 0,
+        "commits": 4111,
+        "percentage_of_all_commits": 132.19
+      },
       "tools": {
         "Markdown": {
           "repositories": 0,
@@ -340,11 +343,31 @@
           "repositories": 0,
           "commits": 3
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Markdown",
+          "commits": 2884,
+          "repositories": 0
+        },
+        {
+          "name": "JSON",
+          "commits": 1223,
+          "repositories": 0
+        },
+        {
+          "name": "XML",
+          "commits": 3,
+          "repositories": 0
+        }
+      ]
     },
     "Linting & Formatting": {
-      "repositories": 49,
-      "commits": 0,
+      "summary": {
+        "repositories": 49,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "ESLint": {
           "repositories": 38,
@@ -354,11 +377,26 @@
           "repositories": 11,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "ESLint",
+          "commits": 0,
+          "repositories": 38
+        },
+        {
+          "name": "Prettier",
+          "commits": 0,
+          "repositories": 11
+        }
+      ]
     },
     "Hosting & Deployment": {
-      "repositories": 3,
-      "commits": 0,
+      "summary": {
+        "repositories": 3,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "Vercel": {
           "repositories": 2,
@@ -368,47 +406,99 @@
           "repositories": 1,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Vercel",
+          "commits": 0,
+          "repositories": 2
+        },
+        {
+          "name": "PM2",
+          "commits": 0,
+          "repositories": 1
+        }
+      ]
     },
     "Infrastructure": {
-      "repositories": 1,
-      "commits": 0,
+      "summary": {
+        "repositories": 1,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "Firebase": {
           "repositories": 1,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Firebase",
+          "commits": 0,
+          "repositories": 1
+        }
+      ]
     },
     "Testing": {
-      "repositories": 6,
-      "commits": 0,
+      "summary": {
+        "repositories": 6,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "Jest": {
           "repositories": 6,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Jest",
+          "commits": 0,
+          "repositories": 6
+        }
+      ]
     },
     "CSS Frameworks": {
-      "repositories": 22,
-      "commits": 0,
+      "summary": {
+        "repositories": 22,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "Tailwind CSS": {
           "repositories": 22,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Tailwind CSS",
+          "commits": 0,
+          "repositories": 22
+        }
+      ]
     },
     "Database Tools": {
-      "repositories": 1,
-      "commits": 0,
+      "summary": {
+        "repositories": 1,
+        "commits": 0,
+        "percentage_of_all_commits": 0.0
+      },
       "tools": {
         "Drizzle": {
           "repositories": 1,
           "commits": 0
         }
-      }
+      },
+      "top_tools": [
+        {
+          "name": "Drizzle",
+          "commits": 0,
+          "repositories": 1
+        }
+      ]
     }
   },
   "unrecognizedDependencies": [
