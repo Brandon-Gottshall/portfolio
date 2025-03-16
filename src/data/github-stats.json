@@ -1,39 +1,39 @@
 {
-  "lastUpdated": "2025-03-16T07:03:09Z",
+  "lastUpdated": "2025-03-16T08:24:05Z",
   "summary": {
     "total_repos": 111,
     "owned_repos": 69,
     "contributed_repos": 95,
-    "total_commits": 3110,
-    "public_repos": 68,
+    "total_commits": 2797,
+    "public_repos": 60,
     "private_repos": 42,
     "forks": 7
   },
-  "repoCount": 110,
+  "repoCount": 102,
   "languages": {
     "JavaScript": {
-      "repositories": 57,
-      "bytes": 754301,
-      "commits": 995
+      "repositories": 50,
+      "bytes": 642505,
+      "commits": 672
     },
     "CSS": {
       "summary": {
-        "repositories": 24,
-        "bytes": 192453,
-        "commits": 487,
-        "percentage_of_all_commits": 15.66
+        "repositories": 22,
+        "bytes": 154641,
+        "commits": 227,
+        "percentage_of_all_commits": 8.12
       },
       "variants": {
         "vanilla": {
-          "repositories": 10,
-          "bytes": 367671,
-          "commits": 157,
-          "percentage_of_css": 32.24,
+          "repositories": 8,
+          "bytes": 71409,
+          "commits": 34,
+          "percentage_of_css": 14.98,
           "file_types": {
             "css": {
-              "files": 103,
+              "files": 44,
               "bytes": 0,
-              "commits": 155
+              "commits": 32
             },
             "scss": {
               "files": 0,
@@ -53,10 +53,10 @@
           }
         },
         "tailwind": {
-          "repositories": 23,
-          "bytes": 43593219,
-          "commits": 330,
-          "percentage_of_css": 67.76,
+          "repositories": 21,
+          "bytes": 28468617,
+          "commits": 193,
+          "percentage_of_css": 85.02,
           "usage": {
             "utility_classes": 0,
             "config_files": 0,
@@ -64,9 +64,9 @@
           },
           "file_types": {
             "css": {
-              "files": 163,
+              "files": 81,
               "bytes": 0,
-              "commits": 306
+              "commits": 169
             },
             "scss": {
               "files": 1,
@@ -74,14 +74,14 @@
               "commits": 1
             },
             "jsx_tsx": {
-              "files": 293,
+              "files": 116,
               "bytes": 0,
-              "commits": 289
+              "commits": 165
             },
             "html": {
-              "files": 28,
+              "files": 27,
               "bytes": 0,
-              "commits": 132
+              "commits": 92
             }
           }
         }
@@ -95,19 +95,11 @@
       },
       "top_repos": [
         {
-          "name": "Solomonbutler13/NutriBuddy-",
-          "commits": 206,
-          "bytes": 422725,
-          "has_tailwind": true,
-          "tailwind_commits": 85,
-          "vanilla_commits": 121
-        },
-        {
           "name": "Brandon-Gottshall/dogPark",
-          "commits": 119,
-          "bytes": 42755963,
+          "commits": 80,
+          "bytes": 27779325,
           "has_tailwind": true,
-          "tailwind_commits": 119,
+          "tailwind_commits": 80,
           "vanilla_commits": 0
         },
         {
@@ -127,24 +119,32 @@
           "vanilla_commits": 2
         },
         {
-          "name": "Brandon-Gottshall/sev9-not-netflix",
-          "commits": 18,
-          "bytes": 30009,
+          "name": "Brandon-Gottshall/airplanes-api",
+          "commits": 17,
+          "bytes": 40914,
           "has_tailwind": true,
-          "tailwind_commits": 18,
-          "vanilla_commits": 0
+          "tailwind_commits": 5,
+          "vanilla_commits": 12
+        },
+        {
+          "name": "Brandon-Gottshall/Simple-Macro-Tracker",
+          "commits": 15,
+          "bytes": 39043,
+          "has_tailwind": true,
+          "tailwind_commits": 6,
+          "vanilla_commits": 9
         }
       ]
     },
     "HTML": {
-      "repositories": 27,
-      "bytes": 95506,
-      "commits": 42
+      "repositories": 20,
+      "bytes": 83625,
+      "commits": 41
     },
     "Ruby": {
       "repositories": 6,
       "bytes": 52879,
-      "commits": 39
+      "commits": 30
     },
     "TypeScript": {
       "repositories": 16,
@@ -156,22 +156,22 @@
       "bytes": 697697,
       "commits": 20
     },
-    "SVG": {
-      "repositories": 0,
-      "bytes": 0,
-      "commits": 11
-    },
     "JSON with Comments": {
       "repositories": 0,
       "bytes": 0,
       "commits": 10
+    },
+    "SVG": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 9
     },
     "Shell": {
       "repositories": 7,
       "bytes": 9289,
       "commits": 6
     },
-    "Gemfile.lock": {
+    "Gradle": {
       "repositories": 0,
       "bytes": 0,
       "commits": 6
@@ -179,12 +179,7 @@
     "Text": {
       "repositories": 5,
       "bytes": 5760,
-      "commits": 5
-    },
-    "Python": {
-      "repositories": 5,
-      "bytes": 46209,
-      "commits": 3
+      "commits": 4
     },
     "Rich Text Format": {
       "repositories": 1,
@@ -206,10 +201,10 @@
       "bytes": 0,
       "commits": 3
     },
-    "Gradle": {
-      "repositories": 0,
-      "bytes": 0,
-      "commits": 3
+    "Python": {
+      "repositories": 4,
+      "bytes": 19651,
+      "commits": 2
     },
     "MDX": {
       "repositories": 2,
@@ -221,7 +216,17 @@
       "bytes": 6176,
       "commits": 2
     },
+    "Gemfile.lock": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 2
+    },
     "robots.txt": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 2
+    },
+    "XML Property List": {
       "repositories": 0,
       "bytes": 0,
       "commits": 2
@@ -234,6 +239,21 @@
     "Jupyter Notebook": {
       "repositories": 2,
       "bytes": 78444,
+      "commits": 1
+    },
+    "Swift": {
+      "repositories": 10,
+      "bytes": 10994,
+      "commits": 1
+    },
+    "Kotlin": {
+      "repositories": 9,
+      "bytes": 1159,
+      "commits": 1
+    },
+    "Java Properties": {
+      "repositories": 0,
+      "bytes": 0,
       "commits": 1
     },
     "Diff": {
@@ -251,16 +271,6 @@
       "bytes": 0,
       "commits": 1
     },
-    "Java Properties": {
-      "repositories": 0,
-      "bytes": 0,
-      "commits": 1
-    },
-    "XML Property List": {
-      "repositories": 0,
-      "bytes": 0,
-      "commits": 1
-    },
     "GraphQL": {
       "repositories": 2,
       "bytes": 1730274,
@@ -272,23 +282,13 @@
       "commits": 0
     },
     "SQL": {
-      "repositories": 5,
-      "bytes": 32755,
+      "repositories": 4,
+      "bytes": 23300,
       "commits": 0
     },
     "C": {
       "repositories": 5,
       "bytes": 17522,
-      "commits": 0
-    },
-    "Swift": {
-      "repositories": 10,
-      "bytes": 10994,
-      "commits": 0
-    },
-    "Kotlin": {
-      "repositories": 9,
-      "bytes": 1159,
       "commits": 0
     },
     "Makefile": {
@@ -299,78 +299,78 @@
   },
   "frameworks": {
     "React": {
-      "repositories": 166,
-      "commits": 1017
+      "repositories": 156,
+      "commits": 694
     },
     "Next.js": {
       "repositories": 42,
-      "commits": 252
+      "commits": 182
     },
     "Rails": {
       "repositories": 0,
-      "commits": 46
+      "commits": 38
     },
     "Express": {
       "repositories": 11,
-      "commits": 33
+      "commits": 32
     },
     "Flutter": {
       "repositories": 10,
-      "commits": 25
+      "commits": 1
     }
   },
   "tools": {
     "Markup & Configuration": {
       "summary": {
         "repositories": 0,
-        "commits": 4111,
-        "percentage_of_all_commits": 132.19
+        "commits": 3651,
+        "percentage_of_all_commits": 130.53
       },
       "tools": {
         "Markdown": {
           "repositories": 0,
-          "commits": 2884
+          "commits": 2830
         },
         "YAML": {
           "repositories": 0,
-          "commits": 1
+          "commits": 6
         },
         "JSON": {
           "repositories": 0,
-          "commits": 1223
+          "commits": 810
         },
         "XML": {
           "repositories": 0,
-          "commits": 3
+          "commits": 5
         }
       },
       "top_tools": [
         {
           "name": "Markdown",
-          "commits": 2884,
+          "commits": 2830,
           "repositories": 0
         },
         {
           "name": "JSON",
-          "commits": 1223,
+          "commits": 810,
           "repositories": 0
         },
         {
-          "name": "XML",
-          "commits": 3,
+          "name": "YAML",
+          "commits": 6,
           "repositories": 0
         }
       ]
     },
     "Linting & Formatting": {
       "summary": {
-        "repositories": 49,
+        "repositories": 48,
         "commits": 0,
         "percentage_of_all_commits": 0.0
       },
       "tools": {
         "ESLint": {
-          "repositories": 38,
+          "repositories": 37,
           "commits": 0
         },
         "Prettier": {
@@ -382,7 +382,7 @@
         {
           "name": "ESLint",
           "commits": 0,
-          "repositories": 38
+          "repositories": 37
         },
         {
           "name": "Prettier",
@@ -583,18 +583,6 @@
       ]
     },
     {
-      "name": "dotenv",
-      "count": 6,
-      "repos": [
-        "Brandon-Gottshall/express-server",
-        "Brandon-Gottshall/Quote-Generator-API",
-        "Brandon-Gottshall/simple-express-server",
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/todo-demo",
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
-      ]
-    },
-    {
       "name": "pg",
       "count": 6,
       "repos": [
@@ -619,6 +607,18 @@
       ]
     },
     {
+      "name": "dotenv",
+      "count": 6,
+      "repos": [
+        "Brandon-Gottshall/express-server",
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server",
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/todo-demo",
+        "Brandon-Gottshall/LMS-HTML-Proccesor"
+      ]
+    },
+    {
       "name": "cors",
       "count": 5,
       "repos": [
@@ -627,16 +627,6 @@
         "Brandon-Gottshall/express-server",
         "Brandon-Gottshall/Quote-Generator-API",
         "Brandon-Gottshall/simple-express-server"
-      ]
-    },
-    {
-      "name": "vite",
-      "count": 4,
-      "repos": [
-        "Brandon-Gottshall/portfolio-qwik-rework",
-        "Brandon-Gottshall/react-tip-calculator",
-        "kwoods17/-Portfolio",
-        "Brandon-Gottshall/course-crafter-react"
       ]
     },
     {
@@ -650,21 +640,21 @@
       ]
     },
     {
-      "name": "nodemon",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/express-server",
-        "Brandon-Gottshall/Quote-Generator-API",
-        "Brandon-Gottshall/simple-express-server"
-      ]
-    },
-    {
       "name": "clsx",
       "count": 3,
       "repos": [
         "Brandon-Gottshall/OpenAI-assistant-experiments",
         "Brandon-Gottshall/compete",
         "Brandon-Gottshall/company-site"
+      ]
+    },
+    {
+      "name": "nodemon",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/express-server",
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server"
       ]
     },
     {
@@ -686,6 +676,15 @@
       ]
     },
     {
+      "name": "lodash",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/marketing-reschool",
+        "Brandon-Gottshall/portfolio"
+      ]
+    },
+    {
       "name": "openai",
       "count": 3,
       "repos": [
@@ -704,6 +703,15 @@
       ]
     },
     {
+      "name": "vite",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/portfolio-qwik-rework",
+        "Brandon-Gottshall/react-tip-calculator",
+        "Brandon-Gottshall/course-crafter-react"
+      ]
+    },
+    {
       "name": "zod",
       "count": 3,
       "repos": [
@@ -713,20 +721,51 @@
       ]
     },
     {
-      "name": "lodash",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/dogPark",
-        "Brandon-Gottshall/marketing-reschool",
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
       "name": "@mdx-js/loader",
       "count": 3,
       "repos": [
         "Brandon-Gottshall/CodeWars-Solutions",
         "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/ProjectArchRoad.com_Site"
+      ]
+    },
+    {
+      "name": "lint-staged",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/OpenAI-assistant-experiments",
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
+      "name": "web-vitals",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/sev9-not-netflix",
+        "Brandon-Gottshall/react-stater-project"
+      ]
+    },
+    {
+      "name": "class-variance-authority",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site"
+      ]
+    },
+    {
+      "name": "@fullhuman/postcss-purgecss",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/next-Portfolio",
+        "Brandon-Gottshall/nxt-wind"
+      ]
+    },
+    {
+      "name": "gray-matter",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/next-learn-starter",
         "Brandon-Gottshall/ProjectArchRoad.com_Site"
       ]
     },
@@ -779,30 +818,6 @@
       ]
     },
     {
-      "name": "class-variance-authority",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "web-vitals",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/sev9-not-netflix",
-        "Brandon-Gottshall/react-stater-project"
-      ]
-    },
-    {
-      "name": "lint-staged",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/OpenAI-assistant-experiments",
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
-    },
-    {
       "name": "formik",
       "count": 2,
       "repos": [
@@ -811,58 +826,14 @@
       ]
     },
     {
-      "name": "gray-matter",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/next-learn-starter",
-        "Brandon-Gottshall/ProjectArchRoad.com_Site"
-      ]
-    },
-    {
-      "name": "@fullhuman/postcss-purgecss",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/next-Portfolio",
-        "Brandon-Gottshall/nxt-wind"
-      ]
-    },
-    {
-      "name": "snazzy",
+      "name": "uuidv4",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/nxt-wind"
+        "Brandon-Gottshall/Crystal-Tee"
       ]
     },
     {
-      "name": "turbo",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/commerceExample"
-      ]
-    },
-    {
-      "name": "playwright",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
-    },
-    {
-      "name": "copy-paste",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Legacy-Trade-Scripts"
-      ]
-    },
-    {
-      "name": "open",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Legacy-Trade-Scripts"
-      ]
-    },
-    {
-      "name": "body-scroll-lock",
+      "name": "@types/lodash.throttle",
       "count": 1,
       "repos": [
         "Brandon-Gottshall/Crystal-Tee"
@@ -876,21 +847,49 @@
       ]
     },
     {
-      "name": "cookie",
+      "name": "body-scroll-lock",
       "count": 1,
       "repos": [
         "Brandon-Gottshall/Crystal-Tee"
       ]
     },
     {
-      "name": "email-validator",
+      "name": "open",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/Legacy-Trade-Scripts"
       ]
     },
     {
-      "name": "immutability-helper",
+      "name": "copy-paste",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/Legacy-Trade-Scripts"
+      ]
+    },
+    {
+      "name": "turbo",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/commerceExample"
+      ]
+    },
+    {
+      "name": "snazzy",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/nxt-wind"
+      ]
+    },
+    {
+      "name": "playwright",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/nxt-wind"
+      ]
+    },
+    {
+      "name": "deepmerge",
       "count": 1,
       "repos": [
         "Brandon-Gottshall/Crystal-Tee"
@@ -911,6 +910,13 @@
       ]
     },
     {
+      "name": "graphql",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
       "name": "daisyui",
       "count": 1,
       "repos": [
@@ -918,10 +924,24 @@
       ]
     },
     {
+      "name": "postcss-flexbugs-fixes",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
       "name": "puppeteer",
       "count": 1,
       "repos": [
         "Brandon-Gottshall/LMS-HTML-Proccesor"
+      ]
+    },
+    {
+      "name": "postcss-preset-env",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/Crystal-Tee"
       ]
     },
     {
@@ -936,27 +956,6 @@
       "count": 1,
       "repos": [
         "Brandon-Gottshall/todo-demo"
-      ]
-    },
-    {
-      "name": "dompurify",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@rollup/plugin-babel",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@babel/preset-env",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
       ]
     }
   ],

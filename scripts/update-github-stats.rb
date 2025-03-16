@@ -12,6 +12,15 @@ require 'set'
 # Load environment variables from .env.local
 Dotenv.load('.env.local')
 
+# Add this near the top of your script
+GC.stress = false  # Ensure garbage collector isn't too aggressive
+
+# 1. First, add a MAX_REPOS constant near the top of the script
+MAX_REPOS = ENV['MAX_REPOS'] ? ENV['MAX_REPOS'].to_i : 20  # Limit to 20 repos by default
+
+# Add this with other global variables/initializations (around line 100-150)
+tools_stats = {}
+
 # --- Configuration & Helper Functions ---
 
 # Languages to exclude from stats (generated or not actually written)
@@ -246,8 +255,22 @@ def increment_counter(counter_group, key = nil, amount = 1)
   end
 end
 
-# --- GitHub Client Setup ---
-client = Octokit::Client.new(access_token: token)
+def log_memory_usage
+  # Get memory usage in MB if available
+  memory = `ps -o rss= -p #{Process.pid}`.to_i / 1024 rescue 0
+  log_with_timestamp("Current memory usage: #{memory}MB")
+end
+
+# --- GitHub Client Setup with timeout ---
+client = Octokit::Client.new(
+  access_token: token,
+  connection_options: {
+    request: {
+      timeout: 60,       # Open/read timeout in seconds
+      open_timeout: 10   # Connection open timeout in seconds
+    }
+  }
+)
 client.auto_paginate = true
 
 # --- Fetching Repositories ---
@@ -290,14 +313,6 @@ else
     # Skip a specific repository if needed
     return false if repo.full_name == 'Brandon-Gottshall/moodle'
 
-    # Test if languages can be fetched
-    begin
-      _langs = client.languages(repo.full_name)
-    rescue Octokit::NotFound
-      log_with_timestamp("Cannot fetch languages for #{repo.full_name} – skipping")
-      return false
-    end
-
     # Include repos from associated organizations
     if ASSOCIATED_ORGS.any? { |org| org.downcase == repo.owner.login.downcase }
       log_with_timestamp("Including #{repo.full_name}: Associated organization")
@@ -305,27 +320,50 @@ else
     end
 
     # For forks or repos not owned by you, check for contributions via username or email
-    if repo.fork || repo.owner.login.downcase != username.downcase
-      begin
-        commits = client.commits(repo.full_name, author: username, per_page: 1)
-        if commits.empty?
-          found = USER_EMAILS.any? do |email|
-            email_commits = client.commits(repo.full_name, author: email, per_page: 1)
-            !email_commits.empty?
-          end
-          return found
-        end
-      rescue Octokit::NotFound
-        log_with_timestamp("No permission to fetch commits for #{repo.full_name} – skipping")
-        return false
-      end
+    begin
+      _langs = client.languages(repo.full_name)
+    rescue Octokit::NotFound
+      log_with_timestamp("Cannot fetch languages for #{repo.full_name} – skipping")
+    return false
     end
 
+    # Rest of your method...
+    
     true
   end
 
-  valid_repos = all_repos.select { |repo| valid_repository?(repo, client, username) }
-  log_with_timestamp("Valid repositories after filtering: #{valid_repos.size}")
+  # 2. Then modify the repository processing to handle smaller batches with more GC
+  def process_repos_in_batches(repos, client, username, batch_size = 5)
+    results = []
+    repos.each_slice(batch_size) do |batch|
+      log_memory_usage
+      
+      # Process this batch
+      batch_results = []
+      batch.each do |repo|
+        valid = valid_repository?(repo, client, username)
+        batch_results << repo if valid
+        
+        # Force garbage collection occasionally
+        GC.start if rand < 0.5
+      end
+      
+      results.concat(batch_results)
+      log_with_timestamp("Processed batch of #{batch_size} repos, found #{batch_results.size} valid ones. Total: #{results.size}")
+      
+      # Force garbage collection between batches
+      GC.start
+      sleep(1)  # Sleep between batches to let system recover
+      
+      # Clear variables to help GC
+      batch_results = nil
+    end
+    results
+  end
+
+  log_memory_usage
+  valid_repos = process_repos_in_batches(all_repos, client, username)
+  log_memory_usage
 
   # Cache the repository data
   cache_data = {
@@ -348,9 +386,16 @@ def clone_repo(repo)
   dir = File.join("tmp_repos", repo.full_name.gsub('/', '_'))
   unless Dir.exist?(dir)
     log_with_timestamp("Cloning #{repo.full_name} into #{dir}...")
+    
+    # Clone the default branch first
     unless system("git clone #{repo.clone_url} #{dir}")
       log_with_timestamp("Error cloning #{repo.full_name}", :error)
+      return dir
     end
+    
+    # Fetch all branches but don't checkout yet
+    system("cd #{dir} && git fetch --all")
+    
     increment_counter(:cloned_repos)
   end
   dir
@@ -638,7 +683,10 @@ def process_commits(repo_path, repo, username)
     r_repo = Rugged::Repository.new(repo_path)
     walker = Rugged::Walker.new(r_repo)
     
-    # Process all local branches
+    # FIX: Use the correct parameter for branches.each_name
+    # Change this line:
+    # r_repo.branches.each_name(:all).to_a
+    # To this:
     r_repo.branches.each_name(:local) do |branch_name|
       begin
         branch = r_repo.branches[branch_name]
@@ -647,190 +695,152 @@ def process_commits(repo_path, repo, username)
         log_with_timestamp("Error processing branch #{branch_name}: #{e.message}")
       end
     end
-
-    # If it's a Flutter repo, handle Flutter-specific processing
-    if is_flutter_repo
-      flutter_commits = 0
-      dart_files = 0
+    
+    # Track which files we've already processed to avoid double-counting
+    processed_changes = Set.new
+    
+    walker.each do |commit|
+      # Skip merge commits - they don't represent actual code changes
+      next if commit.parents.size > 1
       
-      walker.each do |commit|
-        author_email = commit.author[:email].to_s.downcase
-        
-        # Track any new email addresses we find
-        if commit.author[:name].to_s.downcase.include?('brandon') || 
-           commit.author[:name].to_s.downcase.include?('gottshall')
-          FOUND_EMAILS.add(author_email)
-        end
-        
-        # Only process commits from you
-        next unless (author_email == username.downcase || USER_EMAILS.any? { |e| e.downcase == author_email })
-        
-        # Count commit toward Flutter and also Dart
-        flutter_commits += 1
-        
-        # Process files in commit to count Dart usage
-        if commit.parents.empty?
-          diff = commit.diff(nil)
-        else
-          diff = commit.diff(commit.parents.first)
-        end
-        
-        diff.each_delta do |delta|
-          next if delta.status == :deleted
-          path = delta.new_file[:path]
-          
-          # Count Dart files
-          if path.end_with?('.dart')
-            dart_files += 1
-            language_commits['Dart'] += 1
-          end
-        end
+      author_email = commit.author[:email].to_s.downcase
+      
+      # Track any new email addresses we find
+      if commit.author[:name].to_s.downcase.include?('brandon') || 
+         commit.author[:name].to_s.downcase.include?('gottshall')
+        FOUND_EMAILS.add(author_email)
       end
       
-      # Add the Flutter commits count
-      framework_commits['Flutter'] += flutter_commits
-      log_with_timestamp("Counted #{flutter_commits} Flutter commits and #{dart_files} Dart files in Flutter repo #{repo_path}")
-    else
-      # Regular processing for non-Flutter repos
-      walker.each do |commit|
-        author_email = commit.author[:email].to_s.downcase
-        commit_date = commit.time  # Get commit timestamp
+      # Only process commits from the specified user
+      next unless (author_email == username.downcase || USER_EMAILS.any? { |e| e.downcase == author_email })
+
+      # Get the diff
+      diff = if commit.parents.empty?
+               commit.diff(nil)
+             else
+               commit.diff(commit.parents.first)
+             end
+
+      # Process each changed file in the commit
+      diff.each_delta do |delta|
+        next if delta.status == :deleted
+        path = delta.new_file[:path]
         
-        # Track any new email addresses we find
-        if commit.author[:name].to_s.downcase.include?('brandon') || 
-           commit.author[:name].to_s.downcase.include?('gottshall')
-          FOUND_EMAILS.add(author_email)
-        end
+        # Create a unique identifier for this change to avoid double-counting
+        # Use the file content hash + path to identify unique changes
+        change_id = "#{path}:#{delta.new_file[:oid]}"
         
-        # Only process commits from you
-        next unless (author_email == username.downcase || USER_EMAILS.any? { |e| e.downcase == author_email })
-
-        # Get the diff
-        diff = if commit.parents.empty?
-                 commit.diff(nil)
-               else
-                 commit.diff(commit.parents.first)
-               end
-
-        # Track if this commit modified CSS
-        modified_css = false
-
-        # Process each changed file in the commit
-        diff.each_delta do |delta|
-          next if delta.status == :deleted
-          path = delta.new_file[:path]
-          ext = File.extname(path).sub('.', '').downcase
+        # Skip if we've already processed this exact change
+        next if processed_changes.include?(change_id)
+        processed_changes.add(change_id)
+        
+        ext = File.extname(path).sub('.', '').downcase
+        
+        begin
+          blob_data = r_repo.read(delta.new_file[:oid]).data
+          linguist_blob = Linguist::Blob.new(path, blob_data)
           
-          begin
-            blob_data = r_repo.read(delta.new_file[:oid]).data
-            linguist_blob = Linguist::Blob.new(path, blob_data)
-            
-            # Skip generated/vendor/documentation files
-            next if linguist_blob.generated? || linguist_blob.vendored? || linguist_blob.documentation?
-            
-            language_name = nil
-            
-            # Try to get language from Linguist
-            if linguist_blob.language
-              language_name = LANGUAGE_NORMALIZE[linguist_blob.language.name] || linguist_blob.language.name
-            end
-            
-            # Fallback to extension-based detection if needed
-            if language_name.nil? || MARKUP_TOOLS.include?(language_name)
-              fallback_language = LANG_MAP[ext]
-              
-              if fallback_language && !MARKUP_TOOLS.include?(fallback_language)
-                language_name = fallback_language
-              elsif fallback_language && MARKUP_TOOLS.include?(fallback_language)
-                # Count markup languages as tools
-                tool_commits[fallback_language] += 1
-                next
-              else
-                # No language detected even with fallback
-                next
-              end
-            end
-            
-            # Enhanced CSS tracking - process any CSS-related file
-            is_css_file = (language_name == 'CSS' || 
-                          ['css', 'scss', 'sass', 'less'].include?(ext) ||
-                          (path.end_with?('.jsx') && blob_data.include?('className=')) ||
-                          (path.end_with?('.tsx') && blob_data.include?('className=')) ||
-                          (path.end_with?('.html') && blob_data.include?('class="')))
-            
-            if is_css_file
-              modified_css = true
-              file_size = blob_data.size
-              
-              # Update repo CSS stats
-              repo_css_stats[:total_css_files] += 1
-              repo_css_stats[:total_css_commits] += 1
-              repo_css_stats[:total_css_bytes] += file_size
-              
-              # Track first/latest CSS commit dates
-              if repo_css_stats[:first_css_commit_date].nil? || commit_date < repo_css_stats[:first_css_commit_date]
-                repo_css_stats[:first_css_commit_date] = commit_date
-              end
-              if repo_css_stats[:latest_css_commit_date].nil? || commit_date > repo_css_stats[:latest_css_commit_date]
-                repo_css_stats[:latest_css_commit_date] = commit_date
-              end
-              
-              # Update extension-specific counters
-              if ['css', 'scss', 'sass', 'less'].include?(ext)
-                repo_css_stats[:extensions][ext.to_sym] += 1
-              elsif ['jsx', 'tsx'].include?(ext)
-                repo_css_stats[:extensions][:jsx_tsx_with_css] += 1
-              elsif ['html', 'htm'].include?(ext)
-                repo_css_stats[:extensions][:html_with_css] += 1
-              end
-              
-              # Check if it's Tailwind CSS
-              uses_tailwind = tailwind_used?(blob_data) || 
-                             has_tailwind_config || 
-                             has_tailwind_dep || 
-                             path.end_with?('tailwind.config.js') ||
-                             path.end_with?('tailwind.config.ts')
-              
-              if uses_tailwind
-                repo_css_stats[:has_tailwind] = true
-                repo_css_stats[:tailwind_files] += 1
-                repo_css_stats[:tailwind_commits] += 1
-                repo_css_stats[:tailwind_bytes] += file_size
-                
-                # Count as a tool (not a framework)
-                tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
-                tools_stats['Tailwind CSS'][:commits] += 1
-                increment_counter(:tailwind_detections)
-              else
-                repo_css_stats[:vanilla_files] += 1
-                repo_css_stats[:vanilla_commits] += 1
-                repo_css_stats[:vanilla_bytes] += file_size
-                increment_counter(:skipped_files, :vanilla_css)
-              end
-            end
-            
-            # Add language commit if we found a language
-            if language_name && !MARKUP_TOOLS.include?(language_name)
-              language_commits[language_name] += 1
-              processed_files += 1
-              
-              # Check for frameworks based on language and file content
-              check_for_frameworks(language_name, path, ext, blob_data, framework_commits, is_react_repo)
-            end
-            
-            # Free memory
-            blob_data = nil
-            linguist_blob = nil
-            
-          rescue => e
-            log_with_timestamp("Error processing file in commit: #{path}, error: #{e.message}") if DEBUG_HEURISTICS
-            next
+          # Skip generated/vendor/documentation files
+          next if linguist_blob.generated? || linguist_blob.vendored? || linguist_blob.documentation?
+          
+          language_name = nil
+          
+          # Try to get language from Linguist
+          if linguist_blob.language
+            language_name = LANGUAGE_NORMALIZE[linguist_blob.language.name] || linguist_blob.language.name
           end
+          
+          # Fallback to extension-based detection if needed
+          if language_name.nil? || MARKUP_TOOLS.include?(language_name)
+            fallback_language = LANG_MAP[ext]
+            
+            if fallback_language && !MARKUP_TOOLS.include?(fallback_language)
+              language_name = fallback_language
+            elsif fallback_language && MARKUP_TOOLS.include?(fallback_language)
+              # Count markup languages as tools
+              tool_commits[fallback_language] += 1
+              next
+            else
+              # No language detected even with fallback
+              next
+            end
+          end
+          
+          # Enhanced CSS tracking - process any CSS-related file
+          is_css_file = (language_name == 'CSS' || 
+                        ['css', 'scss', 'sass', 'less'].include?(ext) ||
+                        (path.end_with?('.jsx') && blob_data.include?('className=')) ||
+                        (path.end_with?('.tsx') && blob_data.include?('className=')) ||
+                        (path.end_with?('.html') && blob_data.include?('class="')))
+          
+          if is_css_file
+            modified_css = true
+            file_size = blob_data.size
+            
+            # Update repo CSS stats
+            repo_css_stats[:total_css_files] += 1
+            repo_css_stats[:total_css_commits] += 1
+            repo_css_stats[:total_css_bytes] += file_size
+            
+            # Track first/latest CSS commit dates
+            if repo_css_stats[:first_css_commit_date].nil? || commit.time < repo_css_stats[:first_css_commit_date]
+              repo_css_stats[:first_css_commit_date] = commit.time
+            end
+            if repo_css_stats[:latest_css_commit_date].nil? || commit.time > repo_css_stats[:latest_css_commit_date]
+              repo_css_stats[:latest_css_commit_date] = commit.time
+            end
+            
+            # Update extension-specific counters
+            if ['css', 'scss', 'sass', 'less'].include?(ext)
+              repo_css_stats[:extensions][ext.to_sym] += 1
+            elsif ['jsx', 'tsx'].include?(ext)
+              repo_css_stats[:extensions][:jsx_tsx_with_css] += 1
+            elsif ['html', 'htm'].include?(ext)
+              repo_css_stats[:extensions][:html_with_css] += 1
+            end
+            
+            # Check if it's Tailwind CSS
+            uses_tailwind = tailwind_used?(blob_data) || 
+                           has_tailwind_config || 
+                           has_tailwind_dep || 
+                           path.end_with?('tailwind.config.js') ||
+                           path.end_with?('tailwind.config.ts')
+            
+            if uses_tailwind
+              repo_css_stats[:has_tailwind] = true
+              repo_css_stats[:tailwind_files] += 1
+              repo_css_stats[:tailwind_commits] += 1
+              repo_css_stats[:tailwind_bytes] += file_size
+              
+              # Count as a tool (not a framework)
+              tools_stats['Tailwind CSS'] ||= { repositories: 0, commits: 0 }
+              tools_stats['Tailwind CSS'][:commits] += 1
+              increment_counter(:tailwind_detections)
+            else
+              repo_css_stats[:vanilla_files] += 1
+              repo_css_stats[:vanilla_commits] += 1
+              repo_css_stats[:vanilla_bytes] += file_size
+              increment_counter(:skipped_files, :vanilla_css)
+            end
+          end
+          
+          # Add language commit if we found a language
+          if language_name && !MARKUP_TOOLS.include?(language_name)
+            language_commits[language_name] += 1
+            processed_files += 1
+            
+            # Check for frameworks based on language and file content
+            check_for_frameworks(language_name, path, ext, blob_data, framework_commits, is_react_repo)
+          end
+          
+          # Free memory
+          blob_data = nil
+          linguist_blob = nil
+          
+        rescue => e
+          log_with_timestamp("Error processing file in commit: #{path}, error: #{e.message}") if DEBUG_HEURISTICS
+          next
         end
-        
-        # Free memory after processing each commit
-        diff = nil
-        GC.start if rand < 0.1  # Occasionally force garbage collection to avoid memory issues
       end
     end
 
@@ -1345,7 +1355,7 @@ css_complex_stats = create_css_stats_structure
 top_css_repos = []
 
 frameworks_stats = {}
-tools_stats = {}
+tools_stats = {}  # Add the initialization here
 unrecognized_deps = {}
 
 # Process repositories with memory efficiency in mind
@@ -1647,3 +1657,10 @@ cache_path = File.join(Dir.pwd, 'src', 'data', 'github-stats.json')
 FileUtils.mkdir_p(File.dirname(cache_path))
 File.write(cache_path, JSON.pretty_generate(cached_stats))
 log_with_timestamp("Successfully updated GitHub stats cache at #{cache_path}")
+
+# 3. Add memory diagnostics to help understand usage
+def log_memory_usage
+  # Get memory usage in MB if available
+  memory = `ps -o rss= -p #{Process.pid}`.to_i / 1024 rescue 0
+  log_with_timestamp("Current memory usage: #{memory}MB")
+end

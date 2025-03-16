@@ -584,7 +584,17 @@ const ToolCategoryBreakdown = ({ name, stats, isDarkMode }: ToolCategoryBreakdow
   );
 };
 
-// Add this tiny inline warning specifically for card layouts
+// Update the ZeroCommitWarning to be more compact for inline display
+const ZeroCommitWarning = () => (
+  <span className="inline-flex items-center ml-2 text-xs text-amber-600 dark:text-amber-400">
+    <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    No commits found
+  </span>
+);
+
+// The TinyRepoWarning remains the same
 const TinyRepoWarning = () => (
   <span className="inline-flex items-center text-red-600 dark:text-red-400">
     <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -593,6 +603,16 @@ const TinyRepoWarning = () => (
     Repo issue
   </span>
 );
+
+// Enhanced function to check for both error conditions
+const getItemWarning = (commits: number, repositories: number) => {
+  if (commits === 0 && repositories > 0) {
+    return <ZeroCommitWarning />;
+  } else if (repositories === 0 && commits > 0) {
+    return <TinyRepoWarning />;
+  }
+  return null;
+};
 
 // Add this new component after TinyRepoWarning
 const RepositoryError = () => (
@@ -635,6 +655,16 @@ const calculateCategoryPercentage = (
   
   // For languages and frameworks, continue using commit-based percentage
   return totalCommits > 0 ? Math.min((stat.commits / totalCommits) * 100, 100) : 0;
+};
+
+// Add the shouldShowZeroCommitWarning helper function
+const shouldShowZeroCommitWarning = (commits: number, repositories: number) => {
+  return commits === 0 && repositories > 0;
+};
+
+// The existing repo warning check
+const shouldShowRepoWarning = (repoCount: number, commitCount: number) => {
+  return repoCount === 0 && commitCount > 0;
 };
 
 const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
@@ -1135,14 +1165,12 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                           </Tooltip>
                           
                           {/* Add the repository error when appropriate */}
-                          {repoCount === 0 && commitCount > 0 && (
-                            <RepositoryError />
-                          )}
-
-                          {/* Existing additional stats section */}
-                          <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
-                            <span>{commitCount.toLocaleString()} commits</span>
-                            {repoCount === 0 && commitCount > 0 ? (
+                          <div className="flex justify-between mt-1.5 text-xs text-navy/80 dark:text-cream/80">
+                            <div className="flex items-center">
+                              <span>{commitCount} commits</span>
+                              {shouldShowZeroCommitWarning(commitCount, repoCount) && <ZeroCommitWarning />}
+                            </div>
+                            {repoCount === 0 ? (
                               <TinyRepoWarning />
                             ) : (
                               <span>{repoCount} repositories</span>
@@ -1323,17 +1351,15 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
                           </Tooltip>
                           
                           {/* Add the repository error when appropriate */}
-                          {repoCount === 0 && commitCount > 0 && (
-                            <RepositoryError />
+                          {shouldShowZeroCommitWarning(commitCount, repoCount) && (
+                            <ZeroCommitWarning />
                           )}
 
                           {/* Existing additional stats section */}
                           <div className="flex justify-between mt-1 text-xs font-medium text-navy/80 dark:text-cream/80">
                             <span>{commitCount.toLocaleString()} commits</span>
-                            {repoCount === 0 && commitCount > 0 ? (
+                            {shouldShowRepoWarning(repoCount, commitCount) && (
                               <TinyRepoWarning />
-                            ) : (
-                              <span>{repoCount} repositories</span>
                             )}
                           </div>
 
@@ -1429,10 +1455,8 @@ const GithubLanguageStats = ({ type, showBoth = false }: Props) => {
             {/* Display commits and repository information */}
             <div className="flex justify-between mt-1.5 text-xs text-navy/80 dark:text-cream/80">
               <span>{stat.commits || 0} commits</span>
-              {stat.repositories === 0 && stat.commits > 0 ? (
+              {shouldShowRepoWarning(stat.repositories, stat.commits) && (
                 <TinyRepoWarning />
-              ) : (
-                <span>{stat.repositories} repositories</span>
               )}
             </div>
           </div>
