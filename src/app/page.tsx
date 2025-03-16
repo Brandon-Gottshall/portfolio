@@ -165,7 +165,7 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
                 Language Distribution
-                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories contain each programming language">ⓘ</span>
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits containing each programming language">ⓘ</span>
               </h3>
               <GithubLanguageStats type="languages" />
             </div>
@@ -174,7 +174,7 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
                 Framework Distribution
-                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories use each framework, based on package dependencies">ⓘ</span>
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits that use each framework">ⓘ</span>
               </h3>
               <GithubLanguageStats type="frameworks" />
             </div>
@@ -183,7 +183,7 @@ export default function Home() {
             <div>
               <h3 className="text-xl font-light mb-6 text-navy dark:text-cream flex items-center gap-2">
                 Development Tools
-                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows what percentage of my repositories use each development tool, including testing frameworks, databases, and utilities">ⓘ</span>
+                <span className="text-sm text-gray-dark dark:text-tan font-normal" title="Shows percentage of my commits that use each development tool">ⓘ</span>
               </h3>
               <GithubLanguageStats type="tools" />
             </div>

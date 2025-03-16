@@ -1,355 +1,482 @@
 {
-  "lastUpdated": "2025-03-10T19:03:04.719Z",
+  "lastUpdated": "2025-03-16T02:35:11Z",
   "summary": {
-    "totalRepos": 115,
-    "ownedRepos": 100,
-    "contributedRepos": 95,
-    "totalCommits": 272,
-    "publicRepos": 0,
-    "privateRepos": 0,
-    "forks": 11
+    "total_repos": 111,
+    "owned_repos": 69,
+    "contributed_repos": 95,
+    "total_commits": 3114,
+    "public_repos": 68,
+    "private_repos": 42,
+    "forks": 7
   },
-  "repoCount": 108,
+  "repoCount": 110,
   "languages": {
-    "Jupyter Notebook": {
-      "repositories": 2,
-      "usage": 78444
+    "JavaScript": {
+      "repositories": 57,
+      "bytes": 754301,
+      "commits": 1100
     },
-    "Python": {
-      "repositories": 5,
-      "usage": 46209
+    "CSS": {
+      "repositories": 40,
+      "bytes": 192453,
+      "commits": 163
     },
     "TypeScript": {
       "repositories": 16,
-      "usage": 1968320
-    },
-    "C": {
-      "repositories": 5,
-      "usage": 17522
-    },
-    "Makefile": {
-      "repositories": 1,
-      "usage": 543
-    },
-    "CSS": {
-      "repositories": 20,
-      "usage": 3130871
-    },
-    "PLpgSQL": {
-      "repositories": 3,
-      "usage": 402509
+      "bytes": 2001105,
+      "commits": 73
     },
     "HTML": {
-      "repositories": 26,
-      "usage": 220367
-    },
-    "JavaScript": {
-      "repositories": 13,
-      "usage": 24246191
-    },
-    "C++": {
-      "repositories": 4,
-      "usage": 69774
-    },
-    "Dart": {
-      "repositories": 9,
-      "usage": 70338
-    },
-    "CMake": {
-      "repositories": 4,
-      "usage": 59988
+      "repositories": 27,
+      "bytes": 95506,
+      "commits": 58
     },
     "Ruby": {
-      "repositories": 5,
-      "usage": 52071
+      "repositories": 6,
+      "bytes": 52879,
+      "commits": 39
     },
-    "Swift": {
-      "repositories": 5,
-      "usage": 8974
+    "Dart": {
+      "repositories": 11,
+      "bytes": 697697,
+      "commits": 20
     },
-    "Kotlin": {
-      "repositories": 4,
-      "usage": 518
+    "SVG": {
+      "repositories": 31,
+      "bytes": 40712248,
+      "commits": 11
     },
-    "Objective-C": {
-      "repositories": 4,
-      "usage": 152
+    "JSON with Comments": {
+      "repositories": 16,
+      "bytes": 16246,
+      "commits": 10
     },
     "Shell": {
-      "repositories": 9,
-      "usage": 8786
+      "repositories": 7,
+      "bytes": 9289,
+      "commits": 6
     },
-    "Procfile": {
+    "Gemfile.lock": {
       "repositories": 1,
-      "usage": 16
+      "bytes": 4420,
+      "commits": 6
     },
-    "PHP": {
-      "repositories": 1,
-      "usage": 103605035
+    "Text": {
+      "repositories": 5,
+      "bytes": 5760,
+      "commits": 5
     },
-    "Gherkin": {
-      "repositories": 1,
-      "usage": 5673104
+    "Python": {
+      "repositories": 5,
+      "bytes": 46209,
+      "commits": 3
     },
-    "Mustache": {
-      "repositories": 1,
-      "usage": 2656203
+    "Gradle": {
+      "repositories": 10,
+      "bytes": 29190,
+      "commits": 3
     },
-    "SCSS": {
-      "repositories": 1,
-      "usage": 745265
-    },
-    "XSLT": {
-      "repositories": 1,
-      "usage": 33489
-    },
-    "Perl": {
-      "repositories": 1,
-      "usage": 20769
-    },
-    "Hack": {
-      "repositories": 1,
-      "usage": 383
-    },
-    "Dockerfile": {
-      "repositories": 3,
-      "usage": 6176
+    "Objective-C": {
+      "repositories": 11,
+      "bytes": 28753,
+      "commits": 3
     },
     "Rich Text Format": {
       "repositories": 1,
-      "usage": 8347
+      "bytes": 8347,
+      "commits": 3
     },
     "Starlark": {
       "repositories": 1,
-      "usage": 434
+      "bytes": 434,
+      "commits": 3
+    },
+    "Java": {
+      "repositories": 1,
+      "bytes": 364,
+      "commits": 3
+    },
+    "MDX": {
+      "repositories": 2,
+      "bytes": 15843,
+      "commits": 2
+    },
+    "Dockerfile": {
+      "repositories": 3,
+      "bytes": 6176,
+      "commits": 2
+    },
+    "robots.txt": {
+      "repositories": 6,
+      "bytes": 1161,
+      "commits": 2
+    },
+    "INI": {
+      "repositories": 10,
+      "bytes": 908,
+      "commits": 2
+    },
+    "Jupyter Notebook": {
+      "repositories": 2,
+      "bytes": 78444,
+      "commits": 1
+    },
+    "XML Property List": {
+      "repositories": 12,
+      "bytes": 36668,
+      "commits": 1
+    },
+    "Procfile": {
+      "repositories": 1,
+      "bytes": 16,
+      "commits": 1
+    },
+    "Java Properties": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 1
+    },
+    "Dotenv": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 1
+    },
+    "Diff": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 1
+    },
+    "SCSS": {
+      "repositories": 0,
+      "bytes": 0,
+      "commits": 1
+    },
+    "GraphQL": {
+      "repositories": 2,
+      "bytes": 1730274,
+      "commits": 0
+    },
+    "vCard": {
+      "repositories": 1,
+      "bytes": 592163,
+      "commits": 0
+    },
+    "PLpgSQL": {
+      "repositories": 2,
+      "bytes": 201887,
+      "commits": 0
+    },
+    "C++": {
+      "repositories": 4,
+      "bytes": 69774,
+      "commits": 0
+    },
+    "CMake": {
+      "repositories": 4,
+      "bytes": 59988,
+      "commits": 0
+    },
+    "SQL": {
+      "repositories": 5,
+      "bytes": 32755,
+      "commits": 0
+    },
+    "C": {
+      "repositories": 5,
+      "bytes": 17522,
+      "commits": 0
+    },
+    "Swift": {
+      "repositories": 10,
+      "bytes": 10994,
+      "commits": 0
+    },
+    "Prisma": {
+      "repositories": 1,
+      "bytes": 1678,
+      "commits": 0
+    },
+    "Kotlin": {
+      "repositories": 9,
+      "bytes": 1159,
+      "commits": 0
+    },
+    "Makefile": {
+      "repositories": 1,
+      "bytes": 543,
+      "commits": 0
+    },
+    "HTML+ERB": {
+      "repositories": 1,
+      "bytes": 242,
+      "commits": 0
     }
   },
   "frameworks": {
-    "Drizzle": {
-      "repositories": 1,
-      "usage": 1
-    },
-    "Next.js": {
-      "repositories": 25,
-      "usage": 25
-    },
     "React": {
-      "repositories": 73,
-      "usage": 73
+      "repositories": 167,
+      "commits": 1287
     },
     "Tailwind CSS": {
-      "repositories": 22,
-      "usage": 22
+      "repositories": 41,
+      "commits": 607
     },
-    "Prisma": {
-      "repositories": 2,
-      "usage": 2
+    "Next.js": {
+      "repositories": 42,
+      "commits": 452
     },
     "Express": {
-      "repositories": 5,
-      "usage": 5
+      "repositories": 11,
+      "commits": 33
     },
-    "GraphQL": {
+    "Rails": {
+      "repositories": 0,
+      "commits": 26
+    },
+    "Flutter": {
+      "repositories": 10,
+      "commits": 25
+    },
+    "Drizzle": {
       "repositories": 1,
-      "usage": 1
+      "commits": 0
     }
   },
   "tools": {
-    "TypeScript": {
-      "repositories": 68,
-      "usage": 68
+    "Markdown": {
+      "repositories": 0,
+      "commits": 5748
     },
-    "PostgreSQL": {
-      "repositories": 6,
-      "usage": 6
+    "JSON": {
+      "repositories": 0,
+      "commits": 2452
     },
-    "ESLint": {
-      "repositories": 39,
-      "usage": 39
-    },
-    "Prettier": {
-      "repositories": 11,
-      "usage": 11
-    },
-    "PM2": {
-      "repositories": 1,
-      "usage": 1
-    },
-    "Jest": {
-      "repositories": 6,
-      "usage": 6
+    "Kubernetes": {
+      "repositories": 0,
+      "commits": 13
     },
     "Firebase": {
       "repositories": 1,
-      "usage": 1
+      "commits": 6
+    },
+    "XML": {
+      "repositories": 0,
+      "commits": 6
+    },
+    "Chai": {
+      "repositories": 0,
+      "commits": 6
+    },
+    "Redis": {
+      "repositories": 0,
+      "commits": 6
+    },
+    "Docker": {
+      "repositories": 0,
+      "commits": 5
     },
     "Vercel": {
-      "repositories": 3,
-      "usage": 3
-    },
-    "GitHub Actions": {
       "repositories": 2,
-      "usage": 2
+      "commits": 4
+    },
+    "ESLint": {
+      "repositories": 38,
+      "commits": 3
+    },
+    "YAML": {
+      "repositories": 0,
+      "commits": 2
+    },
+    "Jupyter": {
+      "repositories": 0,
+      "commits": 1
+    },
+    "Prettier": {
+      "repositories": 9,
+      "commits": 0
+    },
+    "Jest": {
+      "repositories": 6,
+      "commits": 0
+    },
+    "PM2": {
+      "repositories": 1,
+      "commits": 0
     }
   },
   "unrecognizedDependencies": [
     {
-      "name": "postcss",
-      "count": 14,
+      "name": "typescript",
+      "count": 15,
       "repos": [
-        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/CodeWars-Solutions",
+        "Brandon-Gottshall/express-server",
+        "Brandon-Gottshall/Focus-On-Flowmodoro",
         "Brandon-Gottshall/job-tracker",
+        "Brandon-Gottshall/OpenAI-assistant-experiments",
+        "Brandon-Gottshall/openai-assistants-quickstart",
+        "Brandon-Gottshall/portfolio-qwik-rework",
+        "Brandon-Gottshall/compete",
         "Brandon-Gottshall/company-site",
         "Brandon-Gottshall/levi-armentrout-portfolio",
         "Brandon-Gottshall/rss-aggregator",
-        "Brandon-Gottshall/OpenAI-assistant-experiments",
         "Brandon-Gottshall/companySite",
         "Brandon-Gottshall/File-Firewall",
-        "Brandon-Gottshall/portfolio-qwik-rework",
         "Brandon-Gottshall/shopping-turtles",
-        "Brandon-Gottshall/portfolio",
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
+      "name": "@types/node",
+      "count": 14,
+      "repos": [
         "Brandon-Gottshall/CodeWars-Solutions",
-        "Brandon-Gottshall/Crystal-Tee",
-        "Brandon-Gottshall/marketing-reschool"
+        "Brandon-Gottshall/express-server",
+        "Brandon-Gottshall/Focus-On-Flowmodoro",
+        "Brandon-Gottshall/job-tracker",
+        "Brandon-Gottshall/openai-assistants-quickstart",
+        "Brandon-Gottshall/portfolio-qwik-rework",
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site",
+        "Brandon-Gottshall/levi-armentrout-portfolio",
+        "Brandon-Gottshall/rss-aggregator",
+        "Brandon-Gottshall/companySite",
+        "Brandon-Gottshall/File-Firewall",
+        "Brandon-Gottshall/shopping-turtles",
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
+      "name": "postcss",
+      "count": 14,
+      "repos": [
+        "Brandon-Gottshall/CodeWars-Solutions",
+        "Brandon-Gottshall/job-tracker",
+        "Brandon-Gottshall/marketing-reschool",
+        "Brandon-Gottshall/OpenAI-assistant-experiments",
+        "Brandon-Gottshall/portfolio",
+        "Brandon-Gottshall/portfolio-qwik-rework",
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site",
+        "Brandon-Gottshall/levi-armentrout-portfolio",
+        "Brandon-Gottshall/rss-aggregator",
+        "Brandon-Gottshall/companySite",
+        "Brandon-Gottshall/File-Firewall",
+        "Brandon-Gottshall/shopping-turtles",
+        "Brandon-Gottshall/Crystal-Tee"
       ]
     },
     {
       "name": "autoprefixer",
       "count": 13,
       "repos": [
+        "Brandon-Gottshall/CodeWars-Solutions",
+        "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/marketing-reschool",
+        "Brandon-Gottshall/OpenAI-assistant-experiments",
+        "Brandon-Gottshall/portfolio",
+        "Brandon-Gottshall/portfolio-qwik-rework",
         "Brandon-Gottshall/company-site",
         "Brandon-Gottshall/levi-armentrout-portfolio",
         "Brandon-Gottshall/rss-aggregator",
-        "Brandon-Gottshall/OpenAI-assistant-experiments",
         "Brandon-Gottshall/companySite",
         "Brandon-Gottshall/File-Firewall",
-        "Brandon-Gottshall/portfolio-qwik-rework",
         "Brandon-Gottshall/shopping-turtles",
-        "Brandon-Gottshall/portfolio",
-        "Brandon-Gottshall/CodeWars-Solutions",
-        "Brandon-Gottshall/Crystal-Tee",
-        "Brandon-Gottshall/marketing-reschool",
-        "Brandon-Gottshall/dogPark"
+        "Brandon-Gottshall/Crystal-Tee"
+      ]
+    },
+    {
+      "name": "dotenv",
+      "count": 6,
+      "repos": [
+        "Brandon-Gottshall/express-server",
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server",
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/todo-demo",
+        "Brandon-Gottshall/LMS-HTML-Proccesor"
+      ]
+    },
+    {
+      "name": "pg",
+      "count": 6,
+      "repos": [
+        "Brandon-Gottshall/contacts",
+        "Brandon-Gottshall/contacts-api",
+        "Brandon-Gottshall/job-tracker",
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server",
+        "Brandon-Gottshall/compete"
       ]
     },
     {
       "name": "axios",
       "count": 6,
       "repos": [
+        "Brandon-Gottshall/Crime-NY",
+        "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/portfolio",
         "Brandon-Gottshall/sev9-not-netflix",
         "Brandon-Gottshall/File-Firewall",
-        "Brandon-Gottshall/Legacy-Trade-Scripts",
-        "Brandon-Gottshall/portfolio",
-        "Brandon-Gottshall/Crime-NY",
-        "Brandon-Gottshall/dogPark"
-      ]
-    },
-    {
-      "name": "@typescript-eslint/eslint-plugin",
-      "count": 5,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/rss-aggregator",
-        "Brandon-Gottshall/OpenAI-assistant-experiments",
-        "Brandon-Gottshall/companySite",
-        "Brandon-Gottshall/portfolio-qwik-rework"
-      ]
-    },
-    {
-      "name": "@typescript-eslint/parser",
-      "count": 5,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/OpenAI-assistant-experiments",
-        "Brandon-Gottshall/companySite",
-        "Brandon-Gottshall/portfolio-qwik-rework",
-        "EffortlessDevelopment/setup-ndk"
-      ]
-    },
-    {
-      "name": "dotenv",
-      "count": 5,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/simple-express-server",
-        "Brandon-Gottshall/express-server",
-        "Brandon-Gottshall/Quote-Generator-API",
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
+        "Brandon-Gottshall/Legacy-Trade-Scripts"
       ]
     },
     {
       "name": "cors",
       "count": 5,
       "repos": [
+        "Brandon-Gottshall/contacts",
         "Brandon-Gottshall/contacts-api",
-        "Brandon-Gottshall/simple-express-server",
         "Brandon-Gottshall/express-server",
         "Brandon-Gottshall/Quote-Generator-API",
-        "Brandon-Gottshall/contacts"
+        "Brandon-Gottshall/simple-express-server"
+      ]
+    },
+    {
+      "name": "vite",
+      "count": 4,
+      "repos": [
+        "Brandon-Gottshall/portfolio-qwik-rework",
+        "Brandon-Gottshall/react-tip-calculator",
+        "kwoods17/-Portfolio",
+        "Brandon-Gottshall/course-crafter-react"
       ]
     },
     {
       "name": "prop-types",
       "count": 4,
       "repos": [
-        "Brandon-Gottshall/File-Firewall",
-        "Brandon-Gottshall/portfolio",
         "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "clsx",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site",
-        "Brandon-Gottshall/OpenAI-assistant-experiments"
-      ]
-    },
-    {
-      "name": "tailwind-merge",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site",
-        "Brandon-Gottshall/OpenAI-assistant-experiments"
-      ]
-    },
-    {
-      "name": "zod",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site",
-        "Brandon-Gottshall/companySite"
-      ]
-    },
-    {
-      "name": "vite",
-      "count": 3,
-      "repos": [
-        "Brandon-Gottshall/react-tip-calculator",
-        "Brandon-Gottshall/course-crafter-react",
-        "Brandon-Gottshall/portfolio-qwik-rework"
+        "Brandon-Gottshall/marketing-reschool",
+        "Brandon-Gottshall/portfolio",
+        "Brandon-Gottshall/File-Firewall"
       ]
     },
     {
       "name": "nodemon",
       "count": 3,
       "repos": [
-        "Brandon-Gottshall/simple-express-server",
         "Brandon-Gottshall/express-server",
-        "Brandon-Gottshall/Quote-Generator-API"
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server"
       ]
     },
     {
-      "name": "@testing-library/jest-dom",
+      "name": "clsx",
       "count": 3,
       "repos": [
         "Brandon-Gottshall/OpenAI-assistant-experiments",
-        "Brandon-Gottshall/react-stater-project",
-        "Brandon-Gottshall/Crime-NY"
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site"
+      ]
+    },
+    {
+      "name": "tailwind-merge",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/OpenAI-assistant-experiments",
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site"
       ]
     },
     {
@@ -362,21 +489,39 @@
       ]
     },
     {
+      "name": "openai",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/openai-assistants-quickstart",
+        "Brandon-Gottshall/Quote-Generator-API",
+        "Brandon-Gottshall/simple-express-server"
+      ]
+    },
+    {
       "name": "standard",
       "count": 3,
       "repos": [
-        "Brandon-Gottshall/Legacy-Trade-Scripts",
         "Brandon-Gottshall/portfolio",
-        "Brandon-Gottshall/nxt-wind"
+        "Brandon-Gottshall/nxt-wind",
+        "Brandon-Gottshall/Legacy-Trade-Scripts"
+      ]
+    },
+    {
+      "name": "zod",
+      "count": 3,
+      "repos": [
+        "Brandon-Gottshall/compete",
+        "Brandon-Gottshall/company-site",
+        "Brandon-Gottshall/companySite"
       ]
     },
     {
       "name": "lodash",
       "count": 3,
       "repos": [
-        "Brandon-Gottshall/portfolio",
+        "Brandon-Gottshall/dogPark",
         "Brandon-Gottshall/marketing-reschool",
-        "Brandon-Gottshall/dogPark"
+        "Brandon-Gottshall/portfolio"
       ]
     },
     {
@@ -384,17 +529,56 @@
       "count": 3,
       "repos": [
         "Brandon-Gottshall/CodeWars-Solutions",
-        "Brandon-Gottshall/ProjectArchRoad.com_Site",
-        "Brandon-Gottshall/dogPark"
+        "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/ProjectArchRoad.com_Site"
       ]
     },
     {
-      "name": "@next/mdx",
-      "count": 3,
+      "name": "gatsby-transformer-sharp",
+      "count": 2,
       "repos": [
-        "Brandon-Gottshall/CodeWars-Solutions",
-        "Brandon-Gottshall/ProjectArchRoad.com_Site",
-        "Brandon-Gottshall/dogPark"
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
+      ]
+    },
+    {
+      "name": "gatsby-source-filesystem",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
+      ]
+    },
+    {
+      "name": "gatsby-plugin-sharp",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
+      ]
+    },
+    {
+      "name": "gatsby-plugin-offline",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
+      ]
+    },
+    {
+      "name": "gatsby-plugin-manifest",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
+      ]
+    },
+    {
+      "name": "gatsby",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/maderra",
+        "Brandon-Gottshall/marketing-reschool"
       ]
     },
     {
@@ -403,22 +587,6 @@
       "repos": [
         "Brandon-Gottshall/compete",
         "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "lucide-react",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "openai",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/simple-express-server",
-        "Brandon-Gottshall/Quote-Generator-API"
       ]
     },
     {
@@ -441,289 +609,31 @@
       "name": "formik",
       "count": 2,
       "repos": [
-        "Brandon-Gottshall/portfolio",
-        "Brandon-Gottshall/dogPark"
+        "Brandon-Gottshall/dogPark",
+        "Brandon-Gottshall/portfolio"
+      ]
+    },
+    {
+      "name": "gray-matter",
+      "count": 2,
+      "repos": [
+        "Brandon-Gottshall/next-learn-starter",
+        "Brandon-Gottshall/ProjectArchRoad.com_Site"
       ]
     },
     {
       "name": "@fullhuman/postcss-purgecss",
       "count": 2,
       "repos": [
-        "Brandon-Gottshall/nxt-wind",
-        "Brandon-Gottshall/next-Portfolio"
+        "Brandon-Gottshall/next-Portfolio",
+        "Brandon-Gottshall/nxt-wind"
       ]
     },
     {
-      "name": "gatsby",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-plugin-manifest",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-plugin-offline",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-plugin-react-helmet",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-plugin-sharp",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-source-filesystem",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "gatsby-transformer-sharp",
-      "count": 2,
-      "repos": [
-        "Brandon-Gottshall/maderra",
-        "Brandon-Gottshall/marketing-reschool"
-      ]
-    },
-    {
-      "name": "@electric-sql/pglite",
+      "name": "snazzy",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/compete"
-      ]
-    },
-    {
-      "name": "drizzle-kit",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/compete"
-      ]
-    },
-    {
-      "name": "ts-standard",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/compete"
-      ]
-    },
-    {
-      "name": "vitest",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/compete"
-      ]
-    },
-    {
-      "name": "@vitejs/plugin-react",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/react-tip-calculator"
-      ]
-    },
-    {
-      "name": "globals",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/react-tip-calculator"
-      ]
-    },
-    {
-      "name": "kysely",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/job-tracker"
-      ]
-    },
-    {
-      "name": "@radix-ui/react-label",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "@radix-ui/react-slot",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "validator",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "@hookform/resolvers",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/company-site"
-      ]
-    },
-    {
-      "name": "tree",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/contacts-api"
-      ]
-    },
-    {
-      "name": "@raycast/api",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Focus-On-Flowmodoro"
-      ]
-    },
-    {
-      "name": "@raycast/eslint-config",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Focus-On-Flowmodoro"
-      ]
-    },
-    {
-      "name": "@babel/core",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@babel/preset-env",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@babel/preset-react",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@rollup/plugin-babel",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@vitejs/plugin-react-refresh",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "dompurify",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/course-crafter-react"
-      ]
-    },
-    {
-      "name": "@commitlint/cli",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/OpenAI-assistant-experiments"
-      ]
-    },
-    {
-      "name": "@commitlint/config-conventional",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/OpenAI-assistant-experiments"
-      ]
-    },
-    {
-      "name": "@svgr/webpack",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/OpenAI-assistant-experiments"
-      ]
-    },
-    {
-      "name": "daisyui",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/companySite"
-      ]
-    },
-    {
-      "name": "@google-cloud/storage",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/File-Firewall"
-      ]
-    },
-    {
-      "name": "prismjs",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
-      ]
-    },
-    {
-      "name": "puppeteer",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
-      ]
-    },
-    {
-      "name": "@builder.io/qwik",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio-qwik-rework"
-      ]
-    },
-    {
-      "name": "@builder.io/qwik-city",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio-qwik-rework"
-      ]
-    },
-    {
-      "name": "node-fetch",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio-qwik-rework"
-      ]
-    },
-    {
-      "name": "vite-tsconfig-paths",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio-qwik-rework"
+        "Brandon-Gottshall/nxt-wind"
       ]
     },
     {
@@ -731,6 +641,13 @@
       "count": 1,
       "repos": [
         "Brandon-Gottshall/commerceExample"
+      ]
+    },
+    {
+      "name": "playwright",
+      "count": 1,
+      "repos": [
+        "Brandon-Gottshall/nxt-wind"
       ]
     },
     {
@@ -745,125 +662,6 @@
       "count": 1,
       "repos": [
         "Brandon-Gottshall/Legacy-Trade-Scripts"
-      ]
-    },
-    {
-      "name": "tailwind-scrollbar-hide",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "use-next-blurhash",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "@sendgrid/mail",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "blurhash-as",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "patch-package",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "tailwind-scrollbar",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "vcards-js",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "webpack",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "yup",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/portfolio"
-      ]
-    },
-    {
-      "name": "cli-progress",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
-    },
-    {
-      "name": "playwright",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
-    },
-    {
-      "name": "snazzy",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
-    },
-    {
-      "name": "@babel/runtime",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crime-NY"
-      ]
-    },
-    {
-      "name": "radium",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crime-NY"
-      ]
-    },
-    {
-      "name": "gatsby-image",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/maderra"
-      ]
-    },
-    {
-      "name": "gatsby-plugin-google-analytics",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/maderra"
-      ]
-    },
-    {
-      "name": "@react-spring/web",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
       ]
     },
     {
@@ -902,81 +700,81 @@
       ]
     },
     {
-      "name": "js-cookie",
+      "name": "cli-progress",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/nxt-wind"
       ]
     },
     {
-      "name": "keen-slider",
+      "name": "@google-cloud/storage",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/File-Firewall"
       ]
     },
     {
-      "name": "lodash.debounce",
+      "name": "daisyui",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/companySite"
       ]
     },
     {
-      "name": "lodash.random",
+      "name": "puppeteer",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/LMS-HTML-Proccesor"
       ]
     },
     {
-      "name": "lodash.throttle",
+      "name": "prismjs",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/LMS-HTML-Proccesor"
       ]
     },
     {
-      "name": "postcss-nesting",
+      "name": "glob",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/todo-demo"
       ]
     },
     {
-      "name": "stripe",
+      "name": "dompurify",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/course-crafter-react"
       ]
     },
     {
-      "name": "swell-js",
+      "name": "@rollup/plugin-babel",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/course-crafter-react"
       ]
     },
     {
-      "name": "swr",
+      "name": "@babel/preset-env",
       "count": 1,
       "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
-    },
-    {
-      "name": "tabbable",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
-    },
-    {
-      "name": "uuidv4",
-      "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
+        "Brandon-Gottshall/course-crafter-react"
       ]
     }
+  ],
+  "notes": [
+    "Languages with high byte counts but in few repositories might be due to generated code or dependency files.",
+    "Commit-level analysis now processes diffs using Linguist to exclude generated files before counting language contributions."
+  ],
+  "found_emails": [
+    "brandon@effortlessdevelopment.com",
+    "55668392+brandon-gottshall@users.noreply.github.com",
+    "brandon@nebulaacademy.org",
+    "blgottshall@gmail.com",
+    "brandon@gottshall.dev",
+    "justin.gottshall@sherwin.com",
+    "bgkoden11@gmail.com",
+    "brandongottshall@pop-os.localdomain"
   ]
 }

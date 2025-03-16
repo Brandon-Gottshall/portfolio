@@ -1,6 +1,22 @@
 import fs from 'fs'
 import path from 'path'
 
+/**
+ * GitHub Rate Limit Strategy:
+ * 
+ * GitHub API allows 5000 requests per hour (~1.4 requests/second) for authenticated users.
+ * To optimize performance while respecting rate limits:
+ * 
+ * 1. Base delay of 750ms between standard requests (~1.33 req/sec, just under the limit)
+ * 2. Dynamic delays based on remaining rate limit:
+ *    - Under 500 remaining: 1000ms delay (slowing down further)
+ *    - Under 100 remaining: Wait until reset time
+ * 3. 750-1000ms delays between batches of operations (pages, PR fetches, etc.)
+ * 4. Proper handling of 403 responses and rate limit headers
+ * 
+ * This approach strictly adheres to GitHub's rate limit while still being efficient.
+ */
+
 interface Repository {
   fork: boolean
   languages_url: string
@@ -12,6 +28,7 @@ interface Repository {
     login: string
   }
   html_url: string
+  private: boolean
 }
 
 interface GitHubCommit {
@@ -25,7 +42,7 @@ interface GitHubCommit {
 
 interface DetailedStats {
   repositories: number  // Number of repos using this tech
-  usage: number        // Total usage count (e.g., bytes for languages)
+  commits: number     // Number of commits containing this tech
 }
 
 interface PackageJson {
@@ -54,112 +71,9 @@ interface CachedStats {
     count: number
     repos: string[]
   }[]
+  // Add notes about the data
+  notes: string[]
 }
-
-// Define project types and their ignored languages
-const PROJECT_IGNORED_LANGUAGES: Record<string, string[]> = {
-  // TypeScript projects
-  typescript: [
-    'JavaScript',  // Compiled output
-    'CSS',        // Usually from frameworks/build
-    'HTML',       // Usually from frameworks/build
-    'SCSS',       // Usually from frameworks/build
-    'Less'        // Usually from frameworks/build
-  ],
-
-  // Flutter/Dart projects
-  flutter: [
-    'Swift',        // iOS build output
-    'Kotlin',       // Android build output
-    'Objective-C',  // iOS build output
-    'Java',         // Android build output
-    'Ruby',         // CocoaPods
-    'C',           // Native build output
-    'C++',         // Native build output
-    'CMake'        // Build system
-  ],
-
-  // React Native projects
-  'react-native': [
-    'Java',         // Android build output
-    'Objective-C',  // iOS build output
-    'Swift',        // iOS build output
-    'Ruby',         // CocoaPods
-    'C',           // Native build output
-    'C++',         // Native build output
-    'CMake'        // Build system
-  ],
-
-  // React projects
-  react: [
-    'JavaScript',  // If using TypeScript
-    'CSS',        // Usually from frameworks
-    'HTML',       // Usually from frameworks
-    'SCSS',       // Usually from frameworks
-    'Less'        // Usually from frameworks
-  ],
-
-  // Next.js projects
-  next: [
-    'JavaScript',  // If using TypeScript
-    'CSS',        // Usually from frameworks
-    'HTML',       // Usually from frameworks
-    'SCSS',       // Usually from frameworks
-    'Less',       // Usually from frameworks
-    'MDX'         // Usually build time only
-  ],
-
-  // Tailwind projects
-  tailwind: [
-    'CSS',        // All generated
-    'SCSS',       // Usually from frameworks
-    'Less'        // Usually from frameworks
-  ],
-
-  // Node.js projects
-  node: [
-    'JavaScript', // If using TypeScript
-    'C',         // Native addons
-    'C++',       // Native addons
-    'CMake'      // Build system
-  ],
-
-  // Python projects
-  python: [
-    'JavaScript', // Usually from notebooks or build
-    'CSS',       // Usually from notebooks or build
-    'HTML',      // Usually from notebooks or build
-    'Shell'      // Usually setup scripts
-  ],
-
-  // Vanilla Web projects - don't ignore basic web files
-  'vanilla-web': [],
-
-  // SQL/Database projects - don't ignore SQL files
-  'sql': [],
-}
-
-// Define known generated files and build artifacts
-const GENERATED_FILES = new Set([
-  'Procfile',           // Heroku deployment
-  '*.scss',            // Compiled to CSS
-  '*.less',            // Compiled to CSS
-  '*.sass',            // Compiled to CSS
-  '*.gherkin',         // Test files
-  '*.feature',         // Test files
-  '*.mustache',        // Template files
-  '*.php',             // Server-side files
-  '*.min.js',          // Minified JS
-  '*.min.css',         // Minified CSS
-  '*.bundle.js',       // Bundled JS
-  '*.d.ts',            // TypeScript declarations
-  '*.js.map',          // Source maps
-  '*.css.map',         // Source maps
-  '*.generated.*',     // Generated files
-  '*.compiled.*',      // Compiled files
-  '*.transformed.*',   // Transformed files
-  '*.processed.*'      // Processed files
-])
 
 // Add this array to store all your email addresses
 const userEmails = [
@@ -174,12 +88,11 @@ function logWithTimestamp(message: string) {
   console.log(`[${timestamp}] ${message}`);
 }
 
-// Modify the fetchWithRetry function to log before and after each fetch
+// Modify the fetchWithRetry function to use a more optimized delay approach
 async function fetchWithRetry(url: string, headers: HeadersInit, retries = 3): Promise<Response> {
   for (let i = 0; i < retries; i++) {
-    // Add delay between requests (500ms)
-    logWithTimestamp(`Waiting 500ms before request...`);
-    await delay(500);
+    // Use 750ms delay between requests to stay under GitHub's 1.4 requests/second limit
+    await delay(750);
 
     const endpoint = url.split('?')[0]; // Just get the base endpoint for cleaner logs
     logWithTimestamp(`Sending request to ${endpoint}...`);
@@ -193,7 +106,7 @@ async function fetchWithRetry(url: string, headers: HeadersInit, retries = 3): P
       return new Response(null, { status: 409 });
     }
     
-    // Check and handle rate limits
+    // Check and handle rate limits - this function will add delays only when necessary
     const shouldRetry = await checkRateLimit(response);
     if (shouldRetry) {
       continue;
@@ -215,7 +128,11 @@ async function fetchWithRetry(url: string, headers: HeadersInit, retries = 3): P
 
 // Modify the delay function to show progress during longer waits
 async function delay(ms: number) {
-  if (ms >= 2000) {
+  // For very small delays, just wait without logging
+  if (ms < 100) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  else if (ms >= 2000) {
     // For delays >= 2 seconds, show countdown
     const intervals = Math.min(Math.floor(ms / 500), 10); // Max 10 updates
     const step = Math.floor(ms / intervals);
@@ -231,7 +148,7 @@ async function delay(ms: number) {
   }
 }
 
-// Helper function to check rate limits and wait if needed
+// Modify the checkRateLimit function to be more intelligent about delays
 async function checkRateLimit(response: Response) {
   const remaining = parseInt(response.headers.get('x-ratelimit-remaining') || '0');
   const limit = parseInt(response.headers.get('x-ratelimit-limit') || '0');
@@ -247,7 +164,8 @@ async function checkRateLimit(response: Response) {
     return true;
   }
   
-  // Regular rate limit warning (not exceeded yet)
+  // Add dynamic delay based on how close we are to the rate limit
+  // Only add extra delays when we're getting close to the limit
   if (remaining < 100) {
     const now = Date.now();
     const waitTime = resetTime - now + 1000;
@@ -255,6 +173,9 @@ async function checkRateLimit(response: Response) {
       logWithTimestamp(`Rate limit low (${remaining} remaining). Waiting ${Math.round(waitTime/1000)} seconds...`);
       await delay(waitTime);
     }
+  } else if (remaining < 500) {
+    // Add a 1000ms delay when under 500 remaining to slow down more
+    await delay(1000);
   }
 
   // Handle other 403 errors separately from rate limits
@@ -268,6 +189,13 @@ async function checkRateLimit(response: Response) {
 
 async function isValidRepository(repo: Repository, headers: HeadersInit): Promise<boolean> {
   try {
+    // Skip processing the Moodle repository specifically since it's a large public repo 
+    // where the user doesn't have commits
+    if (repo.full_name === 'Brandon-Gottshall/moodle') {
+      console.log(`Skipping ${repo.full_name}: Large public repository with no user contributions`)
+      return false
+    }
+
     // First check if we can get languages - this is the most important thing we need
     const languagesResponse = await fetchWithRetry(repo.languages_url, headers)
     if (!languagesResponse.ok) {
@@ -275,17 +203,47 @@ async function isValidRepository(repo: Repository, headers: HeadersInit): Promis
       return false
     }
 
-    // Check if this is a template repository or fork without contributions
-    if (repo.fork) {
-      // For forks, check if we have made any commits
+    // Define organizations the user is associated with
+    const associatedOrgs = ['NebulaAcademy', 'Effortless-Development', 'Brandon-Gottshall'];
+
+    // If this repo belongs to an associated org, consider it valid
+    const repoOwner = repo.owner.login;
+    if (associatedOrgs.some(org => org.toLowerCase() === repoOwner.toLowerCase())) {
+      console.log(`Including ${repo.full_name}: Associated organization`);
+      return true;
+    }
+
+    // Check if this is a fork or a public repository where we're not the owner
+    if (repo.fork || repo.owner.login !== process.env.NEXT_PUBLIC_GITHUB_USERNAME) {
+      // For forks or public repos, check if we have made any commits before processing further
       try {
         const commitsResponse = await fetchWithRetry(
-          `https://api.github.com/repos/${repo.full_name}/commits?author=${process.env.NEXT_PUBLIC_GITHUB_USERNAME}`,
+          `https://api.github.com/repos/${repo.full_name}/commits?author=${process.env.NEXT_PUBLIC_GITHUB_USERNAME}&per_page=1`,
           headers
         )
+        
+        // If no commits found by username, check for emails
         if (!commitsResponse.ok || (await commitsResponse.json()).length === 0) {
-          console.log(`Skipping ${repo.full_name}: Fork with no contributions`)
-          return false
+          // Check for any commits by email addresses
+          let foundEmailCommits = false
+          for (const email of userEmails) {
+            const emailCommitsResponse = await fetchWithRetry(
+              `https://api.github.com/repos/${repo.full_name}/commits?author=${email}&per_page=1`,
+              headers
+            )
+            if (emailCommitsResponse.ok && (await emailCommitsResponse.json()).length > 0) {
+              foundEmailCommits = true
+              break
+            }
+            // Add small delay between email checks
+            await delay(750)
+          }
+          
+          // If no commits found by username or email, skip this repository
+          if (!foundEmailCommits) {
+            console.log(`Skipping ${repo.full_name}: No contributions found`)
+            return false
+          }
         }
       } catch (error) {
         console.log(`Error checking commits for ${repo.full_name}:`, error)
@@ -293,7 +251,7 @@ async function isValidRepository(repo: Repository, headers: HeadersInit): Promis
       }
     }
 
-    // If we can get languages and it's either not a fork or has our commits, it's valid
+    // If we can get languages and we've confirmed contributions (or it's our own repo), it's valid
     return true
   } catch (error) {
     console.log(`Error validating repository ${repo.full_name}:`, error)
@@ -303,63 +261,29 @@ async function isValidRepository(repo: Repository, headers: HeadersInit): Promis
 
 async function shouldFetchPackageFiles(repo: Repository, headers: HeadersInit): Promise<{
   shouldFetchPackageJson: boolean
-  shouldFetchPubspecYaml: boolean
-  shouldFetchGemfile: boolean
-  shouldFetchRequirementsTxt: boolean
 }> {
   try {
-    // First check if repo name indicates it's likely to have certain package files
-    const repoNameLower = repo.name.toLowerCase()
-    const isLikelyJS = repoNameLower.includes('node') || 
-                       repoNameLower.includes('react') || 
-                       repoNameLower.includes('vue') || 
-                       repoNameLower.includes('angular') ||
-                       repoNameLower.includes('next') ||
-                       repoNameLower.includes('typescript') ||
-                       repoNameLower.includes('js')
+    // Get repository contents
+    const contentsResponse = await fetchWithRetry(
+      repo.contents_url.replace('{+path}', ''),
+      headers
+    )
     
-    const isLikelyDart = repoNameLower.includes('flutter') || 
-                         repoNameLower.includes('dart')
-    
-    const isLikelyRuby = repoNameLower.includes('rails') || 
-                         repoNameLower.includes('ruby')
-    
-    const isLikelyPython = repoNameLower.includes('django') || 
-                          repoNameLower.includes('flask') ||
-                          repoNameLower.includes('python')
-
-    // Get the primary language only if the name doesn't already indicate the type
-    if (!isLikelyJS && !isLikelyDart && !isLikelyRuby && !isLikelyPython) {
-      const languagesResponse = await fetchWithRetry(repo.languages_url, headers)
-      if (languagesResponse.ok) {
-        const languages = await languagesResponse.json() as Record<string, number>
-        const primaryLanguage = Object.entries(languages)
-          .sort(([,a], [,b]) => b - a)[0]?.[0] || ''
-        
-        return {
-          shouldFetchPackageJson: ['JavaScript', 'TypeScript'].includes(primaryLanguage),
-          shouldFetchPubspecYaml: primaryLanguage === 'Dart',
-          shouldFetchGemfile: primaryLanguage === 'Ruby',
-          shouldFetchRequirementsTxt: primaryLanguage === 'Python'
-        }
-      }
+    if (!contentsResponse.ok) {
+      return { shouldFetchPackageJson: false }
     }
     
-    // Return based on repo name if we couldn't get languages or if name indicates type
-    return {
-      shouldFetchPackageJson: isLikelyJS,
-      shouldFetchPubspecYaml: isLikelyDart,
-      shouldFetchGemfile: isLikelyRuby,
-      shouldFetchRequirementsTxt: isLikelyPython
-    }
+    const contents = await contentsResponse.json() as { name: string, type: string }[]
+    
+    // Check if package.json exists in the repository root
+    const hasPackageJson = contents.some(file => 
+      file.name === 'package.json' && file.type === 'file'
+    )
+    
+    return { shouldFetchPackageJson: hasPackageJson }
   } catch (error) {
     console.error('Error determining package files to fetch:', error)
-    return {
-      shouldFetchPackageJson: false,
-      shouldFetchPubspecYaml: false,
-      shouldFetchGemfile: false,
-      shouldFetchRequirementsTxt: false
-    }
+    return { shouldFetchPackageJson: false }
   }
 }
 
@@ -443,33 +367,355 @@ const toolMap: Record<string, string[]> = {
   'VS Code': ['@vscode/', 'vscode', '.vscode/']
 }
 
-// Helper function to check if a file should be ignored
-function shouldIgnoreFile(filename: string): boolean {
-  // Check if it's a known generated file
-  if (GENERATED_FILES.has(filename) || 
-      Array.from(GENERATED_FILES).some(pattern => 
-        pattern.replace('*', '.*').match(filename)
-      )) {
-    return true
+// Add helper function to check if a file is likely generated
+function isLikelyGeneratedSQLFile(filename: string): boolean {
+  // Common patterns for generated SQL files
+  const generatedPatterns = [
+    /migrations?\//i,                  // Files in migration directories
+    /\d{14}_.+\.sql$/,                 // Timestamp-based migration files (e.g., 20230101120000_create_users.sql)
+    /schema\.sql$/i,                   // Auto-generated schema dumps
+    /\.prisma\/migrations\//,          // Prisma-generated migrations
+    /db\/seeds\//,                     // Seed files are often generated
+    /CREATE\s+PROCEDURE|CREATE\s+FUNCTION/i, // SQL files containing procedures/functions are often generated
+    /--\s*Generated by/i,              // Files with generation comments
+    /sequelize-cli/i,                  // Sequelize migrations
+    /knex/i,                           // Knex.js migrations
+    /_dump\.sql$/i                     // Database dumps
+  ];
+  
+  return generatedPatterns.some(pattern => pattern.test(filename));
+}
+
+// Expanded function to identify various types of generated files
+function isLikelyGeneratedFile(filename: string, language: string): boolean {
+  // Common patterns for all generated files
+  const commonPatterns = [
+    /generated/i,
+    /\.generated\./i,
+    /auto-generated/i,
+    /autogenerated/i,
+    /\.g\./i,                     // Common prefix for generated files
+    /vendor\//i,                  // Vendor directories usually contain third-party code
+    /node_modules\//i,            // Node modules directory
+    /dist\//i,                    // Distribution/build directories
+    /build\//i,                   // Build directories
+    /\.min\./i,                   // Minified files
+    /\.bundle\./i,                // Bundled files
+    /out\//i,                     // Output directories
+    /output\//i,                  // Output directories
+    /\.lock$/i,                   // Lock files
+    /\.(o|obj|a|lib|so|dll|dylib)$/i, // Binary or object files
+    /\.(ico|svg|png|jpg|jpeg|gif|webp)$/i, // Image files are often not hand-coded
+    /\.(woff|woff2|ttf|eot)$/i,   // Font files
+    /\.(mp3|mp4|wav|ogg|webm)$/i, // Media files
+    /\.d\.ts$/i,                  // TypeScript declaration files are often generated
+    /generated-sources/i,         // Generated source directories
+    /\.cache\//i,                 // Cache directories
+    /tmp\//i,                     // Temporary directories
+    /\.next\//i,                  // Next.js build directory
+    /\.nuxt\//i,                  // Nuxt.js build directory
+    /\.vercel\//i,                // Vercel build directory
+    /\.netlify\//i,               // Netlify build directory
+    /\.github\//i,                // GitHub workflows are often templates
+    /\.git\//i,                   // Git internal files
+    /[.]map$/i,                   // Source maps
+    /package-lock.json$/i,        // NPM lock file
+    /yarn.lock$/i,                // Yarn lock file
+    /pnpm-lock.yaml$/i,           // PNPM lock file
+    /Podfile.lock$/i,             // CocoaPods lock file
+    /composer.lock$/i,            // Composer lock file
+    /Gemfile.lock$/i,             // Bundler lock file
+    /project.pbxproj$/i,          // Xcode project files
+  ];
+  
+  // If the file matches any common pattern for generated files
+  if (commonPatterns.some(pattern => pattern.test(filename))) {
+    return true;
   }
-
-  // Check if it's in a build/output directory
-  const buildDirs = ['dist', 'build', 'out', '.next', '.nuxt', '.output', '.cache']
-  if (buildDirs.some(dir => filename.startsWith(dir + '/'))) {
-    return true
+  
+  // Language-specific patterns
+  const languagePatterns: Record<string, RegExp[]> = {
+    // SQL and database-related
+    'PLpgSQL': [
+      /migrations?\//i,
+      /\d{14}_.+\.sql$/,
+      /schema\.sql$/i,
+      /\.prisma\/migrations\//,
+      /db\/seeds\//,
+      /CREATE\s+PROCEDURE|CREATE\s+FUNCTION/i,
+      /--\s*Generated by/i,
+      /sequelize-cli/i,
+      /knex/i,
+      /_dump\.sql$/i,
+      /\.db$/i,
+      /\.sqlite$/i,
+    ],
+    
+    // C/C++ related
+    'C': [
+      /\.o$/i,                     // Object files
+      /CMakeFiles\//i,             // CMake-generated files
+      /\.framework\//i,            // Frameworks
+      /\.xcodeproj\//i,            // Xcode project files
+      /third[_\-]party\//i,        // Third-party code
+      /external\//i,               // External dependencies
+      /deps\//i,                   // Dependencies
+      /lib\//i,                    // Libraries
+      /\.h\.in$/i,                 // Header template files
+      /\.hpp\.in$/i,               // C++ header template files
+      /moc_.*\.cpp$/i,             // Qt generated files
+      /ui_.*\.h$/i,                // Qt UI files
+      /qrc_.*\.cpp$/i,             // Qt resource files
+    ],
+    'C++': [
+      /\.o$/i,
+      /CMakeFiles\//i,
+      /\.framework\//i,
+      /\.xcodeproj\//i,
+      /third[_\-]party\//i,
+      /external\//i,
+      /deps\//i,
+      /lib\//i,
+      /\.pch$/i,                  // Precompiled headers
+      /\.gch$/i,                  // GCC precompiled headers
+      /\.ipp$/i,                  // Inline implementations
+      /\.tcc$/i,                  // Template implementations
+      /\.pb\.h$/i,                // Protobuf headers
+      /\.pb\.cc$/i,               // Protobuf implementation
+      /moc_.*\.cpp$/i,            // Qt generated files
+      /ui_.*\.h$/i,               // Qt UI files
+      /qrc_.*\.cpp$/i,            // Qt resource files
+    ],
+    'CMake': [
+      /CMakeFiles\//i,
+      /CMakeCache/i,
+      /cmake_install/i,
+      /CTestTestfile/i,
+      /\.cmake$/i,                // CMake scripts
+      /CMakeLists.txt.user$/i,    // User-specific CMake files
+      /\.vcxproj/i,               // Visual Studio project files
+      /\.sln$/i,                  // Visual Studio solution files
+    ],
+    
+    // Mobile development
+    'Objective-C': [
+      /\.framework\//i,
+      /Pods\//i,                   // CocoaPods dependencies
+      /\.xcodeproj\//i,
+      /\.xib$/i,                   // Interface builder files
+      /\.storyboard$/i,            // Storyboard files
+      /\.pbxproj$/i,               // Project files
+      /\.modulemap$/i,             // Module map files
+      /\.pch$/i,                   // Precompiled headers
+      /\.strings$/i,               // Strings files
+      /\.lproj\//i,                // Localization directories
+    ],
+    'Swift': [
+      /\.framework\//i,
+      /Pods\//i,                   // CocoaPods dependencies
+      /\.xcodeproj\//i,
+      /\.xib$/i,                   // Interface builder files
+      /\.storyboard$/i,            // Storyboard files
+      /\.pbxproj$/i,               // Project files
+      /\.modulemap$/i,             // Module map files
+      /\.pch$/i,                   // Precompiled headers
+      /\.strings$/i,               // Strings files
+      /\.lproj\//i,                // Localization directories
+      /\.swiftmodule$/i,           // Swift module files
+      /\.swiftinterface$/i,        // Swift interface files
+      /GeneratedSwiftInterface/i,  // Generated Swift files
+    ],
+    'Kotlin': [
+      /\.gradle\//i,               // Gradle build files
+      /build\/generated\//i,       // Generated code
+      /\.idea\//i,                 // IDE files
+      /\.iml$/i,                   // IntelliJ IDEA module files
+      /\.kt\.java$/i,              // Kotlin to Java source
+      /\.class$/i,                 // Java class files
+      /R\.java$/i,                 // Android resource references
+      /BuildConfig\.java$/i,       // Android build config
+      /\.jar$/i,                   // JAR files
+      /\.apk$/i,                   // APK files
+      /\.aar$/i,                   // Android library files
+    ],
+    
+    // Build systems and config
+    'Starlark': [
+      /bazel-/i,                   // Bazel build directories
+      /\.bazelrc$/i,               // Bazel config files
+      /BUILD$/i,                   // BUILD files
+      /WORKSPACE$/i,               // WORKSPACE files
+    ],
+    'Procfile': [
+      /.*Procfile$/i,              // Heroku Procfiles are usually not written manually
+    ],
+    
+    // Python
+    'Jupyter Notebook': [
+      /\.ipynb_checkpoints\//i,    // Jupyter checkpoints
+    ],
+    'Python': [
+      /\.pyc$/i,                   // Python bytecode
+      /\.pyo$/i,                   // Python optimized bytecode
+      /__pycache__\//i,            // Python cache directory
+      /\.egg-info\//i,             // Python egg info
+      /\.egg$/i,                   // Python egg
+      /\.whl$/i,                   // Python wheel
+      /site-packages\//i,          // Python site packages
+      /venv\//i,                   // Virtual environments
+      /env\//i,                    // Virtual environments
+      /\.virtualenv\//i,           // Virtual environments
+    ],
+    
+    // Documentation files
+    'Rich Text Format': [
+      /\.rtf$/i,                   // RTF files are often generated
+      /\.doc$/i,                   // Word documents
+      /\.docx$/i,                  // Word documents
+      /\.pdf$/i,                   // PDF files
+      /\.ppt$/i,                   // PowerPoint
+      /\.pptx$/i,                  // PowerPoint
+      /\.xls$/i,                   // Excel
+      /\.xlsx$/i,                  // Excel
+    ],
+    
+    // Web development
+    'JavaScript': [
+      /\.min\.js$/i,               // Minified JavaScript
+      /bundle\.js$/i,              // Bundled JavaScript
+      /vendor\.js$/i,              // Vendor JavaScript
+      /polyfill\.js$/i,            // Polyfill JavaScript
+      /\.prod\.js$/i,              // Production JavaScript
+      /[0-9a-f]{8,}\.js$/i,        // Chunked/hashed JavaScript files
+    ],
+    'CSS': [
+      /\.min\.css$/i,              // Minified CSS
+      /bundle\.css$/i,             // Bundled CSS
+      /vendor\.css$/i,             // Vendor CSS
+      /\.prod\.css$/i,             // Production CSS
+      /[0-9a-f]{8,}\.css$/i,       // Chunked/hashed CSS files
+    ],
+  };
+  
+  // Check language-specific patterns if they exist
+  if (language in languagePatterns) {
+    return languagePatterns[language].some(pattern => pattern.test(filename));
   }
+  
+  // Default to SQL check for backward compatibility
+  if (filename.endsWith('.sql')) {
+    return isLikelyGeneratedSQLFile(filename);
+  }
+  
+  return false;
+}
 
-  // Check if it's a dependency or config file
-  const ignoredPatterns = [
-    /^(node_modules|vendor)\//,
-    /\.(config|conf)\.(js|ts)$/,
-    /^\..*rc$/,
-    /\.lock$/,
-    /package-lock\.json$/,
-    /yarn\.lock$/
-  ]
-
-  return ignoredPatterns.some(pattern => pattern.test(filename))
+// Add function to check if a repository is likely to contain mostly generated code for a specific language
+function repoLikelyContainsGeneratedLanguage(repoName: string, language: string, byteCount: number): boolean {
+  // For languages that are primary to web development, we're less likely to filter them
+  const primaryWebLanguages = ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'SCSS', 'Less'];
+  
+  if (primaryWebLanguages.includes(language)) {
+    // Only filter out excessive web language code (likely generated)
+    if (byteCount > 1000000 && !repoName.includes(language.toLowerCase())) {
+      console.log(`Excessive ${language} in ${repoName}: ${byteCount} bytes`);
+      return true;
+    }
+    return false; // Don't filter out primary web languages generally
+  }
+  
+  // Language-specific thresholds and repo name patterns
+  const generatedLanguagePatterns: Record<string, {byteThreshold: number, repoPatterns: RegExp[]}> = {
+    'PLpgSQL': {
+      byteThreshold: 10000, // Lower threshold - most SQL in repos is generated
+      repoPatterns: [/prisma/i, /migration/i, /database/i, /postgres/i, /sql/i, /schema/i, /model/i]
+    },
+    'C++': {
+      byteThreshold: 10000, // Lower threshold - most C++ in web dev repos is likely from dependencies
+      repoPatterns: [/native/i, /module/i, /binding/i, /addon/i, /lib/i, /vendor/i, /third-party/i]
+    },
+    'C': {
+      byteThreshold: 5000, // Lower threshold for C files
+      repoPatterns: [/native/i, /module/i, /binding/i, /addon/i, /lib/i, /vendor/i, /third-party/i]
+    },
+    'CMake': {
+      byteThreshold: 1000, // Very low threshold for CMake
+      repoPatterns: [/cmake/i, /build/i, /lib/i, /vendor/i, /third-party/i]
+    },
+    'Objective-C': {
+      byteThreshold: 5000, // Lower threshold for Objective-C
+      repoPatterns: [/ios/i, /app/i, /mobile/i, /react-native/i, /expo/i]
+    },
+    'Swift': {
+      byteThreshold: 5000, // Lower threshold for Swift
+      repoPatterns: [/ios/i, /app/i, /mobile/i, /react-native/i, /expo/i]
+    },
+    'Kotlin': {
+      byteThreshold: 2000, // Lower threshold for Kotlin
+      repoPatterns: [/android/i, /app/i, /mobile/i, /react-native/i, /expo/i]
+    },
+    'Starlark': {
+      byteThreshold: 500, // Low threshold for Starlark/Bazel files
+      repoPatterns: [/bazel/i, /build/i]
+    },
+    'Procfile': {
+      byteThreshold: 50, // Very low threshold for Procfile
+      repoPatterns: [/heroku/i, /deploy/i, /app/i]
+    },
+    'Makefile': {
+      byteThreshold: 1000, // Low threshold for Makefiles
+      repoPatterns: [/build/i, /lib/i, /module/i]
+    },
+    'Shell': {
+      byteThreshold: 5000,
+      repoPatterns: [/script/i, /ci/i, /build/i]
+    },
+    'Rich Text Format': {
+      byteThreshold: 100, // Very low threshold for RTF - almost always generated
+      repoPatterns: [/doc/i, /documentation/i, /report/i, /export/i]
+    },
+    'Java': {
+      byteThreshold: 10000,
+      repoPatterns: [/android/i, /app/i, /mobile/i, /java/i, /lib/i]
+    },
+  };
+  
+  // If we have specific rules for this language
+  if (language in generatedLanguagePatterns) {
+    const { byteThreshold, repoPatterns } = generatedLanguagePatterns[language];
+    
+    // If byte count exceeds threshold for this language
+    if (byteCount > byteThreshold) {
+      // Or if repo name matches any suspicious pattern
+      if (repoPatterns.some(pattern => pattern.test(repoName))) {
+        return true;
+      }
+      
+      // For any language not specifically related to the repo name
+      if (!repoName.toLowerCase().includes(language.toLowerCase())) {
+        // And byte count is significantly above threshold
+        if (byteCount > byteThreshold * 2) {
+          return true;
+        }
+      }
+      
+      // For extremely high byte counts, filter regardless of repo name
+      if (byteCount > byteThreshold * 10) {
+        return true;
+      }
+    }
+  }
+  
+  // General case for unexpected languages in repos
+  // If a language contributes more than 50KB and isn't mentioned in the repo name,
+  // it's likely to be a dependency/generated code
+  if (byteCount > 50000 && !primaryWebLanguages.includes(language) && 
+      !repoName.toLowerCase().includes(language.toLowerCase())) {
+    console.log(`Likely generated ${language} in ${repoName}: ${byteCount} bytes`);
+    return true;
+  }
+  
+  return false;
 }
 
 async function updateGitHubStats() {
@@ -552,8 +798,12 @@ async function updateGitHubStats() {
     // Count public/private repos and forks
     for (const repo of allRepos) {
       if (repo.fork) summary.forks++
-      // Note: We can't easily determine public/private from the API response
-      // as it's not included in the basic repo info
+      // Use the private field to determine if repo is public or private
+      if (repo.private) {
+        summary.privateRepos++
+      } else {
+        summary.publicRepos++
+      }
     }
 
     // Get total commits across all repos
@@ -563,8 +813,8 @@ async function updateGitHubStats() {
         console.log(`\nProcessing ${repo.full_name}...`)
 
         // Add delay before first commit fetch for each repo
-        console.log('  Waiting 1 second before fetching commits...')
-        await delay(1000)
+        console.log('  Starting commit fetching...')
+        await delay(750)
 
         let page = 1
         let hasMoreCommits = true
@@ -601,8 +851,8 @@ async function updateGitHubStats() {
 
           // Add delay between commit pages
           if (commits.length === 100) { // Only delay if we're likely to have another page
-            console.log('    Waiting 1 second before next page of commits...');
-            await delay(1000);
+            console.log('    Fetching next page of commits...');
+            await delay(750);
           }
         }
 
@@ -643,21 +893,19 @@ async function updateGitHubStats() {
 
             // Add delay between commit pages
             if (emailCommits.length === 100) { // Only delay if we're likely to have another page
-              console.log('    Waiting 1 second before next page of commits...');
-              await delay(1000);
+              console.log('    Fetching next page of commits...');
+              await delay(750);
             }
           }
           
           // Add delay between email fetches
-          if (userEmails.length > 1) {
-            console.log('  Waiting 1 second before fetching next email...');
-            await delay(1000);
-          }
+          console.log('  Fetching next email commits...');
+          await delay(750);
         }
-
+        
         // Add delay between direct commits and committer commits
-        console.log('  Waiting 2 seconds before checking committer commits...');
-        await delay(2000);
+        console.log('  Checking committer commits...');
+        await delay(750);
 
         // Reset pagination for committer commits
         page = 1;
@@ -699,14 +947,14 @@ async function updateGitHubStats() {
 
           // Add delay between committer pages
           if (committerCommits.length === 100) { // Only delay if we're likely to have another page
-            console.log('    Waiting 1 second before next page of committer commits...');
-            await delay(1000);
+            console.log('    Fetching next page of committer commits...');
+            await delay(750);
           }
         }
 
         // Add delay between committer commits and PR commits
-        console.log('  Waiting 2 seconds before checking pull requests...');
-        await delay(2000);
+        console.log('  Checking pull requests...');
+        await delay(750);
 
         // Get pull request contributions
         page = 1;
@@ -756,8 +1004,8 @@ async function updateGitHubStats() {
 
             // Add delay between PR commit fetches
             if (prs.length > 1) { // Only delay if there are multiple PRs
-              console.log('      Waiting 500ms before next PR...');
-              await delay(500);
+              console.log('      Fetching next PR...');
+              await delay(750);
             }
           }
 
@@ -765,8 +1013,8 @@ async function updateGitHubStats() {
           
           // Add delay between PR pages
           if (prs.length === 100) { // Only delay if we're likely to have another page
-            console.log('    Waiting 1 second before next page of PRs...');
-            await delay(1000);
+            console.log('    Fetching next page of PRs...');
+            await delay(750);
           }
         }
 
@@ -791,155 +1039,273 @@ async function updateGitHubStats() {
         const languagesResponse = await fetchWithRetry(repo.languages_url, headers)
         const repoLanguages = await languagesResponse.json() as Record<string, number>
         
+        // Create tracking objects for each language in this repo
+        const repoLanguagesList = Object.keys(repoLanguages)
+        repoLanguagesList.forEach(language => {
+          if (!languages[language]) {
+            languages[language] = { repositories: 0, commits: 0 }
+          }
+          languages[language].repositories++
+        })
+        
         // Get repository contents to check for build files
         const contentsResponse = await fetchWithRetry(
           repo.contents_url.replace('{+path}', ''),
           headers
         )
         
-        // Determine project type
-        let projectType: string | null = null
-        
-        if (contentsResponse.ok) {
-          const contents = await contentsResponse.json() as Array<{ name: string, type: string }>
-          
-          // Check if this is a full-stack app by looking for common folders
-          const hasFullStackFolders = contents.some(f => 
-            f.type === 'dir' && 
-            ['api', 'server', 'client', 'frontend', 'backend', 'src'].includes(f.name.toLowerCase())
-          )
-
-          // Only check for build files if it's not a full-stack app
-          if (!hasFullStackFolders) {
-            const hasOnlyBuildFiles = contents
-              .filter(item => item.type === 'file')
-              .every(item => shouldIgnoreFile(item.name))
-            
-            if (hasOnlyBuildFiles && contents.every(item => item.type !== 'dir')) {
-              console.log(`Skipping ${repo.full_name}: Contains only build/generated files`)
-              continue
-            }
-          }
-
-          // Determine project type based on contents
-          if (contents.some(f => f.name.toLowerCase().endsWith('.sql'))) {
-            projectType = 'sql'
-          } else if (
-            contents.some(f => f.name.toLowerCase() === 'index.html') &&
-            !contents.some(f => f.name === 'package.json')
-          ) {
-            projectType = 'vanilla-web'
-          }
+        // Skip if contents fetch failed
+        if (!contentsResponse.ok) {
+          console.log(`Skipping framework/tool detection for ${repo.full_name} - couldn't fetch contents`)
+          continue
         }
         
-        // If project type not determined by contents, use primary language
-        if (!projectType) {
-          const primaryLanguage = Object.entries(repoLanguages)
-            .sort(([,a], [,b]) => b - a)[0]?.[0]
-
-          if (primaryLanguage === 'TypeScript') {
-            projectType = 'typescript'
-          } else if (primaryLanguage === 'Dart') {
-            projectType = 'flutter'
-          } else if (primaryLanguage === 'Python') {
-            projectType = 'python'
-          } else if (primaryLanguage === 'JavaScript') {
-            projectType = 'node'
-          } else if (primaryLanguage === 'HTML' || primaryLanguage === 'CSS') {
-            projectType = 'vanilla-web'
-          } else if (primaryLanguage === 'SQL') {
-            projectType = 'sql'
-          } else if (primaryLanguage === 'PLpgSQL' || primaryLanguage === 'PostgreSQL') {
-            projectType = 'postgres'
-          }
+        const contents = await contentsResponse.json() as { name: string, type: string }[]
+        
+        // Use the contents for checking specific files or directories
+        const hasReadmeFile = contents.some(file => 
+          file.name.toLowerCase() === 'readme.md' && file.type === 'file'
+        )
+        if (hasReadmeFile) {
+          console.log(`Repository ${repo.full_name} has a README file`)
         }
 
         // Check for package files
-        const packageFilesToFetch = await shouldFetchPackageFiles(repo, headers)
+        const { shouldFetchPackageJson } = await shouldFetchPackageFiles(repo, headers)
         
-        if (packageFilesToFetch.shouldFetchPackageJson) {
-          try {
-            const packageJsonUrl = repo.contents_url.replace('{+path}', 'package.json')
-            const packageJsonResponse = await fetchWithRetry(packageJsonUrl, headers)
-            
-            if (packageJsonResponse.ok) {
-              const data = await packageJsonResponse.json()
-              const content = JSON.parse(Buffer.from(data.content, 'base64').toString()) as PackageJson
-              
-              const allDeps = {
-                ...(content.dependencies || {}),
-                ...(content.devDependencies || {})
-              }
-
-              // Update project type based on dependencies
-              if (Object.keys(allDeps).includes('typescript')) {
-                projectType = 'typescript'
-              } else if (Object.keys(allDeps).includes('next')) {
-                projectType = 'next'
-              } else if (Object.keys(allDeps).includes('react-native')) {
-                projectType = 'react-native'
-              } else if (Object.keys(allDeps).includes('react')) {
-                projectType = 'react'
-              }
-
-              // Check for Tailwind
-              if (Object.keys(allDeps).includes('tailwindcss')) {
-                projectType = projectType || 'tailwind'
-              }
-
-              // Track all dependencies for discovery
-              Object.keys(allDeps).forEach(dep => {
-                let recognized = false
-
-                // Check frameworks
-                Object.entries(frameworkMap).forEach(([framework, patterns]) => {
-                  if (patterns.some(pattern => 
-                    dep.startsWith(pattern) || 
-                    dep === pattern
-                  )) {
-                    frameworks[framework] = frameworks[framework] || { repositories: 0, usage: 0 }
-                    frameworks[framework].repositories++
-                    frameworks[framework].usage++
-                    recognized = true
-                  }
-                })
-                
-                // Check tools
-                Object.entries(toolMap).forEach(([tool, patterns]) => {
-                  if (patterns.some(pattern => 
-                    dep.startsWith(pattern) || 
-                    dep === pattern
-                  )) {
-                    tools[tool] = tools[tool] || { repositories: 0, usage: 0 }
-                    tools[tool].repositories++
-                    tools[tool].usage++
-                    recognized = true
-                  }
-                })
-
-                // Track unrecognized dependencies
-                if (!recognized) {
-                  const existing = unrecognizedDeps.get(dep) || { count: 0, repos: new Set() }
-                  existing.count++
-                  existing.repos.add(repo.full_name)
-                  unrecognizedDeps.set(dep, existing)
-                }
-              })
+        // Count commits related to each language
+        console.log(`Counting language commits for ${repo.full_name}...`)
+        let page = 1
+        let hasMoreCommits = true
+        
+        while (hasMoreCommits) {
+          const commitsResponse = await fetchWithRetry(
+            `https://api.github.com/repos/${repo.full_name}/commits?per_page=100&page=${page}`,
+            headers
+          )
+          
+          if (!commitsResponse.ok) {
+            if (commitsResponse.status === 403) {
+              console.log(`  ⚠️ No permission to access commits for ${repo.full_name}`)
+            } else if (commitsResponse.status === 409) {
+              console.log(`  ⚠️ Repository ${repo.full_name} is empty or has conflicts`)
+            } else {
+              console.log(`  ⚠️ Failed to fetch page ${page} of commits`)
             }
-          } catch (error) {
-            if (error instanceof Error && !error.message.includes('404')) {
-              console.log(`Error processing package.json for ${repo.full_name}:`, error)
+            break
+          }
+          
+          const commits = await commitsResponse.json() as { sha: string }[]
+          if (commits.length === 0) {
+            hasMoreCommits = false
+            break
+          }
+          
+          console.log(`  Processing ${commits.length} commits from page ${page}...`)
+          
+          for (const commit of commits) {
+            const commitResponse = await fetchWithRetry(
+              `https://api.github.com/repos/${repo.full_name}/commits/${commit.sha}`,
+              headers
+            )
+            
+            if (!commitResponse.ok) {
+              console.log(`    ⚠️ Failed to fetch details for commit ${commit.sha.substring(0, 7)}`)
+              continue
+            }
+            
+            const commitData = await commitResponse.json() as { 
+              files: { filename: string, status: string }[] 
+            }
+            
+            // Track which languages are used in this commit
+            const commitLanguages = new Set<string>()
+            
+            for (const file of commitData.files || []) {
+              // Skip deleted files
+              if (file.status === 'removed') continue
+              
+              // Determine language from file extension
+              const ext = file.filename.split('.').pop()?.toLowerCase()
+              if (!ext) continue
+              
+              // Map extensions to languages (simplified version)
+              const langMap: Record<string, string> = {
+                'js': 'JavaScript',
+                'jsx': 'JavaScript',
+                'ts': 'TypeScript',
+                'tsx': 'TypeScript',
+                'py': 'Python',
+                'rb': 'Ruby',
+                'php': 'PHP',
+                'java': 'Java',
+                'c': 'C',
+                'cpp': 'C++',
+                'h': 'C',
+                'hpp': 'C++',
+                'cs': 'C#',
+                'go': 'Go',
+                'rs': 'Rust',
+                'swift': 'Swift',
+                'kt': 'Kotlin',
+                'dart': 'Dart',
+                'html': 'HTML',
+                'css': 'CSS',
+                'scss': 'SCSS',
+                'less': 'Less',
+                'json': 'JSON',
+                'md': 'Markdown',
+                'sql': 'SQL',
+                'sh': 'Shell',
+                'bash': 'Shell',
+                'zsh': 'Shell',
+                'yml': 'YAML',
+                'yaml': 'YAML',
+                'xml': 'XML',
+                'm': 'Objective-C',
+                'mm': 'Objective-C',
+                'cmake': 'CMake',
+                'bazel': 'Starlark',
+                'ipynb': 'Jupyter Notebook',
+              }
+              
+              if (ext in langMap) {
+                const language = langMap[ext];
+                
+                // Skip if this file is likely generated
+                if (isLikelyGeneratedFile(file.filename, language)) {
+                  console.log(`Skipping likely generated file: ${file.filename} (${language})`);
+                  continue;
+                }
+                
+                commitLanguages.add(language);
+              }
+            }
+            
+            // Increment commit count for each language found in this commit
+            for (const language of commitLanguages) {
+              if (repoLanguagesList.includes(language)) {
+                languages[language].commits += repoLanguages[language]
+              }
+            }
+          }
+          
+          page++
+          
+          // Delay between pages of commits
+          console.log('  Fetching next page of commits...')
+          await delay(750)
+        }
+        
+        // Process package.json for frameworks and tools detection
+        // (We've already counted language usage above)
+        if (shouldFetchPackageJson) {
+          const packageJsonResponse = await fetchWithRetry(
+            repo.contents_url.replace('{+path}', 'package.json'),
+            headers
+          )
+          
+          if (packageJsonResponse.ok) {
+            const packageJsonData = await packageJsonResponse.json()
+            const content = Buffer.from(packageJsonData.content, 'base64').toString('utf-8')
+            const packageJson = JSON.parse(content) as PackageJson
+            
+            // Extract dependencies
+            const allDeps = [
+              ...Object.keys(packageJson.dependencies || {}),
+              ...Object.keys(packageJson.devDependencies || {})
+            ]
+            
+            // Set frameworks
+            for (const [framework, patterns] of Object.entries(frameworkMap)) {
+              if (allDeps.some(dep => 
+                patterns.some(pattern => 
+                  dep === pattern || 
+                  (pattern.startsWith('^') && dep.startsWith(pattern.substring(1))) ||
+                  dep === pattern
+                ))) {
+                frameworks[framework] = frameworks[framework] || { repositories: 0, commits: 0 }
+                frameworks[framework].repositories++
+                
+                // Estimate commit count based on repo's total commits divided by number of frameworks
+                // This is a rough approximation since we can't easily determine which commits used which frameworks
+                const estimatedFrameworkCommits = Math.ceil(
+                  Object.values(languages).reduce((sum, lang) => sum + lang.commits, 0) / 
+                  (Object.keys(frameworks).length || 1)
+                )
+                frameworks[framework].commits += estimatedFrameworkCommits
+              }
+            }
+            
+            // Set tools
+            for (const [tool, patterns] of Object.entries(toolMap)) {
+              if (allDeps.some(dep => 
+                patterns.some(pattern => 
+                  dep === pattern || 
+                  (pattern.startsWith('^') && dep.startsWith(pattern.substring(1))) ||
+                  dep === pattern
+                ))) {
+                tools[tool] = tools[tool] || { repositories: 0, commits: 0 }
+                tools[tool].repositories++
+                
+                // Estimate commit count similar to frameworks
+                const estimatedToolCommits = Math.ceil(languages[Object.keys(languages)[0]]?.commits || 0) / 
+                                           (Object.keys(tools).length || 1)
+                tools[tool].commits += estimatedToolCommits
+              }
+            }
+            
+            // Track unrecognized dependencies
+            for (const dep of allDeps) {
+              let recognized = false
+              
+              for (const patterns of Object.values(frameworkMap)) {
+                if (patterns.some(pattern => 
+                  dep === pattern || 
+                  (pattern.startsWith('^') && dep.startsWith(pattern.substring(1))) ||
+                  dep === pattern
+                )) {
+                  recognized = true
+                  break
+                }
+              }
+              
+              if (!recognized) {
+                for (const patterns of Object.values(toolMap)) {
+                  if (patterns.some(pattern => 
+                    dep === pattern || 
+                    (pattern.startsWith('^') && dep.startsWith(pattern.substring(1))) ||
+                    dep === pattern
+                  )) {
+                    recognized = true
+                    break
+                  }
+                }
+              }
+              
+              if (!recognized) {
+                if (!unrecognizedDeps.has(dep)) {
+                  unrecognizedDeps.set(dep, { count: 0, repos: new Set() })
+                }
+                unrecognizedDeps.get(dep)!.count++
+                unrecognizedDeps.get(dep)!.repos.add(repo.full_name)
+              }
             }
           }
         }
 
         // Update language stats with better filtering
         Object.entries(repoLanguages).forEach(([language, bytes]) => {
-          if (!projectType || !PROJECT_IGNORED_LANGUAGES[projectType]?.includes(language)) {
-            languages[language] = languages[language] || { repositories: 0, usage: 0 }
-            languages[language].repositories++
-            languages[language].usage += bytes
+          // Skip languages likely to be generated in this repo
+          if (repoLikelyContainsGeneratedLanguage(repo.name, language, bytes)) {
+            console.log(`Skipping likely generated ${language} in ${repo.full_name} (${bytes} bytes)`);
+            return;
           }
+          
+          // Add all languages without filtering by project type
+          languages[language] = languages[language] || { repositories: 0, commits: 0 }
+          languages[language].repositories++
+          languages[language].commits += bytes
         })
 
       } catch (error) {
@@ -955,7 +1321,7 @@ async function updateGitHubStats() {
         repos: Array.from(repos)
       }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 100) // Keep top 100 most common unrecognized dependencies
+      .slice(0, 50) // Keep top 50 most common unrecognized dependencies
 
     // Log potential missing technologies
     console.log('\nPotentially missing technologies:')
@@ -966,19 +1332,61 @@ async function updateGitHubStats() {
       }
     })
 
-    // Update the cache file
-    const stats: CachedStats = {
+    // Sort stats by commit count instead of usage
+    const cachedStats: CachedStats = {
       lastUpdated: new Date().toISOString(),
       summary,
       repoCount: validRepos.length,
-      languages,
-      frameworks,
-      tools,
-      unrecognizedDependencies: sortedUnrecognized
+      languages: Object.fromEntries(
+        Object.entries(languages)
+          .sort(([,a], [,b]) => b.commits - a.commits)
+          .filter(([language, stats]) => {
+            // Additional filtering for languages that are mostly generated
+            
+            // Check for unusually high commit counts relative to repository count
+            const avgCommitsPerRepo = stats.commits / stats.repositories;
+            
+            // Languages with significantly high avg commit count are suspicious
+            if (avgCommitsPerRepo > 50000 && 
+                !['JavaScript', 'TypeScript', 'HTML', 'CSS'].includes(language)) {
+              console.log(`Excluding ${language} from results: unusually high commit count (${stats.commits}) across only ${stats.repositories} repos.`);
+              return false;
+            }
+            
+            // For languages not commonly used in web development, filter if they're in just a few repos
+            const nonWebLanguages = ['PLpgSQL', 'C', 'C++', 'CMake', 'Objective-C', 'Swift', 'Kotlin', 'Starlark', 'Makefile'];
+            if (nonWebLanguages.includes(language) && stats.repositories < 3) {
+              console.log(`Excluding ${language} from results: only in ${stats.repositories} repos but has ${stats.commits} commits.`);
+              return false;
+            }
+            
+            return true;
+          })
+      ),
+      frameworks: Object.fromEntries(
+        Object.entries(frameworks)
+          .sort(([,a], [,b]) => b.commits - a.commits)
+      ),
+      tools: Object.fromEntries(
+        Object.entries(tools)
+          .sort(([,a], [,b]) => b.commits - a.commits)
+      ),
+      unrecognizedDependencies: Array.from(unrecognizedDeps.entries())
+        .map(([name, { count, repos }]) => ({
+          name,
+          count,
+          repos: Array.from(repos)
+        }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 50),
+      notes: [
+        "Several languages with high commit counts but minimal repository presence are likely from generated code, dependencies, or forks.",
+        "Languages like PLpgSQL, C++, CMake, and Objective-C may show as excluded or reduced if they appear to be primarily generated."
+      ]
     }
 
     const cachePath = path.join(process.cwd(), 'src', 'data', 'github-stats.json')
-    fs.writeFileSync(cachePath, JSON.stringify(stats, null, 2))
+    fs.writeFileSync(cachePath, JSON.stringify(cachedStats, null, 2))
     
     console.log('\nSuccessfully updated GitHub stats cache')
   } catch (error) {
