@@ -29,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={oxanium.variable} suppressHydrationWarning>
-      <body className="min-h-screen bg-cream text-navy dark:bg-black dark:text-tan transition-colors duration-300">
+      <body className="min-h-screen transition-colors duration-300 bg-cream text-navy dark:bg-black dark:text-tan">
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <div className="flex flex-col min-h-screen">
             <Navbar />

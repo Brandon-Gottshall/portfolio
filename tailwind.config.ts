@@ -10,25 +10,25 @@ export default {
   			navy: {
   				darkest: '#0B0E29',
   				DEFAULT: '#1A237E',
-  				light: '#303F9F',
+  				light: '#303F9F'
   			},
   			blue: {
   				DEFAULT: '#1E88E5',
   				light: '#64B5F6',
   				dark: '#0D47A1',
-  				accent: '#4FC3F7',
+  				accent: '#4FC3F7'
   			},
   			gray: {
   				DEFAULT: '#959991',
-  				dark: '#2A2A2A',
+  				dark: '#2A2A2A'
   			},
   			tan: {
   				DEFAULT: '#D7CBA9',
-  				muted: '#C5B797',
+  				muted: '#C5B797'
   			},
   			cream: {
   				DEFAULT: '#E3DEC8',
-  				dark: '#D1CCB6',
+  				dark: '#D1CCB6'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -77,9 +77,39 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		fontFamily: {
-  			sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-  			code: ['Fira Code', 'monospace'],
+  			sans: [
+  				'Inter',
+  				'system-ui',
+  				'-apple-system',
+  				'sans-serif'
+  			],
+  			code: [
+  				'Fira Code',
+  				'monospace'
+  			]
   		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
+  		}
   	}
   },
   plugins: [],
