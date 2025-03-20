@@ -33,14 +33,28 @@ const eslintConfig = [
     ]
   },
   // Base configurations from Next.js
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript'
-  ),
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   // General TypeScript/JavaScript rules
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
-    ignores: ['**/tmp_repos/**/*', '**/node_modules/**/*', '**/.next/**/*', '**/build/**/*', '**/dist/**/*', '**/Component Archive/**/*', '**/next.config.ts', '**/tailwind.config.ts', '**/postcss.config.ts', '**/postcss.config.mjs', '**/components.json', '**/sanity.config.ts', '**/sanity.cli.ts', '**/sanity.schema.ts', '**/sanity.studio.tsx', '**/sanity.types.ts'],
+    ignores: [
+      '**/tmp_repos/**/*',
+      '**/node_modules/**/*',
+      '**/.next/**/*',
+      '**/build/**/*',
+      '**/dist/**/*',
+      '**/Component Archive/**/*',
+      '**/next.config.ts',
+      '**/tailwind.config.ts',
+      '**/postcss.config.ts',
+      '**/postcss.config.mjs',
+      '**/components.json',
+      '**/sanity.config.ts',
+      '**/sanity.cli.ts',
+      '**/sanity.schema.ts',
+      '**/sanity.studio.tsx',
+      '**/sanity.types.ts'
+    ],
     rules: {
       // Error handling patterns
       'no-else-return': 'error',
@@ -48,7 +62,10 @@ const eslintConfig = [
       // React/Next.js preferences
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' }
+      ],
 
       // Code complexity guidelines
       complexity: ['warn', 5],
@@ -61,7 +78,20 @@ const eslintConfig = [
   },
   // Special config for Next.js pages and app directory
   {
-    files: ['**/pages/**/*.{ts,tsx}', '**/app/**/*.{ts,tsx}', '**/next.config.ts', '**/tailwind.config.ts', '**/postcss.config.ts', '**/postcss.config.mjs', '**/components.json', '**/sanity.config.ts', '**/sanity.cli.ts', '**/sanity.schema.ts', '**/sanity.studio.tsx', '**/sanity.types.ts'],
+    files: [
+      '**/pages/**/*.{ts,tsx}',
+      '**/app/**/*.{ts,tsx}',
+      '**/next.config.ts',
+      '**/tailwind.config.ts',
+      '**/postcss.config.ts',
+      '**/postcss.config.mjs',
+      '**/components.json',
+      '**/sanity.config.ts',
+      '**/sanity.cli.ts',
+      '**/sanity.schema.ts',
+      '**/sanity.studio.tsx',
+      '**/sanity.types.ts'
+    ],
     rules: {
       'import/no-default-export': 'off'
     }
