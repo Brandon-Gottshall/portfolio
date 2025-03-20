@@ -1,0 +1,82 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+**Cursor Editor Cohesive Coding Guidelines**
+
+These guidelines ensure all code modifications adhere to a consistent style, incorporate best practices, and prevent common pitfalls. They cover technical style, functional programming, error handling, React/Next.js components, and general code hygiene.
+
+**1\. Core Principles**
+
+* **Concise & Technical:** Write concise, technical responses with accurate TypeScript examples.  
+* **Functional & Declarative:** Emphasize functional, declarative programming. Avoid classes.  
+* **Iteration & Modularization:** Favor iteration and modularization over duplication. Always prefer simple solutions and check for existing implementations before adding new code.  
+* **Descriptive Naming:** Use descriptive variable names—including auxiliary verbs (e.g., isLoading)—to improve code clarity.  
+* **Directory Structure:** Use lowercase with dashes for directories (e.g., components/auth-wizard).  
+* **Named Exports & RORO Pattern:** Favor named exports for components and apply the “Receive an Object, Return an Object” (RORO) pattern for function parameters and returns.  
+* **Consistency:** Adhere to these guidelines and Standard-TS conventions.
+
+**2\. JavaScript/TypeScript Style**
+
+* **Function Syntax:** Write pure functions using the function keyword. Omit semicolons where Standard-TS allows.  
+* **Type Safety:** Use TypeScript for all code. Prefer interfaces over types where appropriate. Avoid enums; use maps instead.  
+* **File Structure:** Organize files as follows: Exported component, subcomponents, helpers, static content, and types.  
+* **Conditional Statements:** Avoid unnecessary curly braces in conditional statements. For single-line statements in conditionals, omit curly braces. Use concise, one-line syntax for simple conditional statements (e.g., if (condition) doSomething()).
+
+**3\. Error Handling and Validation**
+
+* **Prioritize Error Handling:** Prioritize error handling and edge cases.  
+* **Early Returns:** Handle errors and edge cases at the beginning of functions using early returns to avoid deeply nested if statements.  
+* **Happy Path Last:** Place the “happy path” last in the function for improved readability.  
+* **Avoid Unnecessary else:** Avoid unnecessary else statements; use the if-return pattern instead.  
+* **Guard Clauses:** Use guard clauses to handle preconditions and invalid states early.  
+* **Logging & Messaging:** Implement proper error logging and user-friendly error messages.  
+* **Custom Errors:** Consider using custom error types or error factories for consistent error handling.  
+* **Error Modeling in Server Actions:** For expected errors in Server Actions, use useActionState and avoid try/catch. Return errors to the client.
+
+**4\. React/Next.js Component Practices**
+
+* **Functional Components:** Write components as functional components using TypeScript interfaces and declarative JSX.  
+* **Component Definition:** Define components using the function keyword.  
+* **UI Libraries:** Use Shadcn UI, Radix UI, and Tailwind Aria for components and styling.  
+* **Responsive Design:** Implement responsive design with Tailwind CSS, using a mobile-first approach.  
+* **Content Placement:** Place static content and interfaces at the end of the file. Use content variables for static content outside render functions.  
+* **Minimize Client-Side Effects:** Minimize reliance on 'use client', useEffect, and setState. Favor React Server Components (RSC) where possible.  
+* **Form Validation:** Use Zod for form validation. Use useActionState with react-hook-form for form validation.  
+* **Suspense:** Wrap client components in Suspense with a fallback UI.  
+* **Dynamic Loading:** Use dynamic loading (import()) for non-critical components.  
+* **Image Optimization:** Optimize images: Use WebP format, include size data, and use lazy loading.  
+* **Error Boundaries:** Implement error boundaries using error.tsx and global-error.tsx to handle unexpected errors and provide a fallback UI.  
+* **services/** Errors: Code in the services/ directory should always throw user-friendly errors that TanStack Query can catch and display to the user.  
+* **next-safe-action**: Use next-safe-action for all server actions.  
+  * Implement type-safe server actions with proper validation.  
+  * Use the action function from next-safe-action.  
+  * Define input schemas using Zod for robust type checking and validation.  
+  * Handle errors gracefully and return appropriate responses.  
+  * Use import type { ActionResponse } from '@/types/actions'.  
+  * Ensure all server actions return the ActionResponse type.  
+  * Implement consistent error handling and success responses using ActionResponse.
+
+**5\. Key Conventions**
+
+* **Next.js App Router State:** Rely on the Next.js App Router for state changes.  
+* **Web Vitals:** Prioritize Web Vitals (LCP, CLS, FID).  
+* **Minimize 'use client':**  
+  * Prefer server components and Next.js SSR features.  
+  * Use 'use client' only for Web API access in small components.  
+  * Avoid using 'use client' for data fetching or state management.  
+* **Next.js Documentation:** Refer to the Next.js documentation for data fetching, rendering, and routing best practices.
+
+**6\. General Best Practices & Pitfall Avoidance**
+
+* **Targeted Changes Only:** Make changes only when they are explicitly requested or when you are completely confident in their necessity and impact.  
+* **Avoid Code Duplication:** Always check for similar functionality elsewhere in the codebase before writing new code. When fixing bugs, do not introduce new patterns or technology without exhausting all options within the existing implementation. If a new approach is adopted, remove the old implementation to avoid duplicate logic.  
+* **Maintain a Clean Codebase:** Keep the overall codebase clean, well-organized, and free of redundant or legacy code.  
+* **Script Management:** Avoid writing one-off scripts directly in files; seek alternative approaches for code that is likely to run only once.  
+* **File Length Control:** Keep individual files within a 200–300 line limit. Refactor files that grow too large to maintain readability and manageability.  
+* **Environment File Protection:** Never overwrite the .env file without first asking and confirming the change.  
+* **Prefer Simple Solutions:** Always prefer simple solutions.  
+* **Code for Environments:** Write code that takes into account the different environments: dev, test, and prod.  
+* **No Mocking for Dev/Prod:** Mocking data is only needed for tests; never mock data for dev or prod.  
+* **No Stubbing/Fake Data for Dev/Prod:** Never add stubbing or fake data patterns to code that affects the dev or prod environments.
