@@ -51,7 +51,7 @@ const eslintConfig = [
   },
   // Special config for Next.js pages and app directory
   {
-    files: ['**/pages/**/*.{ts,tsx}', '**/app/**/*.{ts,tsx}'],
+    files: ['**/pages/**/*.{ts,tsx}', '**/app/**/*.{ts,tsx}', '**/next.config.ts'],
     rules: {
       'import/no-default-export': 'off'
     }
