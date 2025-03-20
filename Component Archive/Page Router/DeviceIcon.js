@@ -5,9 +5,14 @@ import webIcon from '../public/web.svg'
 import desktopMobileIcon from '../public/desktop-mobile.svg'
 import cloudIcon from '../public/cloud.svg'
 
-export default function DeviceIcon ({ linkSafeguard, deviceIconStyle, deviceName, altText, tooltipText }) {
-  useEffect(() => {
-  }, [linkSafeguard])
+export default function DeviceIcon({
+  linkSafeguard,
+  deviceIconStyle,
+  deviceName,
+  altText,
+  tooltipText
+}) {
+  useEffect(() => {}, [linkSafeguard])
   const iconSelector = {
     web: webIcon,
     'desktop-mobile': desktopMobileIcon,
