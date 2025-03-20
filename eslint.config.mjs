@@ -51,7 +51,7 @@ const eslintConfig = [
   },
   // Special config for Next.js pages and app directory
   {
-    files: ['**/pages/**/*.{ts,tsx}', '**/app/**/*.{ts,tsx}', '**/next.config.ts'],
+    files: ['**/pages/**/*.{ts,tsx}', '**/app/**/*.{ts,tsx}', '**/next.config.ts', '**/tailwind.config.ts', '**/postcss.config.ts', '**/postcss.config.mjs', '**/components.json', '**/sanity.config.ts', '**/sanity.cli.ts', '**/sanity.schema.ts', '**/sanity.studio.tsx', '**/sanity.types.ts'],
     rules: {
       'import/no-default-export': 'off'
     }
