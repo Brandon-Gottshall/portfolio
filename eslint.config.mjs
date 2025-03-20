@@ -19,7 +19,17 @@ const eslintConfig = [
       '**/.next/**/*',
       '**/build/**/*',
       '**/dist/**/*',
-      '**/Component Archive/**/*'
+      '**/Component Archive/**/*',
+      '**/next.config.ts',
+      '**/tailwind.config.ts',
+      '**/postcss.config.ts',
+      '**/postcss.config.mjs',
+      '**/components.json',
+      '**/sanity.config.ts',
+      '**/sanity.cli.ts',
+      '**/sanity.schema.ts',
+      '**/sanity.studio.tsx',
+      '**/sanity.types.ts'
     ]
   },
   // Base configurations from Next.js
@@ -30,7 +40,7 @@ const eslintConfig = [
   // General TypeScript/JavaScript rules
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
-    ignores: ['**/tmp_repos/**/*', '**/node_modules/**/*', '**/.next/**/*', '**/build/**/*', '**/dist/**/*', '**/Component Archive/**/*'],
+    ignores: ['**/tmp_repos/**/*', '**/node_modules/**/*', '**/.next/**/*', '**/build/**/*', '**/dist/**/*', '**/Component Archive/**/*', '**/next.config.ts', '**/tailwind.config.ts', '**/postcss.config.ts', '**/postcss.config.mjs', '**/components.json', '**/sanity.config.ts', '**/sanity.cli.ts', '**/sanity.schema.ts', '**/sanity.studio.tsx', '**/sanity.types.ts'],
     rules: {
       // Error handling patterns
       'no-else-return': 'error',
