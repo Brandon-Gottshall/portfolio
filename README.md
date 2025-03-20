@@ -23,17 +23,27 @@
 ### Core Features
 
 - **Navigation**
-  - [ ] Display initials (e.g., "BG") as default logo with animation to full name
-  - [ ] Add smooth dropdown animation (200-300ms)
-  - [ ] Add visual indicator for dropdown functionality
+  - [ ] Slow the animation of the logo initials (e.g., "BG") with animation to full name
+  - [ ] Add smooth rolling down dropdown animation (200-300ms)
+  - [X] Add visual indicator for dropdown functionality
   - [x] Implement light/dark mode theming
   - [x] Apply established color palette (navy, red, tan, cream)
 
 - **Content**
   - [ ] Connect homepage featured projects to Sanity CMS
-  - [ ] Add resume content and structure
+  - [ ] Add resume page with content from Sanity CMS
+    - [ ] Add resume content and structure to Sanity CMS
+    - [ ] Add resume page to navigation
+    - [ ] Implement resume page with content from Sanity CMS
+    - [ ] Add resume page to footer
+    - [ ] Add resume page to landing page
+    - [ ] Add resume page to contact page
   - [ ] Write and publish first blog post
+    - [ ] Brainstorm blog post ideas for next 5 posts
+    - [ ] Add blog post to Sanity CMS
   - [ ] Convert GitHub stats script to Vercel function with CRON updates
+    - [ ] Move the ruby script to a Vercel function
+    - [ ] Add the cron job to the Vercel config
 
 - **Social & Engagement**
   - [ ] Add social media buttons in strategic locations
