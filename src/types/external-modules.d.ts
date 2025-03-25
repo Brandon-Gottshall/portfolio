@@ -66,7 +66,7 @@ declare module 'sanity/cli' {
     dataset?: string
     [key: string]: unknown
   }
-  
+
   export function defineCliConfig(config: SanityCliConfig): SanityCliConfig
 }
 
@@ -85,7 +85,7 @@ declare module 'sanity' {
     }
     [key: string]: unknown
   }
-  
+
   export interface PortableTextBlock {
     _type: string
     children: Array<{
@@ -102,7 +102,7 @@ declare module 'sanity' {
     style?: string
     [key: string]: unknown
   }
-  
+
   export interface SchemaTypeOptions {
     name: string
     title?: string
@@ -130,11 +130,13 @@ declare module 'sanity' {
     }
     [key: string]: unknown
   }
-  
+
   export function defineConfig(config: Record<string, unknown>): unknown
   export function defineField(config: SchemaTypeOptions): SchemaTypeOptions
   export function defineType(config: SchemaTypeOptions): SchemaTypeOptions
-  export function defineArrayMember(config: SchemaTypeOptions): SchemaTypeOptions
+  export function defineArrayMember(
+    config: SchemaTypeOptions
+  ): SchemaTypeOptions
   export type SchemaTypeDefinition = SchemaTypeOptions
 }
 
@@ -144,7 +146,7 @@ declare module 'sanity/structure' {
     schemaType?: string
     [key: string]: unknown
   }
-  
+
   export interface StructureBuilder {
     list: () => {
       title: (title: string) => {
@@ -157,10 +159,12 @@ declare module 'sanity/structure' {
     divider: () => unknown
     documentTypeListItems: () => Array<{ getId: () => string | undefined }>
   }
-  
+
   export type StructureResolver = (S: StructureBuilder) => unknown
-  
-  export function structureTool(options?: { structure?: StructureResolver }): unknown
+
+  export function structureTool(options?: {
+    structure?: StructureResolver
+  }): unknown
 }
 
 declare module '@sanity/vision' {
@@ -168,19 +172,19 @@ declare module '@sanity/vision' {
     defaultApiVersion?: string
     [key: string]: unknown
   }
-  
+
   export function visionTool(options?: VisionToolOptions): unknown
 }
 
 // Next.js related modules
 declare module 'next-sanity/studio' {
   import type { ReactElement } from 'react'
-  
+
   export interface StudioProps {
     config: Record<string, unknown>
     [key: string]: unknown
   }
-  
+
   export const NextStudio: (props: StudioProps) => ReactElement
   export const metadata: Record<string, unknown>
   export const viewport: Record<string, unknown>
@@ -194,20 +198,23 @@ declare module 'next-sanity' {
     useCdn?: boolean
     [key: string]: unknown
   }
-  
+
   export function createClient(config: SanityClientConfig): {
-    fetch: <T = unknown>(query: string, params?: Record<string, unknown>) => Promise<T>
+    fetch: <T = unknown>(
+      query: string,
+      params?: Record<string, unknown>
+    ) => Promise<T>
     [key: string]: unknown
   }
-  
+
   export function defineLive<T>(config: Record<string, unknown>): T
 }
 
 declare module 'next-themes/dist/types' {
   import { ReactNode } from 'react'
-  
+
   export type Attribute = string | 'class' | 'data-theme' | 'data-color-scheme'
-  
+
   export interface ThemeProviderProps {
     attribute?: Attribute | Attribute[]
     defaultTheme?: string
@@ -218,8 +225,16 @@ declare module 'next-themes/dist/types' {
 
 // Fix for chart.js type imports with verbatimModuleSyntax
 declare module 'chart.js' {
-  export type ChartType = 'bar' | 'line' | 'pie' | 'doughnut' | 'radar' | 'polarArea' | 'bubble' | 'scatter'
-  
+  export type ChartType =
+    | 'bar'
+    | 'line'
+    | 'pie'
+    | 'doughnut'
+    | 'radar'
+    | 'polarArea'
+    | 'bubble'
+    | 'scatter'
+
   export interface ChartTypeRegistry {
     bar: {
       data: unknown[]
@@ -234,7 +249,7 @@ declare module 'chart.js' {
       options: unknown
     }
   }
-  
+
   export type ChartData<T extends ChartType = ChartType> = {
     labels?: unknown[]
     datasets: {
@@ -248,7 +263,7 @@ declare module 'chart.js' {
     }[]
     [key: string]: unknown
   }
-  
+
   export type ChartOptions<T extends ChartType = ChartType> = {
     responsive?: boolean
     maintainAspectRatio?: boolean
@@ -269,7 +284,7 @@ declare module 'chart.js' {
     }
     [key: string]: unknown
   }
-  
+
   export interface TooltipItem<T extends ChartType = ChartType> {
     datasetIndex: number
     index: number
@@ -282,7 +297,7 @@ declare module 'chart.js' {
     }
     [key: string]: unknown
   }
-  
+
   export interface ChartEvent {
     type: string
     native?: Event
@@ -290,7 +305,7 @@ declare module 'chart.js' {
     y: number
     [key: string]: unknown
   }
-  
+
   export interface LegendElement {
     text: string
     fillStyle: string
@@ -299,7 +314,7 @@ declare module 'chart.js' {
     strokeStyle: string
     [key: string]: unknown
   }
-  
+
   export interface LegendItem {
     text: string
     fillStyle: string
@@ -307,7 +322,7 @@ declare module 'chart.js' {
     index: number
     [key: string]: unknown
   }
-  
+
   // Chart components and plugins
   export const Chart: {
     register: (...items: unknown[]) => void
@@ -349,7 +364,12 @@ declare module 'react' {
   }
 
   // Ensure ReactElement is properly typed
-  interface ReactElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
+  interface ReactElement<
+    P = any,
+    T extends string | JSXElementConstructor<any> =
+      | string
+      | JSXElementConstructor<any>
+  > {
     type: T
     props: P
     key: string | null
@@ -357,8 +377,8 @@ declare module 'react' {
 
   // Update JSX namespace
   namespace JSX {
-    interface Element extends ReactElement<any, any> { }
-    
+    interface Element extends ReactElement<any, any> {}
+
     interface ElementClass extends React.Component<any> {
       render(): React.ReactNode
     }
@@ -386,37 +406,48 @@ declare module 'react' {
   ): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>
 
   // React 19 hooks and types
-  export function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>]
-  export function useEffect(effect: () => void | (() => void), deps?: unknown[]): void
+  export function useState<S>(
+    initialState: S | (() => S)
+  ): [S, Dispatch<SetStateAction<S>>]
+  export function useEffect(
+    effect: () => void | (() => void),
+    deps?: unknown[]
+  ): void
   export function useRef<T>(initialValue: T | null): { current: T | null }
   export function useMemo<T>(factory: () => T, deps: unknown[]): T
-  
+
   export type ForwardedRef<T> = Ref<T>
-  
+
   export type RefCallback<T> = (instance: T | null) => void
   export type RefObject<T> = { current: T | null }
   export type Ref<T> = RefCallback<T> | RefObject<T> | null
-  
+
   export type SetStateAction<S> = S | ((prevState: S) => S)
   export type Dispatch<A> = (value: A) => void
-  
+
   export type ForwardedRef<T> = Ref<T>
-  
-  export type ElementRef<T> = T extends React.ForwardRefExoticComponent<infer P> ? P extends { ref?: infer R } ? R : never : never
-  export type ComponentPropsWithoutRef<T> = T extends React.ComponentType<infer P> ? P : Record<string, unknown>
-  
+
+  export type ElementRef<T> =
+    T extends React.ForwardRefExoticComponent<infer P>
+      ? P extends { ref?: infer R }
+        ? R
+        : never
+      : never
+  export type ComponentPropsWithoutRef<T> =
+    T extends React.ComponentType<infer P> ? P : Record<string, unknown>
+
   export interface HTMLAttributes<T> {
     className?: string
     style?: Record<string, unknown>
     [key: string]: unknown
   }
-  
+
   export interface ButtonHTMLAttributes<T> extends HTMLAttributes<T> {
     type?: 'button' | 'submit' | 'reset'
     disabled?: boolean
     [key: string]: unknown
   }
-  
+
   export interface MouseEvent<T> {
     target: T
     currentTarget: T
@@ -431,13 +462,25 @@ declare module '../../../components/ui/card' {
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     children?: ReactNode
   }
-  
-  export const Card: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
-  export const CardContent: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
-  export const CardHeader: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
-  export const CardFooter: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
-  export const CardTitle: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
-  export const CardDescription: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+
+  export const Card: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
+  export const CardContent: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
+  export const CardHeader: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
+  export const CardFooter: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
+  export const CardTitle: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
+  export const CardDescription: ForwardRefExoticComponent<
+    CardProps & RefAttributes<HTMLDivElement>
+  >
 }
 
 declare module '../../../components/ui/badge' {
@@ -445,20 +488,32 @@ declare module '../../../components/ui/badge' {
     variant?: 'default' | 'secondary' | 'destructive' | 'outline'
     children?: ReactNode
   }
-  
-  export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLDivElement>>
-  export function badgeVariants(options: { variant?: BadgeProps['variant'] }): string
+
+  export const Badge: ForwardRefExoticComponent<
+    BadgeProps & RefAttributes<HTMLDivElement>
+  >
+  export function badgeVariants(options: {
+    variant?: BadgeProps['variant']
+  }): string
 }
 
 declare module '../../../components/ui/button' {
   export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+    variant?:
+      | 'default'
+      | 'destructive'
+      | 'outline'
+      | 'secondary'
+      | 'ghost'
+      | 'link'
     size?: 'default' | 'sm' | 'lg' | 'icon'
     asChild?: boolean
     children?: ReactNode
   }
-  
-  export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>
+
+  export const Button: ForwardRefExoticComponent<
+    ButtonProps & RefAttributes<HTMLButtonElement>
+  >
 }
 
 // GitHub stats types
@@ -499,14 +554,20 @@ interface CSSStats {
   commits?: number
   bytes?: number
   tools?: Record<string, { repositories: number; commits: number }>
-  variants?: Record<string, {
-    file_types?: Record<string, {
-      repositories: number
-      commits: number
-      bytes: number
-    }>
-    [key: string]: unknown
-  }>
+  variants?: Record<
+    string,
+    {
+      file_types?: Record<
+        string,
+        {
+          repositories: number
+          commits: number
+          bytes: number
+        }
+      >
+      [key: string]: unknown
+    }
+  >
   summary?: {
     repositories?: number
     commits?: number
@@ -528,4 +589,7 @@ interface CachedStats {
   repoCount: number
   tools: Record<string, DetailedStats>
   found_emails: string[]
-} 
+}
+
+// Type declarations for modules without definition files
+declare module 'sanity/structure'

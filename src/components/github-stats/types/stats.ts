@@ -19,14 +19,20 @@ export interface DetailedStats extends BaseStats {
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
     tailwind?: {
       repositories: number
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
   }
   tools?: Record<string, { repositories: number; commits: number }>
@@ -45,14 +51,20 @@ export interface CSSStats extends DetailedStats {
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
     tailwind: {
       repositories: number
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
   }
 }
@@ -72,7 +84,7 @@ export interface FileTypeStats {
 }
 
 export interface FrameworkStats extends BaseStats {
-  tools?: Record<string, { repositories: number, commits: number }>
+  tools?: Record<string, { repositories: number; commits: number }>
 }
 
 export interface StatsItem extends BaseStats {
@@ -80,7 +92,7 @@ export interface StatsItem extends BaseStats {
   percentage: number
   summary?: CSSStats['summary']
   variants?: CSSStats['variants']
-  tools?: Record<string, { repositories: number, commits: number }>
+  tools?: Record<string, { repositories: number; commits: number }>
 }
 
 export interface ToolStats {
@@ -89,10 +101,13 @@ export interface ToolStats {
     commits: number
     percentage_of_all_commits: number
   }
-  tools: Record<string, {
-    repositories: number
-    commits: number
-  }>
+  tools: Record<
+    string,
+    {
+      repositories: number
+      commits: number
+    }
+  >
   top_tools: Array<{
     name: string
     commits: number
@@ -155,14 +170,20 @@ export interface CSSProcessedStat extends ProcessedStat {
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
     tailwind: {
       repositories: number
       bytes: number
       commits: number
       percentage_of_css: number
-      file_types: Record<string, { files: number; bytes: number; commits: number }>
+      file_types: Record<
+        string,
+        { files: number; bytes: number; commits: number }
+      >
     }
   }
   summary: {
@@ -177,7 +198,7 @@ export type StatItem = ProcessedStat | CSSProcessedStat
 
 // Type guard to check if a stat is the complex CSS structure
 export function isCSSStats(stat: StatItem): stat is CSSProcessedStat {
-  return (
+  return !!(
     'summary' in stat &&
     'variants' in stat &&
     stat.summary &&

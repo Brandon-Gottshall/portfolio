@@ -32,7 +32,82 @@ import { ToolsDetailedView } from './components/ToolsDetailedView'
 
 import type { CachedStats, Props, DetailedStats, CSSStats } from './types/stats'
 
-const typedCachedStats = cachedStats as CachedStats
+// Create an adapter function to properly map the JSON data to the expected types
+function adaptCachedStats(rawData: any): CachedStats {
+  // Map languages to the correct interface structure
+  const languages: Record<string, DetailedStats | CSSStats> = {}
+
+  if (rawData.languages) {
+    Object.entries(rawData.languages).forEach(([lang, data]: [string, any]) => {
+      if (lang === 'CSS' && data.summary && data.variants) {
+        // Handle CSS with its special structure
+        languages[lang] = {
+          name: lang,
+          commits: data.summary.commits || 0,
+          repositories: data.summary.repositories || 0,
+          percentage: data.summary.percentage_of_all_commits || 0,
+          summary: {
+            repositories: data.summary.repositories || 0,
+            commits: data.summary.commits || 0,
+            bytes: data.summary.bytes || 0,
+            percentage_of_all_commits:
+              data.summary.percentage_of_all_commits || 0
+          },
+          variants: {
+            vanilla: data.variants.vanilla || {
+              repositories: 0,
+              bytes: 0,
+              commits: 0,
+              percentage_of_css: 0,
+              file_types: {}
+            },
+            tailwind: data.variants.tailwind || {
+              repositories: 0,
+              bytes: 0,
+              commits: 0,
+              percentage_of_css: 0,
+              file_types: {}
+            }
+          }
+        }
+      } else {
+        // Handle regular languages
+        languages[lang] = {
+          name: lang,
+          commits: data.commits || 0,
+          repositories: data.repositories || 0,
+          bytes: data.bytes || 0,
+          percentage: 0,
+          summary: {
+            repositories: data.repositories || 0,
+            commits: data.commits || 0,
+            bytes: data.bytes || 0
+          }
+        }
+      }
+    })
+  }
+
+  return {
+    lastUpdated: rawData.lastUpdated || new Date().toISOString(),
+    repoCount: rawData.repoCount || 0,
+    languages,
+    frameworks: rawData.frameworks || {},
+    tools: rawData.tools || {},
+    summary: rawData.summary || {
+      total_repos: 0,
+      owned_repos: 0,
+      contributed_repos: 0,
+      total_commits: 0,
+      public_repos: 0,
+      private_repos: 0,
+      forks: 0
+    },
+    found_emails: rawData.found_emails || []
+  }
+}
+
+const typedCachedStats = adaptCachedStats(cachedStats)
 
 interface ProcessedStat {
   name: string
@@ -94,8 +169,23 @@ function processStatEntry(
 ): ProcessedStat {
   const processed = createBaseStat(name, stat, type, totalCommits, totalBytes)
 
-  if ('tools' in stat) processed.tools = stat.tools
-  if ('variants' in stat) processed.variants = stat.variants
+  if ('tools' in stat && stat.tools) processed.tools = stat.tools
+
+  // Add a type guard to properly handle CSS stats variants
+  if (
+    'variants' in stat &&
+    stat.variants &&
+    'vanilla' in stat.variants &&
+    'tailwind' in stat.variants &&
+    stat.variants.vanilla &&
+    stat.variants.tailwind
+  ) {
+    // Only assign if it's a complete CSS variants object
+    processed.variants = {
+      vanilla: stat.variants.vanilla,
+      tailwind: stat.variants.tailwind
+    }
+  }
 
   return processed
 }
@@ -119,7 +209,9 @@ function useStatsProcessing(
     )
 
     const processedStats = Object.entries(stats)
-      .map(([name, stat]) => processStatEntry(name, stat, totalCommits, totalBytes, type))
+      .map(([name, stat]) =>
+        processStatEntry(name, stat, totalCommits, totalBytes, type)
+      )
       .sort((a, b) => b.percentage - a.percentage)
 
     // Add CSS handling logic
@@ -235,13 +327,16 @@ function StatsVisualization({
 
   const topItems = processedStats.slice(0, 4)
   const smallItems = processedStats.slice(4)
-  
-  const otherPercentage = smallItems.reduce((sum, item) => sum + item.percentage, 0)
+
+  const otherPercentage = smallItems.reduce(
+    (sum, item) => sum + item.percentage,
+    0
+  )
   const otherCommits = smallItems.reduce((sum, item) => sum + item.commits, 0)
   const otherRepos = new Set(
     smallItems.flatMap((item) => Array(item.repositories).fill(0))
   ).size
-  
+
   const finalDonutStats = [
     ...topItems,
     {
@@ -250,7 +345,9 @@ function StatsVisualization({
       commits: otherCommits,
       repositories: otherRepos,
       bytes: smallItems.reduce((sum, item) => sum + (item.bytes || 0), 0),
-      bytesFormatted: formatBytes(smallItems.reduce((sum, item) => sum + (item.bytes || 0), 0))
+      bytesFormatted: formatBytes(
+        smallItems.reduce((sum, item) => sum + (item.bytes || 0), 0)
+      )
     }
   ]
 
@@ -347,7 +444,9 @@ function StatsVisualization({
 }
 
 function useGithubStats(type: Props['type']) {
-  const [stats, setStats] = useState<Record<string, DetailedStats | CSSStats>>({})
+  const [stats, setStats] = useState<Record<string, DetailedStats | CSSStats>>(
+    {}
+  )
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
@@ -358,18 +457,21 @@ function useGithubStats(type: Props['type']) {
         // Convert ToolStats to DetailedStats for the tools type
         const toolStats: Record<string, DetailedStats> = {}
         Object.entries(typedCachedStats.tools).forEach(([key, value]) => {
-          toolStats[key] = {
-            name: key,
-            commits: value.summary.commits,
-            repositories: value.summary.repositories,
-            percentage: value.summary.percentage_of_all_commits,
-            summary: {
-              repositories: value.summary.repositories,
-              commits: value.summary.commits,
-              bytes: 0,
-              percentage_of_all_commits: value.summary.percentage_of_all_commits
-            },
-            tools: value.tools
+          if (value.summary) {
+            toolStats[key] = {
+              name: key,
+              commits: value.summary?.commits || 0,
+              repositories: value.summary?.repositories || 0,
+              percentage: value.summary?.percentage_of_all_commits || 0,
+              summary: {
+                repositories: value.summary?.repositories || 0,
+                commits: value.summary?.commits || 0,
+                bytes: 0,
+                percentage_of_all_commits:
+                  value.summary?.percentage_of_all_commits || 0
+              },
+              tools: value.tools
+            }
           }
         })
         setStats(toolStats)
@@ -464,26 +566,38 @@ export function GithubLanguageStats({ type, showBoth = false }: Props) {
   const { stats, loading, error, lastUpdated } = useGithubStats(type)
   const isDarkMode = useDarkMode()
   const [activeSegment, setActiveSegment] = useState<number | null>(null)
-  
+
   // Add debug logging
   console.log(`[${type}] Raw stats:`, stats)
-  
+
   const processedStats = useStatsProcessing(stats, type)
-  
+
   // Add debug logging
   console.log(`[${type}] Processed stats:`, processedStats)
 
-  if (loading) return <div className='flex justify-center items-center h-48 text-navy dark:text-cream'><Loader2 className='w-6 h-6 animate-spin' /></div>
-  if (error) return <div className='flex justify-center items-center h-48 text-blue dark:text-blue-accent'><p className='text-sm'>{error}</p></div>
+  if (loading)
+    return (
+      <div className='flex justify-center items-center h-48 text-navy dark:text-cream'>
+        <Loader2 className='w-6 h-6 animate-spin' />
+      </div>
+    )
+  if (error)
+    return (
+      <div className='flex justify-center items-center h-48 text-blue dark:text-blue-accent'>
+        <p className='text-sm'>{error}</p>
+      </div>
+    )
   if (!processedStats) return <NoDataWarning />
 
-  return <StatsContent 
-    processedStats={processedStats}
-    isDarkMode={isDarkMode}
-    type={type}
-    activeSegment={activeSegment}
-    setActiveSegment={setActiveSegment}
-    lastUpdated={lastUpdated}
-    showBoth={showBoth}
-  />
+  return (
+    <StatsContent
+      processedStats={processedStats}
+      isDarkMode={isDarkMode}
+      type={type}
+      activeSegment={activeSegment}
+      setActiveSegment={setActiveSegment}
+      lastUpdated={lastUpdated}
+      showBoth={showBoth}
+    />
+  )
 }
