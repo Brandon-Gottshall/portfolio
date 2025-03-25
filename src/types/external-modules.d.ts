@@ -16,6 +16,20 @@ import type {
   ForwardRefRenderFunction
 } from 'react'
 
+// Add React namespace declaration
+declare namespace React {
+  interface Component<P = {}, S = {}> {
+    render(): ReactNode
+  }
+
+  interface FunctionComponent<P = {}> {
+    (props: P, context?: any): ReactNode | null
+    displayName?: string
+    defaultProps?: Partial<P>
+    propTypes?: unknown
+  }
+}
+
 /**
  * Type declarations for external modules without proper TypeScript support
  * These declarations provide minimal but type-safe interfaces
@@ -33,10 +47,6 @@ declare module '@eslint/eslintrc' {
     constructor(options?: FlatCompatOptions)
     config(options: Record<string, unknown>): Array<Record<string, unknown>>
     extends(...configs: string[]): Array<Record<string, unknown>>
-  }
-
-  export const Legacy: {
-    [key: string]: unknown
   }
 }
 
@@ -78,27 +88,35 @@ declare module 'sanity' {
     [key: string]: unknown
   }
 
-  export interface Image {
-    asset: {
-      _ref: string
-      _type: string
-    }
+  export interface Reference {
+    _ref: string
+    _type: 'reference'
     [key: string]: unknown
   }
 
-  export interface PortableTextBlock {
+  export interface SanityImage {
+    _type: 'image'
+    asset: Reference
+    [key: string]: unknown
+  }
+
+  export interface PortableTextSpan {
+    _type: 'span'
+    text: string
+    marks?: string[]
+    [key: string]: unknown
+  }
+
+  export interface PortableTextMark {
+    _key: string
     _type: string
-    children: Array<{
-      _type: string
-      text: string
-      marks?: string[]
-      [key: string]: unknown
-    }>
-    markDefs?: Array<{
-      _key: string
-      _type: string
-      [key: string]: unknown
-    }>
+    [key: string]: unknown
+  }
+
+  export interface SanityPortableTextBlock {
+    _type: 'block'
+    children: PortableTextSpan[]
+    markDefs?: PortableTextMark[]
     style?: string
     [key: string]: unknown
   }
@@ -137,7 +155,6 @@ declare module 'sanity' {
   export function defineArrayMember(
     config: SchemaTypeOptions
   ): SchemaTypeOptions
-  export type SchemaTypeDefinition = SchemaTypeOptions
 }
 
 declare module 'sanity/structure' {
@@ -147,17 +164,20 @@ declare module 'sanity/structure' {
     [key: string]: unknown
   }
 
+  export interface ListBuilderType {
+    title(title: string): ListBuilderType
+    items(items: unknown[]): unknown
+  }
+
+  export interface DocumentTypeListItemType {
+    title(title: string): unknown
+  }
+
   export interface StructureBuilder {
-    list: () => {
-      title: (title: string) => {
-        items: (items: unknown[]) => unknown
-      }
-    }
-    documentTypeListItem: (type: string) => {
-      title: (title: string) => unknown
-    }
-    divider: () => unknown
-    documentTypeListItems: () => Array<{ getId: () => string | undefined }>
+    list(): ListBuilderType
+    documentTypeListItem(type: string): DocumentTypeListItemType
+    divider(): unknown
+    documentTypeListItems(): Array<{ getId(): string | undefined }>
   }
 
   export type StructureResolver = (S: StructureBuilder) => unknown
@@ -178,14 +198,12 @@ declare module '@sanity/vision' {
 
 // Next.js related modules
 declare module 'next-sanity/studio' {
-  import type { ReactElement } from 'react'
-
   export interface StudioProps {
     config: Record<string, unknown>
     [key: string]: unknown
   }
 
-  export const NextStudio: (props: StudioProps) => ReactElement
+  export const NextStudio: any // Using any since we can't reference React types without conflicts
   export const metadata: Record<string, unknown>
   export const viewport: Record<string, unknown>
 }
@@ -593,3 +611,54 @@ interface CachedStats {
 
 // Type declarations for modules without definition files
 declare module 'sanity/structure'
+
+declare module '@eslint/js' {
+  const js: {
+    configs: {
+      recommended: any
+      all: any
+    }
+  }
+  export default js
+}
+
+// Fix JSX namespace
+declare global {
+  namespace JSX {
+    interface Element extends React.ReactElement<any, any> {}
+    interface ElementClass extends React.Component<any> {}
+    interface ElementAttributesProperty {
+      props: {}
+    }
+    interface ElementChildrenAttribute {
+      children: {}
+    }
+    interface IntrinsicAttributes {
+      key?: string | number
+    }
+    interface IntrinsicElements {
+      [elemName: string]: any
+    }
+  }
+}
+
+// Remove duplicate type declarations and fix React references
+export interface ForwardRefExoticComponent<P>
+  extends React.FunctionComponent<P> {
+  displayName?: string
+  defaultProps?: Partial<P>
+  propTypes?: unknown
+}
+
+export interface ReactElement<
+  P = any,
+  T extends string | React.ComponentType<any> =
+    | string
+    | React.ComponentType<any>
+> {
+  type: T
+  props: P
+  key: string | null
+}
+
+// Remove unused type declarations and exports that are causing ESLint errors

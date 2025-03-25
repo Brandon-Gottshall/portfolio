@@ -7,6 +7,9 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "bundler",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 } 
