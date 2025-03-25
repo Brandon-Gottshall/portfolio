@@ -1,3 +1,21 @@
+import type {
+  ReactNode,
+  ReactElement,
+  ForwardRefExoticComponent,
+  RefAttributes,
+  ComponentPropsWithoutRef,
+  ElementRef,
+  HTMLAttributes,
+  ButtonHTMLAttributes,
+  MouseEvent,
+  RefCallback,
+  RefObject,
+  Ref,
+  SetStateAction,
+  Dispatch,
+  ForwardRefRenderFunction
+} from 'react'
+
 /**
  * Type declarations for external modules without proper TypeScript support
  * These declarations provide minimal but type-safe interfaces
@@ -87,14 +105,12 @@ declare module '@sanity/vision' {
 
 // Next.js related modules
 declare module 'next-sanity/studio' {
-  import { ReactNode } from 'react'
-  
   export interface StudioProps {
     config: Record<string, unknown>
     [key: string]: unknown
   }
   
-  export const NextStudio: (props: StudioProps) => ReactNode
+  export const NextStudio: (props: StudioProps) => ReactElement
   export const metadata: Record<string, unknown>
   export const viewport: Record<string, unknown>
 }
@@ -236,10 +252,75 @@ declare module 'chart.js' {
 
 // Fix for React type imports with verbatimModuleSyntax
 declare module 'react' {
-  export interface ReactNode {
-    // Core React node types
-    [key: string]: unknown
+  import type {
+    ReactNode,
+    ReactElement,
+    ForwardRefExoticComponent,
+    RefAttributes,
+    ComponentPropsWithoutRef,
+    ElementRef,
+    HTMLAttributes,
+    ButtonHTMLAttributes,
+    MouseEvent,
+    RefCallback,
+    RefObject,
+    Ref,
+    SetStateAction,
+    Dispatch,
+    ForwardRefRenderFunction
+  } from 'react'
+
+  // Extend ForwardRefExoticComponent to include displayName
+  interface ForwardRefExoticComponent<P> extends React.FunctionComponent<P> {
+    displayName?: string
+    defaultProps?: Partial<P>
+    propTypes?: unknown
   }
+
+  // Ensure ReactElement is properly typed
+  interface ReactElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
+    type: T
+    props: P
+    key: string | null
+  }
+
+  // Update JSX namespace
+  namespace JSX {
+    interface Element extends ReactElement<any, any> { }
+    
+    interface ElementClass extends React.Component<any> {
+      render(): React.ReactNode
+    }
+
+    interface ElementAttributesProperty {
+      props: {}
+    }
+
+    interface ElementChildrenAttribute {
+      children: {}
+    }
+
+    interface IntrinsicAttributes {
+      key?: string | number
+    }
+
+    interface IntrinsicElements {
+      [elemName: string]: any
+    }
+  }
+
+  // Ensure forwardRef is properly typed
+  export function forwardRef<T, P = {}>(
+    render: ForwardRefRenderFunction<T, P>
+  ): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>
+
+  // React 19 hooks and types
+  export function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>]
+  export function useEffect(effect: () => void | (() => void), deps?: unknown[]): void
+  export function useRef<T>(initialValue: T | null): { current: T | null }
+  export function useMemo<T>(factory: () => T, deps: unknown[]): T
+  
+  export type ForwardedRef<T> = Ref<T>
   
   export type RefCallback<T> = (instance: T | null) => void
   export type RefObject<T> = { current: T | null }
@@ -249,32 +330,6 @@ declare module 'react' {
   export type Dispatch<A> = (value: A) => void
   
   export type ForwardedRef<T> = Ref<T>
-  
-  namespace JSX {
-    interface Element {
-      type?: unknown
-      props?: unknown
-      key?: unknown
-    }
-    
-    interface IntrinsicElements {
-      [elemName: string]: {
-        [propName: string]: unknown
-        children?: unknown
-        className?: string
-        style?: Record<string, unknown>
-      }
-    }
-  }
-  
-  // React 19 hooks and types
-  export function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>]
-  export function useEffect(effect: () => void | (() => void), deps?: unknown[]): void
-  export function useRef<T>(initialValue: T | null): { current: T | null }
-  export function useMemo<T>(factory: () => T, deps: unknown[]): T
-  
-  export function forwardRef<T, P = {}>(render: (props: P, ref: ForwardedRef<T>) => ReactNode): 
-    (props: P & { ref?: ForwardedRef<T> }) => ReactNode
   
   export type ElementRef<T> = T extends React.ForwardRefExoticComponent<infer P> ? P extends { ref?: infer R } ? R : never : never
   export type ComponentPropsWithoutRef<T> = T extends React.ComponentType<infer P> ? P : Record<string, unknown>
@@ -302,35 +357,29 @@ declare module 'react' {
 
 // UI component paths
 declare module '../../../components/ui/card' {
-  import { HTMLAttributes, ReactNode, ForwardedRef } from 'react'
-  
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     children?: ReactNode
   }
   
-  export const Card: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
-  export const CardContent: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
-  export const CardHeader: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
-  export const CardFooter: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
-  export const CardTitle: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
-  export const CardDescription: (props: CardProps & { ref?: ForwardedRef<HTMLDivElement> }) => ReactNode
+  export const Card: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+  export const CardContent: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+  export const CardHeader: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+  export const CardFooter: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+  export const CardTitle: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
+  export const CardDescription: ForwardRefExoticComponent<CardProps & RefAttributes<HTMLDivElement>>
 }
 
 declare module '../../../components/ui/badge' {
-  import { HTMLAttributes, ReactNode } from 'react'
-  
   export interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
     variant?: 'default' | 'secondary' | 'destructive' | 'outline'
     children?: ReactNode
   }
   
-  export const Badge: (props: BadgeProps) => ReactNode
+  export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLDivElement>>
   export function badgeVariants(options: { variant?: BadgeProps['variant'] }): string
 }
 
 declare module '../../../components/ui/button' {
-  import { ButtonHTMLAttributes, ReactNode, ForwardedRef } from 'react'
-  
   export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
     size?: 'default' | 'sm' | 'lg' | 'icon'
@@ -338,7 +387,7 @@ declare module '../../../components/ui/button' {
     children?: ReactNode
   }
   
-  export const Button: (props: ButtonProps & { ref?: ForwardedRef<HTMLButtonElement> }) => ReactNode
+  export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>
 }
 
 // GitHub stats types
