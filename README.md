@@ -92,3 +92,7 @@
 - [ ] Add Open Graph metadata
 - [ ] Add structured data (JSON-LD)
 - [ ] Implement advanced content relationships in CMS
+- [ ] Improve type safety by replacing `any` types in declaration files
+  - [ ] Check for official `@types` packages for external modules
+  - [ ] Replace remaining `any` types with `unknown` or more specific types
+  - [ ] Enable stricter TypeScript compiler options (noImplicitAny)
