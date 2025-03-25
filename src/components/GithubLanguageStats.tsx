@@ -745,7 +745,7 @@ const RepositoryError = () => (
       </span>
     </div>
     <p className="mt-1 text-xs text-red-600/90 dark:text-red-300/90">
-      Commits were detected but couldn't be associated with any repository. This
+      Commits were detected but couldn&apos;t be associated with any repository. This
       usually happens with generated code or when repository detection fails.
     </p>
   </div>

@@ -16,9 +16,10 @@ const config: Linter.FlatConfig[] = [
       'build/**',
       'dist/**',
       '*.d.ts',
+      'tmp_repos/**',
+      'Component Archive/**',
       '!sanity.cli.ts',
-      '!sanity.config.ts',
-      'tmp_repos/**'
+      '!sanity.config.ts'
     ]
   },
   ...compat.config({
