@@ -1,44 +1,60 @@
 export interface BaseStats {
-  repositories: number
+  name: string
   commits: number
+  repositories: number
   bytes?: number
+  percentage: number
 }
 
 export interface DetailedStats extends BaseStats {
   summary?: {
     repositories: number
-    bytes: number
     commits: number
-    percentage_of_all_commits: number
+    bytes?: number
+    percentage_of_all_commits?: number
   }
-  variants?: CSSStats['variants']
-  tools?: Record<string, { repositories: number, commits: number }>
+  variants?: {
+    vanilla?: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+    tailwind?: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+  }
+  tools?: Record<string, { repositories: number; commits: number }>
 }
 
-export interface CSSStats {
+export interface CSSStats extends DetailedStats {
   summary: {
     repositories: number
-    bytes: number
     commits: number
+    bytes: number
     percentage_of_all_commits: number
   }
   variants: {
-    vanilla: CSSVariant
-    tailwind: CSSVariant & { usage: Record<string, number> }
+    vanilla: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+    tailwind: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
   }
-  timeline: {
-    first_used: string
-    first_tailwind: string | null
-    recent_activity: unknown[]
-  }
-  top_repos: Array<{
-    name: string
-    commits: number
-    bytes: number
-    has_tailwind: boolean
-    tailwind_commits: number
-    vanilla_commits: number
-  }>
 }
 
 export interface CSSVariant {
@@ -86,6 +102,10 @@ export interface ToolStats {
 
 export interface CachedStats {
   lastUpdated: string
+  repoCount: number
+  languages: Record<string, DetailedStats | CSSStats>
+  frameworks: Record<string, DetailedStats>
+  tools: Record<string, DetailedStats>
   summary: {
     total_repos: number
     owned_repos: number
@@ -95,10 +115,6 @@ export interface CachedStats {
     private_repos: number
     forks: number
   }
-  repoCount: number
-  languages: Record<string, DetailedStats | CSSStats>
-  frameworks: Record<string, DetailedStats>
-  tools: Record<string, ToolStats>
   found_emails: string[]
 }
 
@@ -107,13 +123,72 @@ export interface Props {
   showBoth?: boolean
 }
 
-export interface ProcessedStat {
+export interface ProcessedStat extends DetailedStats {
   name: string
-  commits: number
-  repositories: number
-  bytes: number
-  bytesFormatted: string
   percentage: number
-  tools?: Record<string, { repositories: number; commits: number }>
-  variants?: CSSStats['variants']
+}
+
+export interface CSSProcessedStat extends CSSStats {
+  name: string
+  percentage: number
+}
+
+export type StatItem = ProcessedStat | CSSProcessedStat
+
+// Type guard to check if a stat is the complex CSS structure
+export function isCSSStats(stat: StatItem): stat is CSSProcessedStat {
+  return (
+    'summary' in stat &&
+    'variants' in stat &&
+    stat.summary &&
+    stat.variants &&
+    'vanilla' in stat.variants &&
+    'tailwind' in stat.variants
+  )
+}
+
+// Type guard to check if a stat has tools
+export function isToolCategory(stat: StatItem): boolean {
+  return (
+    stat &&
+    typeof stat === 'object' &&
+    'tools' in stat &&
+    typeof stat.tools === 'object' &&
+    Object.keys(stat.tools || {}).length > 0
+  )
+}
+
+// Helper function to check if a stat has detailed data
+export function hasDetailedData(stat: StatItem): boolean {
+  return (
+    stat &&
+    // Check for CSS structure with variants
+    (('variants' in stat && typeof stat.variants === 'object') ||
+      // Check for tools structure
+      ('tools' in stat &&
+        typeof stat.tools === 'object' &&
+        Object.keys(stat.tools || {}).length > 0))
+  )
+}
+
+// Helper functions to safely get data from stats
+export function getCommits(stat: StatItem): number {
+  if (isCSSStats(stat)) {
+    return stat.summary.commits
+  }
+  return stat.commits
+}
+
+export function getRepositories(stat: StatItem): number {
+  if (isCSSStats(stat)) {
+    return stat.summary.repositories
+  }
+  return stat.repositories
+}
+
+export function getBytes(stat: StatItem): number | undefined {
+  if (isCSSStats(stat)) {
+    return stat.summary.bytes
+  }
+  return stat.bytes
 }

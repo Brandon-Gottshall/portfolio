@@ -8,12 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "update-github-stats": "bun run scripts/update-github-stats.ts",
-    "lint:ts": "tsc --noEmit",
+    "lint:ts": "tsc --noEmit --project tsconfig.json",
     "lint:eslint": "eslint .",
     "lint:eslint:cached": "eslint . --cache",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
@@ -46,6 +46,9 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@sanity/types": "^3.80.1",
+    "@types/eslint": "^9.6.1",
+    "@types/eslint__eslintrc": "^3.3.0",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19",
@@ -56,6 +59,7 @@
     "eslint-config-next": "15.2.1",
     "eslint-config-prettier": "^10.1.1",
     "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.2.3",
     "husky": "^8.0.0",
     "jiti": "^2.4.2",

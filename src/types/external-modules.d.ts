@@ -38,6 +38,13 @@ declare module 'sanity/cli' {
 }
 
 declare module 'sanity' {
+  export interface Rule {
+    required(): Rule
+    max(limit: number): Rule
+    min(limit: number): Rule
+    [key: string]: unknown
+  }
+
   export interface Image {
     asset: {
       _ref: string
@@ -71,13 +78,18 @@ declare module 'sanity' {
       name: string
       type: string
       title?: string
-      validation?: (Rule: any) => any
+      validation?: (rule: Rule) => Rule
       options?: Record<string, unknown>
       [key: string]: unknown
     }>
     preview?: {
       select?: Record<string, string>
-      prepare?: (selection: any) => {
+      prepare?: (selection: {
+        title?: string
+        subtitle?: string
+        media?: unknown
+        [key: string]: unknown
+      }) => {
         title?: string
         subtitle?: string
         media?: unknown
@@ -115,7 +127,7 @@ declare module 'sanity/structure' {
   
   export type StructureResolver = (S: StructureBuilder) => unknown
   
-  export function structureTool(options: { structure?: StructureResolver }): unknown
+  export function structureTool(options?: { structure?: StructureResolver }): unknown
 }
 
 declare module '@sanity/vision' {
