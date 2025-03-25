@@ -1,66 +1,95 @@
 import { FlatCompat } from '@eslint/eslintrc'
-import tsParser from '@typescript-eslint/parser'
+import * as path from 'node:path'
+// Using require to avoid TypeScript module resolution issues
+const parser = require('@typescript-eslint/parser')
+const tseslint = require('@typescript-eslint/eslint-plugin')
 
 const compat = new FlatCompat({
-  baseDirectory: process.cwd(),
-  // This is a basic recommended config
-  recommendedConfig: {
-    rules: {
-      'no-console': 'warn',
-      'no-debugger': 'warn',
-      'no-unused-vars': 'warn'
-    }
-  }
+  baseDirectory: process.cwd()
 })
 
 // Import Next.js config
-const nextConfig = compat.extends('next/core-web-vitals')[0]
+const nextConfig = compat.extends('next/core-web-vitals')[0] || {}
 
 export default [
-  // Configure TypeScript files
+  // Global configuration
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: true
+    }
+  },
+
+  // Configuration for TypeScript files
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
     languageOptions: {
-      parser: tsParser,
+      parser: parser,
       parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: process.cwd(),
-        sourceType: 'module',
+        project: path.resolve('./tsconfig.json'),
         ecmaVersion: 'latest',
+        sourceType: 'module',
         ecmaFeatures: {
           jsx: true
         }
       }
+    },
+    plugins: {
+      '@typescript-eslint': tseslint
+    },
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_'
+        }
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn'
     }
   },
-  // Include Next.js config with updated languageOptions
+
+  // Next.js configuration
   {
-    ...nextConfig,
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    ...(nextConfig || {}),
     languageOptions: {
-      ...nextConfig.languageOptions,
       parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: process.cwd(),
+        project: path.resolve('./tsconfig.json'),
+        ecmaVersion: 'latest',
         sourceType: 'module'
       }
     }
   },
-  // Basic rules config
+
+  // Configuration for type declaration files
   {
-    files: [
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.mts',
-      '**/*.cts'
-    ],
+    files: ['**/*.d.ts'],
+    languageOptions: {
+      parser: parser
+    },
     rules: {
-      'no-console': 'warn',
-      'no-debugger': 'warn',
-      'no-unused-vars': 'warn'
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-undef': 'off'
     }
   },
+
+  // Special configuration for tmp_repos directory
+  {
+    files: [
+      'tmp_repos/**/*.js',
+      'tmp_repos/**/*.jsx',
+      'tmp_repos/**/*.ts',
+      'tmp_repos/**/*.tsx'
+    ],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module'
+    },
+    rules: {}
+  },
+
   // Ignore patterns
   {
     ignores: [
@@ -76,34 +105,9 @@ export default [
       'Component Archive/**',
       '*.tsbuildinfo',
       'next-env.d.ts',
-      'eslint.config.js'
+      'eslint.config.js',
+      '!sanity.cli.ts',
+      '!sanity.config.ts'
     ]
-  },
-  // Special configuration for tmp_repos directory
-  {
-    files: [
-      'tmp_repos/**/*.js',
-      'tmp_repos/**/*.jsx',
-      'tmp_repos/**/*.ts',
-      'tmp_repos/**/*.tsx'
-    ],
-    languageOptions: {
-      parser: undefined,
-      ecmaVersion: 'latest',
-      sourceType: 'module'
-    },
-    rules: {}
-  },
-  // Special configuration for type declaration files
-  {
-    files: ['**/*.d.ts'],
-    languageOptions: {
-      parser: tsParser
-    },
-    rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'no-undef': 'off'
-    }
   }
 ]
