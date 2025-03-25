@@ -1,3 +1,7 @@
+// @ts-ignore
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Properly type these definitions during PMVP phase (see README.md)
+
 import type {
   ReactNode,
   ReactElement,
