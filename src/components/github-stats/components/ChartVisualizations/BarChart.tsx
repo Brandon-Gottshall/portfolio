@@ -5,10 +5,14 @@ import {
   LinearScale,
   BarElement,
   Tooltip,
-  Legend,
+  Legend
+} from 'chart.js'
+import type {
   ChartData,
   ChartOptions,
-  TooltipItem
+  TooltipItem,
+  Chart,
+  ChartDataset
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { getTooltipConfig } from '../../utils/chart-config'
@@ -101,7 +105,7 @@ export function BarChart({
   activeSegment,
   onSegmentHover
 }: BarChartProps) {
-  const chartRef = useRef<ChartJS<'bar'>>(null)
+  const chartRef = useRef<Chart<'bar'>>(null)
 
   const chartColors = [
     'rgba(30, 136, 229, 0.95)', // blue
@@ -122,7 +126,7 @@ export function BarChart({
       ),
       borderWidth: 0,
       borderRadius: 4
-    }]
+    } as ChartDataset<'bar', number[]>]
   }
 
   useEffect(() => {

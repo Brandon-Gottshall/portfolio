@@ -2,7 +2,7 @@ import React from 'react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { StaleDataWarning, ZeroCommitWarning, TinyRepoWarning } from '../utils/warnings'
-import { ProcessedStat } from '../types/stats'
+import type { ProcessedStat } from '../types/stats'
 import { shouldShowZeroCommitWarning, shouldShowRepoWarning } from '../utils/calculations'
 import { ToolCategoryBreakdown } from './ToolCategoryBreakdown'
 

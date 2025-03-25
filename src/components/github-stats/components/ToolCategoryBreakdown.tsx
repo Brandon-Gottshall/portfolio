@@ -1,6 +1,6 @@
 import { getSafePercentage } from '../utils/formatters'
 
-import { JSX } from 'react'
+import type { JSX } from 'react'
 
 interface ToolCategoryBreakdownProps {
   name: string

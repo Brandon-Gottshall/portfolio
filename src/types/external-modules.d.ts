@@ -67,6 +67,22 @@ declare module 'sanity' {
     name: string
     title?: string
     type: string
+    fields?: Array<{
+      name: string
+      type: string
+      title?: string
+      validation?: (Rule: any) => any
+      options?: Record<string, unknown>
+      [key: string]: unknown
+    }>
+    preview?: {
+      select?: Record<string, string>
+      prepare?: (selection: any) => {
+        title?: string
+        subtitle?: string
+        media?: unknown
+      }
+    }
     [key: string]: unknown
   }
   
@@ -84,12 +100,20 @@ declare module 'sanity/structure' {
     [key: string]: unknown
   }
   
-  export type StructureResolver = (S: {
-    list: () => { title: (title: string) => { items: (items: unknown[]) => unknown } }
-    documentTypeListItem: (type: string) => { title: (title: string) => unknown }
+  export interface StructureBuilder {
+    list: () => {
+      title: (title: string) => {
+        items: (items: unknown[]) => unknown
+      }
+    }
+    documentTypeListItem: (type: string) => {
+      title: (title: string) => unknown
+    }
     divider: () => unknown
     documentTypeListItems: () => Array<{ getId: () => string | undefined }>
-  }) => unknown
+  }
+  
+  export type StructureResolver = (S: StructureBuilder) => unknown
   
   export function structureTool(options: { structure?: StructureResolver }): unknown
 }
@@ -105,6 +129,8 @@ declare module '@sanity/vision' {
 
 // Next.js related modules
 declare module 'next-sanity/studio' {
+  import type { ReactElement } from 'react'
+  
   export interface StudioProps {
     config: Record<string, unknown>
     [key: string]: unknown

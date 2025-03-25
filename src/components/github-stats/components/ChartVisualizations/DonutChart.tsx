@@ -2,9 +2,12 @@ import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
-  Legend,
+  Legend
+} from 'chart.js'
+import type {
   ChartEvent,
-  TooltipItem
+  TooltipItem,
+  Chart
 } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
@@ -30,7 +33,13 @@ interface ToolCategoryData extends BaseChartData {
 }
 
 interface DonutChartProps {
-  data: Array<BaseChartData | ToolCategoryData>
+  data: Array<{
+    name: string
+    percentage: number
+    commits?: number
+    repositories: number
+    bytes?: number
+  }>
   isDarkMode: boolean
   type: 'languages' | 'frameworks' | 'tools'
   activeSegment: number | null
@@ -54,36 +63,23 @@ export function DonutChart({
   activeSegment,
   onSegmentHover
 }: DonutChartProps) {
-  const chartRef = useRef<ChartJS<'doughnut'>>(null)
+  const chartRef = useRef<Chart<'doughnut'>>(null)
 
-  const handleChartInteraction = (
-    chart: ChartJS<'doughnut'>,
-    index: number | null
+  const handleHover = (
+    chart: Chart<'doughnut'>,
+    event: ChartEvent,
+    elements: { index: number }[]
   ) => {
-    if (index === null) {
-      chart.setActiveElements([])
-      if (chart.tooltip) {
-        chart.tooltip.setActiveElements([], { x: 0, y: 0 })
-        chart.tooltip.active = false
-      }
+    if (elements && elements.length) {
+      onSegmentHover(elements[0].index)
     } else {
-      chart.setActiveElements([{ datasetIndex: 0, index }])
-      const meta = chart.getDatasetMeta(0)
-      if (meta.data[index] && chart.tooltip) {
-        const arc = meta.data[index]
-        chart.tooltip.setActiveElements(
-          [{ datasetIndex: 0, index }],
-          { x: arc.x, y: arc.y }
-        )
-        chart.tooltip.active = true
-      }
+      onSegmentHover(null)
     }
-    chart.update()
   }
 
   useEffect(() => {
     if (!chartRef.current) return
-    handleChartInteraction(chartRef.current, activeSegment)
+    handleHover(chartRef.current, null, [{ index: activeSegment }])
   }, [activeSegment])
 
   useEffect(() => {
@@ -196,13 +192,7 @@ export function DonutChart({
         }
       }
     },
-    onHover: (event: ChartEvent, elements: { index: number }[]) => {
-      if (elements && elements.length) {
-        onSegmentHover(elements[0].index)
-      } else {
-        onSegmentHover(null)
-      }
-    }
+    onHover: handleHover
   }
 
   return (

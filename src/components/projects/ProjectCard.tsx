@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import type { Project } from '@/sanity/api/project'
-import { Card, CardContent } from '../../../components/ui/card'
-import { Badge } from '../../../components/ui/badge'
-import { Button } from '../../../components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { GithubIcon } from 'lucide-react'
 
 export default function ProjectCard({
@@ -33,7 +33,7 @@ export default function ProjectCard({
       w-[280px]"
     >
       {/* Image Container */}
-      <div className="relative h-40 w-full overflow-hidden bg-gray-50 dark:bg-navy/40">
+      <div className="overflow-hidden relative w-full h-40 bg-gray-50 dark:bg-navy/40">
         <Image
           src={urlFor(thumbnail).url()}
           alt={title}
@@ -43,7 +43,7 @@ export default function ProjectCard({
       </div>
 
       {/* Content Container */}
-      <CardContent className="p-5 flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-3 p-5">
         {/* Header */}
         <div className="space-y-1">
           <h2 className="text-lg font-light tracking-tight text-navy dark:text-cream/90">
@@ -51,7 +51,7 @@ export default function ProjectCard({
           </h2>
           <Badge
             variant="outline"
-            className={`${statusColors[status]} text-[10px] font-medium uppercase tracking-wider`}
+            className={`font-medium tracking-wider uppercase ${statusColors[status]} text-[10px]`}
           >
             {status === 'planned-update'
               ? 'Update Planned'
@@ -60,7 +60,7 @@ export default function ProjectCard({
         </div>
 
         {/* Description */}
-        <p className="text-navy/70 dark:text-cream/60 text-sm leading-relaxed line-clamp-2">
+        <p className="text-sm leading-relaxed text-navy/70 dark:text-cream/60 line-clamp-2">
           {shortDescription}
         </p>
 
@@ -83,7 +83,7 @@ export default function ProjectCard({
             <Button
               asChild
               size="sm"
-              className="flex-1 bg-blue hover:bg-blue/90 text-cream font-medium tracking-wide"
+              className="flex-1 font-medium tracking-wide bg-blue hover:bg-blue/90 text-cream"
             >
               <a href={projectUrl} target="_blank" rel="noopener noreferrer">
                 View Project
@@ -95,7 +95,7 @@ export default function ProjectCard({
               asChild
               size="sm"
               variant="outline"
-              className="flex-1 bg-transparent border-cream text-cream hover:bg-cream/10 font-code tracking-tight"
+              className="flex-1 tracking-tight bg-transparent border-cream text-cream hover:bg-cream/10 font-code"
             >
               <a href={githubUrl} target="_blank" rel="noopener noreferrer">
                 <GithubIcon className="mr-2 h-3.5 w-3.5" />

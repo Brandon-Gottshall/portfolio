@@ -20,11 +20,9 @@ import {
   Chart as ChartJS,
   ArcElement,
   Tooltip as ChartTooltip,
-  Legend,
-  ChartEvent,
-  LegendElement,
-  LegendItem
+  Legend
 } from 'chart.js'
+import type { ChartEvent, LegendElement, LegendItem } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 
 // Add datalabels plugin for direct labels on chart
