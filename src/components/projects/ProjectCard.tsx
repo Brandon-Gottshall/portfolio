@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import type { Project } from '@/sanity/api/project'
-import { Card, CardContent } from "../../../components/ui/card"
-import { Badge } from "../../../components/ui/badge"
-import { Button } from "../../../components/ui/button"
-import { GithubIcon } from "lucide-react"
+import { Card, CardContent } from '../../../components/ui/card'
+import { Badge } from '../../../components/ui/badge'
+import { Button } from '../../../components/ui/button'
+import { GithubIcon } from 'lucide-react'
 
 export default function ProjectCard({
   title,
@@ -17,19 +17,21 @@ export default function ProjectCard({
 }: Omit<Project, '_id' | 'slug' | 'description' | 'featured'>) {
   const statusColors = {
     'in-development': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream',
-    'completed': 'bg-blue/5 text-blue dark:bg-blue/5 dark:text-blue-accent',
-    'archived': 'bg-gray/5 text-gray dark:bg-gray/5 dark:text-gray',
+    completed: 'bg-blue/5 text-blue dark:bg-blue/5 dark:text-blue-accent',
+    archived: 'bg-gray/5 text-gray dark:bg-gray/5 dark:text-gray',
     'planned-update': 'bg-navy/5 text-navy dark:bg-cream/5 dark:text-cream'
   }
 
   return (
-    <Card className="group relative overflow-hidden bg-white dark:bg-navy-light/30 transition-all duration-300 
+    <Card
+      className="group relative overflow-hidden bg-white dark:bg-navy-light/30 transition-all duration-300 
       border border-navy/5 dark:border-[#4A9DFF]/40
       dark:shadow-[0_0_1px_#4A9DFF,inset_0_0_1px_#4A9DFF] 
       dark:hover:shadow-[0_0_2px_#4A9DFF,inset_0_0_2px_#4A9DFF] 
       dark:hover:border-[#4A9DFF]/70
       hover:scale-[1.02]
-      w-[280px]">
+      w-[280px]"
+    >
       {/* Image Container */}
       <div className="relative h-40 w-full overflow-hidden bg-gray-50 dark:bg-navy/40">
         <Image
@@ -44,9 +46,16 @@ export default function ProjectCard({
       <CardContent className="p-5 flex flex-col gap-3">
         {/* Header */}
         <div className="space-y-1">
-          <h2 className="text-lg font-light tracking-tight text-navy dark:text-cream/90">{title}</h2>
-          <Badge variant="outline" className={`${statusColors[status]} text-[10px] font-medium uppercase tracking-wider`}>
-            {status === 'planned-update' ? 'Update Planned' : status.replace('-', ' ')}
+          <h2 className="text-lg font-light tracking-tight text-navy dark:text-cream/90">
+            {title}
+          </h2>
+          <Badge
+            variant="outline"
+            className={`${statusColors[status]} text-[10px] font-medium uppercase tracking-wider`}
+          >
+            {status === 'planned-update'
+              ? 'Update Planned'
+              : status.replace('-', ' ')}
           </Badge>
         </div>
 
@@ -58,7 +67,7 @@ export default function ProjectCard({
         {/* Technologies */}
         <div className="flex flex-wrap gap-1.5">
           {technologies.map((tech) => (
-            <Badge 
+            <Badge
               key={tech}
               variant="outline"
               className="font-code bg-transparent text-[10px] text-navy/60 dark:text-cream/50 border-navy/20 dark:border-cream/20"
@@ -71,32 +80,24 @@ export default function ProjectCard({
         {/* Actions */}
         <div className="flex gap-2 mt-1">
           {projectUrl && (
-            <Button 
+            <Button
               asChild
               size="sm"
               className="flex-1 bg-blue hover:bg-blue/90 text-cream font-medium tracking-wide"
             >
-              <a
-                href={projectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={projectUrl} target="_blank" rel="noopener noreferrer">
                 View Project
               </a>
             </Button>
           )}
           {githubUrl && (
-            <Button 
+            <Button
               asChild
               size="sm"
               variant="outline"
               className="flex-1 bg-transparent border-cream text-cream hover:bg-cream/10 font-code tracking-tight"
             >
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer">
                 <GithubIcon className="mr-2 h-3.5 w-3.5" />
                 GitHub
               </a>
@@ -106,4 +107,4 @@ export default function ProjectCard({
       </CardContent>
     </Card>
   )
-} 
+}

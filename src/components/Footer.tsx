@@ -9,7 +9,7 @@ interface FooterProps {
   lastUpdated: string
 }
 
-export function Footer({ lastUpdated }: FooterProps): JSX.Element {
+export function Footer ({ lastUpdated }: FooterProps): JSX.Element {
   console.log('Footer component is rendering')
   const currentYear = new Date().getFullYear()
 

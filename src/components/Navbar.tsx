@@ -1,30 +1,30 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { ThemeSwitch } from './ThemeSwitch';
-import { ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+import { ThemeSwitch } from './ThemeSwitch'
+import { ChevronDown } from 'lucide-react'
 
 const navLinks = [
   { title: 'About', href: '/about' },
   { title: 'Projects', href: '/projects' },
   { title: 'Blog', href: '/blog' },
-  { title: 'Contact', href: '/contact' },
-];
+  { title: 'Contact', href: '/contact' }
+]
 
 export default function Navbar() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <nav className="p-4 bg-cream dark:bg-navy-darkest border-b border-navy/10 dark:border-cream/10">
@@ -42,7 +42,10 @@ export default function Navbar() {
             onClick={() => setIsExpanded(!isExpanded)}
             onHoverStart={() => !isMobile && setIsExpanded(true)}
           >
-            <Link href="/" className="whitespace-nowrap text-2xl font-light text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200">
+            <Link
+              href="/"
+              className="whitespace-nowrap text-2xl font-light text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
+            >
               {isExpanded ? 'Brandon Gottshall' : 'BG'}
             </Link>
             <motion.div
@@ -54,9 +57,9 @@ export default function Navbar() {
               transition={{
                 y: {
                   repeat: Infinity,
-                  repeatType: "reverse",
+                  repeatType: 'reverse',
                   duration: 1,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                   repeatDelay: 0.5
                 },
                 rotate: {
@@ -80,7 +83,9 @@ export default function Navbar() {
                 className="absolute top-full left-0 -mt-2 z-50"
               >
                 <div className="py-1 min-w-[160px] bg-cream dark:bg-navy-darkest border border-navy/10 dark:border-cream/10 rounded-lg shadow-lg">
-                  <div className="py-1"> {/* Extra padding container to maintain hover area */}
+                  <div className="py-1">
+                    {' '}
+                    {/* Extra padding container to maintain hover area */}
                     {navLinks.map((link) => (
                       <Link
                         key={link.title}
@@ -104,5 +109,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  );
-} 
+  )
+}

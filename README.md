@@ -5,7 +5,7 @@
 - Technical Documentation
   - [GitHub Stats Configuration](./Technical%20Documentation/github-stats.md)
   - [Development Patterns](./Technical%20Documentation/development-patterns.md)
-  - [Tools & Technologies](./Technical%20Documentation/tools-and-technologies.md)  
+  - [Tools & Technologies](./Technical%20Documentation/tools-and-technologies.md)
 - [MVP (Minimum Viable Product)](#mvp-minimum-viable-product)
   - [Core Features](#core-features)
   - [Essential Technical](#essential-technical)
@@ -23,13 +23,15 @@
 ### Core Features
 
 - **Navigation**
+
   - [ ] Slow the animation of the logo initials (e.g., "BG") with animation to full name
   - [ ] Add smooth rolling down dropdown animation (200-300ms)
-  - [X] Add visual indicator for dropdown functionality
+  - [x] Add visual indicator for dropdown functionality
   - [x] Implement light/dark mode theming
   - [x] Apply established color palette (navy, red, tan, cream)
 
 - **Content**
+
   - [ ] Connect homepage featured projects to Sanity CMS
   - [ ] Add resume page with content from Sanity CMS
     - [ ] Add resume content and structure to Sanity CMS

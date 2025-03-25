@@ -19,4 +19,4 @@ export interface ProjectDocument extends SanityDocument {
   thumbnail: Image
   status: 'in-development' | 'completed' | 'archived'
   featured: boolean
-} 
+}

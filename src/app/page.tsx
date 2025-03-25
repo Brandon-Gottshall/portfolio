@@ -1,35 +1,46 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import { ArrowRight, CheckCircle, ExternalLink, Github, Star, Terminal } from "lucide-react"
-import { TextLoop } from "react-text-loop-next"
-import GithubLanguageStats from '@/components/GithubLanguageStats'
+import Image from 'next/image'
+import {
+  ArrowRight,
+  CheckCircle,
+  ExternalLink,
+  Github,
+  Star,
+  Terminal
+} from 'lucide-react'
+import { TextLoop } from 'react-text-loop-next'
+import OldGithubLanguageStats from '@/components/GithubLanguageStats'
+import { GithubLanguageStats } from '@/components/github-stats'
 
 export default function Home() {
   const projects = [
     {
       id: 1,
-      title: "Project One",
-      description: "Web App",
-      image: "/placeholder.svg?height=400&width=600",
-      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Prisma"],
-      challenge: "Built a high-performance dashboard with real-time data visualization",
+      title: 'Project One',
+      description: 'Web App',
+      image: '/placeholder.svg?height=400&width=600',
+      technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma'],
+      challenge:
+        'Built a high-performance dashboard with real-time data visualization'
     },
     {
       id: 2,
-      title: "Project Two",
-      description: "Mobile App",
-      image: "/placeholder.svg?height=400&width=600",
-      technologies: ["React Native", "Next.js API Routes", "MongoDB"],
-      challenge: "Developed a cross-platform mobile app with seamless API integration",
+      title: 'Project Two',
+      description: 'Mobile App',
+      image: '/placeholder.svg?height=400&width=600',
+      technologies: ['React Native', 'Next.js API Routes', 'MongoDB'],
+      challenge:
+        'Developed a cross-platform mobile app with seamless API integration'
     },
     {
       id: 3,
-      title: "Project Three",
-      description: "E-commerce",
-      image: "/placeholder.svg?height=400&width=600",
-      technologies: ["Next.js", "Stripe", "Sanity CMS", "Vercel"],
-      challenge: "Created a high-converting e-commerce platform with 99% Lighthouse score",
+      title: 'Project Three',
+      description: 'E-commerce',
+      image: '/placeholder.svg?height=400&width=600',
+      technologies: ['Next.js', 'Stripe', 'Sanity CMS', 'Vercel'],
+      challenge:
+        'Created a high-converting e-commerce platform with 99% Lighthouse score'
     }
   ]
 
@@ -48,16 +59,27 @@ export default function Home() {
               </h1>
               <div className="mb-6">
                 <TextLoop interval={2000}>
-                  <span className="text-2xl font-light font-code md:text-3xl text-gray-dark dark:text-tan">Software Engineer</span>
-                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">SE Bootcamp Instructor</span>
-                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">Marine Corps Veteran</span>
-                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">Lifetime Student</span>
-                  <span className="text-2xl font-light font-code md:text-3xl text-gray-dark dark:text-tan">Automation Enthusiast</span>
+                  <span className="text-2xl font-light font-code md:text-3xl text-gray-dark dark:text-tan">
+                    Software Engineer
+                  </span>
+                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">
+                    SE Bootcamp Instructor
+                  </span>
+                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">
+                    Marine Corps Veteran
+                  </span>
+                  <span className="text-2xl font-light md:text-3xl text-gray-dark dark:text-tan">
+                    Lifetime Student
+                  </span>
+                  <span className="text-2xl font-light font-code md:text-3xl text-gray-dark dark:text-tan">
+                    Automation Enthusiast
+                  </span>
                 </TextLoop>
               </div>
               <p className="mb-8 max-w-xl text-lg font-normal text-gray-dark dark:text-tan">
-                I&apos;m a specialized software engineer with experience crafting high-performance, scalable
-                web applications that users love.
+                I&apos;m a specialized software engineer with experience
+                crafting high-performance, scalable web applications that users
+                love.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <button className="flex gap-2 items-center px-6 py-3 font-medium rounded-lg transition-colors bg-blue hover:bg-blue-light text-cream">
@@ -106,7 +128,8 @@ export default function Home() {
               Why Work With Me?
             </h2>
             <p className="mx-auto max-w-2xl text-lg text-gray-dark dark:text-tan">
-              I bring technical expertise, business understanding, and a commitment to excellence to every project
+              I bring technical expertise, business understanding, and a
+              commitment to excellence to every project
             </p>
           </div>
 
@@ -115,10 +138,14 @@ export default function Home() {
               <div className="flex justify-center items-center mb-6 w-12 h-12 rounded-lg bg-cream dark:bg-navy-light/50">
                 <Terminal className="w-6 h-6 text-navy dark:text-cream" />
               </div>
-              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">Technical Excellence</h3>
+              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">
+                Technical Excellence
+              </h3>
               <p className="text-gray-dark dark:text-tan">
-                I write <span className="font-code">clean, maintainable code</span> following best practices. My applications are fast, secure, and built
-                with scalability in mind.
+                I write{' '}
+                <span className="font-code">clean, maintainable code</span>{' '}
+                following best practices. My applications are fast, secure, and
+                built with scalability in mind.
               </p>
             </div>
 
@@ -126,10 +153,12 @@ export default function Home() {
               <div className="flex justify-center items-center mb-6 w-12 h-12 rounded-lg bg-cream dark:bg-navy-light/50">
                 <Star className="w-6 h-6 text-navy dark:text-cream" />
               </div>
-              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">Modern Stack</h3>
+              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">
+                Modern Stack
+              </h3>
               <p className="text-gray-dark dark:text-tan">
-                I specialize in Next.js, React, TypeScript and modern tools that enable rapid development without
-                compromising on quality.
+                I specialize in Next.js, React, TypeScript and modern tools that
+                enable rapid development without compromising on quality.
               </p>
             </div>
 
@@ -137,10 +166,13 @@ export default function Home() {
               <div className="flex justify-center items-center mb-6 w-12 h-12 rounded-lg bg-cream dark:bg-navy-light/50">
                 <CheckCircle className="w-6 h-6 text-navy dark:text-cream" />
               </div>
-              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">Results-Driven</h3>
+              <h3 className="mb-3 text-xl font-light text-navy dark:text-cream">
+                Results-Driven
+              </h3>
               <p className="text-gray-dark dark:text-tan">
-                I focus on delivering business value, not just code. Your success is my priority, and I measure my work by
-                the results it generates.
+                I focus on delivering business value, not just code. Your
+                success is my priority, and I measure my work by the results it
+                generates.
               </p>
             </div>
           </div>
@@ -160,8 +192,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
-            {/* GitHub Language Stats */}
+          {/* New Implementation */}
+          <div className="grid grid-cols-1 gap-6 mb-16 md:grid-cols-3 md:gap-8">
             <div>
               <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
                 Language Distribution
@@ -172,7 +204,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* GitHub Framework Stats */}
             <div>
               <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
                 Framework Distribution
@@ -183,7 +214,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* GitHub Tools Stats */}
             <div>
               <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
                 Development Tools
@@ -191,6 +221,39 @@ export default function Home() {
               </h3>
               <div className="h-full">
                 <GithubLanguageStats type="tools" showBoth={true} />
+              </div>
+            </div>
+          </div>
+
+          {/* Original Implementation */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+            <div>
+              <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
+                Language Distribution (Original)
+                <span className="text-sm font-normal text-gray-dark dark:text-tan" title="Shows percentage of my commits containing each programming language">ⓘ</span>
+              </h3>
+              <div className="h-full">
+                <OldGithubLanguageStats type="languages" showBoth={true} />
+              </div>
+            </div>
+
+            <div>
+              <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
+                Framework Distribution (Original)
+                <span className="text-sm font-normal text-gray-dark dark:text-tan" title="Shows percentage of my commits that use each framework">ⓘ</span>
+              </h3>
+              <div className="h-full">
+                <OldGithubLanguageStats type="frameworks" showBoth={true} />
+              </div>
+            </div>
+
+            <div>
+              <h3 className="flex gap-2 justify-center items-center mb-6 text-xl font-light text-navy dark:text-cream">
+                Development Tools (Original)
+                <span className="text-sm font-normal text-gray-dark dark:text-tan" title="Shows percentage of my commits that use each development tool">ⓘ</span>
+              </h3>
+              <div className="h-full">
+                <OldGithubLanguageStats type="tools" showBoth={true} />
               </div>
             </div>
           </div>
@@ -202,7 +265,9 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="mb-4 text-3xl font-light text-navy dark:text-cream">Featured Projects</h2>
+              <h2 className="mb-4 text-3xl font-light text-navy dark:text-cream">
+                Featured Projects
+              </h2>
               <p className="max-w-2xl text-gray-dark dark:text-tan">
                 A selection of my recent work building modern web applications
               </p>
@@ -220,7 +285,7 @@ export default function Home() {
               >
                 <div className="overflow-hidden">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image || '/placeholder.svg'}
                     alt={project.title}
                     width={600}
                     height={400}
@@ -228,13 +293,22 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="mb-2 text-xl font-light text-navy dark:text-cream">{project.title}</h3>
-                  <p className="mb-4 text-sm text-gray-dark dark:text-tan">{project.description}</p>
-                  <p className="mb-4 text-sm text-blue/90 dark:text-blue-accent/90">{project.challenge}</p>
+                  <h3 className="mb-2 text-xl font-light text-navy dark:text-cream">
+                    {project.title}
+                  </h3>
+                  <p className="mb-4 text-sm text-gray-dark dark:text-tan">
+                    {project.description}
+                  </p>
+                  <p className="mb-4 text-sm text-blue/90 dark:text-blue-accent/90">
+                    {project.challenge}
+                  </p>
 
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.map((tech) => (
-                      <span key={tech} className="px-2 py-1 text-xs rounded-full bg-cream dark:bg-navy-light/50 text-navy dark:text-cream">
+                      <span
+                        key={tech}
+                        className="px-2 py-1 text-xs rounded-full bg-cream dark:bg-navy-light/50 text-navy dark:text-cream"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -260,10 +334,13 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <div className="p-8 rounded-3xl border bg-white/80 dark:bg-navy md:p-12 border-navy/10 dark:border-cream/10">
             <div className="mx-auto max-w-3xl text-center">
-              <h2 className="mb-6 text-3xl font-light md:text-4xl text-navy dark:text-cream">Ready to Build Something Amazing?</h2>
+              <h2 className="mb-6 text-3xl font-light md:text-4xl text-navy dark:text-cream">
+                Ready to Build Something Amazing?
+              </h2>
               <p className="mb-8 text-lg text-gray-dark dark:text-tan">
-                I&apos;m currently available for freelance projects, full-time positions, and consulting work. Let&apos;s discuss
-                how I can help bring your ideas to life.
+                I&apos;m currently available for freelance projects, full-time
+                positions, and consulting work. Let&apos;s discuss how I can
+                help bring your ideas to life.
               </p>
               <div className="flex flex-col gap-4 justify-center sm:flex-row">
                 <button className="flex gap-2 justify-center items-center px-8 py-4 font-medium rounded-lg transition-colors bg-blue hover:bg-blue-light text-cream">

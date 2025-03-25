@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export const projectType = defineType({
   name: 'project',
@@ -17,7 +17,7 @@ export const projectType = defineType({
       type: 'slug',
       options: {
         source: 'title',
-        maxLength: 96,
+        maxLength: 96
       },
       validation: (Rule) => Rule.required()
     }),
@@ -58,7 +58,7 @@ export const projectType = defineType({
       name: 'technologies',
       title: 'Technologies',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
       options: {
         layout: 'tags'
       }
@@ -74,9 +74,9 @@ export const projectType = defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'In Development', value: 'in-development'},
-          {title: 'Completed', value: 'completed'},
-          {title: 'Archived', value: 'archived'}
+          { title: 'In Development', value: 'in-development' },
+          { title: 'Completed', value: 'completed' },
+          { title: 'Archived', value: 'archived' }
         ]
       },
       initialValue: 'completed'
@@ -88,7 +88,7 @@ export const projectType = defineType({
       status: 'status',
       media: 'thumbnail'
     },
-    prepare({title, status, media}) {
+    prepare({ title, status, media }) {
       return {
         title,
         subtitle: status.charAt(0).toUpperCase() + status.slice(1),

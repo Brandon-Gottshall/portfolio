@@ -14,8 +14,9 @@ These guidelines ensure all code modifications adhere to a consistent style, inc
 * **Iteration & Modularization:** Favor iteration and modularization over duplication. Always prefer simple solutions and check for existing implementations before adding new code.  
 * **Descriptive Naming:** Use descriptive variable names—including auxiliary verbs (e.g., isLoading)—to improve code clarity.  
 * **Directory Structure:** Use lowercase with dashes for directories (e.g., components/auth-wizard).  
-* **Named Exports & RORO Pattern:** Favor named exports for components and apply the “Receive an Object, Return an Object” (RORO) pattern for function parameters and returns.  
+* **Named Exports & RORO Pattern:** Favor named exports for components and apply the "Receive an Object, Return an Object" (RORO) pattern for function parameters and returns.  
 * **Consistency:** Adhere to these guidelines and Standard-TS conventions.
+* **Proactive Context Retrieval:** Retrieve all necessary files, context, and information to provide a comprehensive and accurate response. Avoid explicitly stating the intent to retrieve them.
 
 **2\. JavaScript/TypeScript Style**
 
@@ -23,12 +24,13 @@ These guidelines ensure all code modifications adhere to a consistent style, inc
 * **Type Safety:** Use TypeScript for all code. Prefer interfaces over types where appropriate. Avoid enums; use maps instead.  
 * **File Structure:** Organize files as follows: Exported component, subcomponents, helpers, static content, and types.  
 * **Conditional Statements:** Avoid unnecessary curly braces in conditional statements. For single-line statements in conditionals, omit curly braces. Use concise, one-line syntax for simple conditional statements (e.g., if (condition) doSomething()).
+* **Type Precision:** Prefer changing the original type over type casting. If the original type is already in use and changing it would cause degradation, use an interface to adapt the type, in preference to type casting.
 
 **3\. Error Handling and Validation**
 
 * **Prioritize Error Handling:** Prioritize error handling and edge cases.  
 * **Early Returns:** Handle errors and edge cases at the beginning of functions using early returns to avoid deeply nested if statements.  
-* **Happy Path Last:** Place the “happy path” last in the function for improved readability.  
+* **Happy Path Last:** Place the "happy path" last in the function for improved readability.  
 * **Avoid Unnecessary else:** Avoid unnecessary else statements; use the if-return pattern instead.  
 * **Guard Clauses:** Use guard clauses to handle preconditions and invalid states early.  
 * **Logging & Messaging:** Implement proper error logging and user-friendly error messages.  
@@ -80,3 +82,19 @@ These guidelines ensure all code modifications adhere to a consistent style, inc
 * **Code for Environments:** Write code that takes into account the different environments: dev, test, and prod.  
 * **No Mocking for Dev/Prod:** Mocking data is only needed for tests; never mock data for dev or prod.  
 * **No Stubbing/Fake Data for Dev/Prod:** Never add stubbing or fake data patterns to code that affects the dev or prod environments.
+
+**7\. Type Declaration Patterns**
+
+* **Type Declaration Scope:**
+  * Evaluate type declaration scope before choosing a pattern:
+    - Global types (in @types/): Only when types need to be available project-wide or for third-party module augmentation that's used across multiple files
+    - Local module types: When types are specific to a single file or module's implementation
+    - Module augmentation: Prefer local module augmentation when types are only needed for a specific configuration or module instance
+  * For configuration files (like ESLint, Jest, etc.):
+    - Keep type declarations local to the configuration file if they're only used there
+    - Use module augmentation within the file rather than creating separate type declarations
+    - Only move to global declarations if the types become needed in multiple places
+  * For third-party modules:
+    - Check for existing @types packages first
+    - Use local module augmentation if types are only needed in one place
+    - Create global types only if the augmented types are needed across multiple files

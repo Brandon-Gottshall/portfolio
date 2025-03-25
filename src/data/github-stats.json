@@ -89,9 +89,7 @@
       "timeline": {
         "first_used": "2019-12-08 13:52:02 -0500",
         "first_tailwind": null,
-        "recent_activity": [
-
-        ]
+        "recent_activity": []
       },
       "top_repos": [
         {
@@ -748,10 +746,7 @@
     {
       "name": "class-variance-authority",
       "count": 2,
-      "repos": [
-        "Brandon-Gottshall/compete",
-        "Brandon-Gottshall/company-site"
-      ]
+      "repos": ["Brandon-Gottshall/compete", "Brandon-Gottshall/company-site"]
     },
     {
       "name": "@fullhuman/postcss-purgecss",
@@ -820,143 +815,102 @@
     {
       "name": "formik",
       "count": 2,
-      "repos": [
-        "Brandon-Gottshall/dogPark",
-        "Brandon-Gottshall/portfolio"
-      ]
+      "repos": ["Brandon-Gottshall/dogPark", "Brandon-Gottshall/portfolio"]
     },
     {
       "name": "uuidv4",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "@types/lodash.throttle",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "classnames",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "body-scroll-lock",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "open",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Legacy-Trade-Scripts"
-      ]
+      "repos": ["Brandon-Gottshall/Legacy-Trade-Scripts"]
     },
     {
       "name": "copy-paste",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Legacy-Trade-Scripts"
-      ]
+      "repos": ["Brandon-Gottshall/Legacy-Trade-Scripts"]
     },
     {
       "name": "turbo",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/commerceExample"
-      ]
+      "repos": ["Brandon-Gottshall/commerceExample"]
     },
     {
       "name": "snazzy",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
+      "repos": ["Brandon-Gottshall/nxt-wind"]
     },
     {
       "name": "playwright",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
+      "repos": ["Brandon-Gottshall/nxt-wind"]
     },
     {
       "name": "deepmerge",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "cli-progress",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/nxt-wind"
-      ]
+      "repos": ["Brandon-Gottshall/nxt-wind"]
     },
     {
       "name": "@google-cloud/storage",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/File-Firewall"
-      ]
+      "repos": ["Brandon-Gottshall/File-Firewall"]
     },
     {
       "name": "graphql",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "daisyui",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/companySite"
-      ]
+      "repos": ["Brandon-Gottshall/companySite"]
     },
     {
       "name": "postcss-flexbugs-fixes",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "puppeteer",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
-      ]
+      "repos": ["Brandon-Gottshall/LMS-HTML-Proccesor"]
     },
     {
       "name": "postcss-preset-env",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/Crystal-Tee"
-      ]
+      "repos": ["Brandon-Gottshall/Crystal-Tee"]
     },
     {
       "name": "prismjs",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/LMS-HTML-Proccesor"
-      ]
+      "repos": ["Brandon-Gottshall/LMS-HTML-Proccesor"]
     },
     {
       "name": "glob",
       "count": 1,
-      "repos": [
-        "Brandon-Gottshall/todo-demo"
-      ]
+      "repos": ["Brandon-Gottshall/todo-demo"]
     }
   ],
   "notes": [

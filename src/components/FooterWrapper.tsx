@@ -1,8 +1,10 @@
-import { getLastCommitDate } from '@/lib/git-info';
-import Footer from './Footer';
+import { getLastCommitDate } from '@/lib/git-info'
+import { Footer } from './Footer'
 
-export default async function FooterWrapper() {
-  const lastUpdated = getLastCommitDate();
-  
-  return <Footer lastUpdated={lastUpdated} />;
-} 
+import type { JSX } from 'react'
+
+export async function FooterWrapper (): Promise<JSX.Element> {
+  const lastUpdated = getLastCommitDate()
+
+  return <Footer lastUpdated={lastUpdated} />
+}

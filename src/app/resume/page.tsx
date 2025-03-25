@@ -6,7 +6,8 @@ export default function ResumePage() {
         <div className="mb-12">
           <h2 className="text-2xl font-light mb-4">Professional Summary</h2>
           <p className="text-gray mb-4">
-            Experienced Software Engineer specializing in modern web technologies and full-stack development.
+            Experienced Software Engineer specializing in modern web
+            technologies and full-stack development.
           </p>
         </div>
 
@@ -15,7 +16,9 @@ export default function ResumePage() {
           <div className="space-y-8">
             <div className="p-6 rounded-xl border border-navy/10">
               <h3 className="text-xl mb-2">Coming Soon</h3>
-              <p className="text-gray">Professional experience details will be available shortly.</p>
+              <p className="text-gray">
+                Professional experience details will be available shortly.
+              </p>
             </div>
           </div>
         </div>
@@ -24,10 +27,12 @@ export default function ResumePage() {
           <h2 className="text-2xl font-light mb-4">Education</h2>
           <div className="p-6 rounded-xl border border-navy/10">
             <h3 className="text-xl mb-2">Coming Soon</h3>
-            <p className="text-gray">Education details will be available shortly.</p>
+            <p className="text-gray">
+              Education details will be available shortly.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  );
-} 
+  )
+}

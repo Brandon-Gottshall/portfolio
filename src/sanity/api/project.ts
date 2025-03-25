@@ -47,4 +47,4 @@ export async function getFeaturedProjects(): Promise<Project[]> {
       status
     }
   `)
-} 
+}
