@@ -31,93 +31,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 // Register ChartJS components
 ChartJS.register(ArcElement, ChartTooltip, Legend, ChartDataLabels)
 
-interface DetailedStats {
-  repositories: number
-  bytes?: number // Optional byte count for languages
-  commits: number // Commit count for all types
-}
-
-// New interface for CSS complex structure
-interface CSSStats {
-  summary: {
-    repositories: number
-    bytes: number
-    commits: number
-    percentage_of_all_commits: number
-  }
-  variants: {
-    vanilla: {
-      repositories: number
-      bytes: number
-      commits: number
-      percentage_of_css: number
-      file_types: Record<
-        string,
-        { files: number; bytes: number; commits: number }
-      >
-    }
-    tailwind: {
-      repositories: number
-      bytes: number
-      commits: number
-      percentage_of_css: number
-      file_types: {
-        css: { files: number; bytes: number; commits: number }
-        scss: { files: number; bytes: number; commits: number }
-        jsx_tsx: { files: number; bytes: number; commits: number }
-        html: { files: number; bytes: number; commits: number }
-      }
-    }
-  }
-}
-
-interface FrameworkStats {
-  repositories: number
-  commits: number
-}
-
-interface ToolCategory {
-  repositories: number
-  commits: number
-  tools: Record<string, { repositories: number; commits: number }>
-}
-
-interface StatsItem extends DetailedStats {
-  name: string
-  percentage: number
-  // Add optional CSS properties
-  summary?: {
-    repositories: number
-    bytes: number
-    commits: number
-    percentage_of_all_commits: number
-  }
-  variants?: {
-    vanilla: {
-      repositories: number
-      bytes: number
-      commits: number
-      percentage_of_css: number
-      file_types: Record<
-        string,
-        { files: number; bytes: number; commits: number }
-      >
-    }
-    tailwind: {
-      repositories: number
-      bytes: number
-      commits: number
-      percentage_of_css: number
-      file_types: Record<
-        string,
-        { files: number; bytes: number; commits: number }
-      >
-    }
-  }
-  // Add optional properties for tools categories
-  tools?: Record<string, { repositories: number; commits: number }>
-}
-
 interface Props {
   type: 'languages' | 'frameworks' | 'tools'
   showBoth?: boolean
@@ -129,27 +42,110 @@ interface CachedStats {
   languages: Record<string, DetailedStats | CSSStats>
   frameworks: Record<string, DetailedStats>
   tools: Record<string, DetailedStats>
+  summary: {
+    total_repos: number
+    owned_repos: number
+    contributed_repos: number
+    total_commits: number
+    public_repos: number
+    private_repos: number
+    forks: number
+  }
+  found_emails: string[]
 }
 
+interface BaseStats {
+  name: string
+  commits: number
+  repositories: number
+  bytes?: number
+  percentage: number
+}
+
+interface DetailedStats {
+  repositories: number
+  commits: number
+  bytes?: number
+  summary?: {
+    repositories: number
+    commits: number
+    bytes?: number
+    percentage_of_all_commits?: number
+  }
+  variants?: {
+    vanilla?: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+    tailwind?: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+  }
+  tools?: Record<string, { repositories: number; commits: number }>
+}
+
+interface CSSStats extends DetailedStats {
+  summary: {
+    repositories: number
+    commits: number
+    bytes: number
+    percentage_of_all_commits: number
+  }
+  variants: {
+    vanilla: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+    tailwind: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+  }
+}
+
+interface StatsItem extends BaseStats, DetailedStats {}
+interface CSSStatsItem extends BaseStats, CSSStats {}
+
+type StatItem = StatsItem | CSSStatsItem
+
 // Type guard to check if a stat is the complex CSS structure
-const isCSSStats = (stat: DetailedStats | CSSStats): stat is CSSStats => {
-  return 'summary' in stat && 'variants' in stat
+const isCSSStats = (stat: StatItem): stat is CSSStatsItem => {
+  return (
+    'summary' in stat &&
+    'variants' in stat &&
+    stat.summary &&
+    stat.variants &&
+    'vanilla' in stat.variants &&
+    'tailwind' in stat.variants
+  )
 }
 
 // Add this function to correctly check for tool categories
-const isToolCategory = (stat: any): boolean => {
-  // Check if it's one of the known tool categories with the correct structure
+const isToolCategory = (stat: StatItem): boolean => {
   return (
     stat &&
     typeof stat === 'object' &&
     'tools' in stat &&
     typeof stat.tools === 'object' &&
-    Object.keys(stat.tools).length > 0
+    Object.keys(stat.tools || {}).length > 0
   )
 }
 
 // Update the hasDetailedTools function to better handle the tools structure
-const hasDetailedTools = (stat: any): boolean => {
+const hasDetailedTools = (stat: StatItem): boolean => {
   // First, check if it's one of the specific tool categories we know exists in the data
   const isToolCategory = [
     'Markup & Configuration',
@@ -166,15 +162,13 @@ const hasDetailedTools = (stat: any): boolean => {
     stat &&
     'tools' in stat &&
     typeof stat.tools === 'object' &&
-    Object.keys(stat.tools).length > 0
+    Object.keys(stat.tools || {}).length > 0
 
   return isToolCategory || hasToolsProperty
 }
 
-// Add this function after isCSSStats and before the components
-
 // Helper function to check if a stat has detailed data (either CSS variants or tools)
-const hasDetailedData = (stat: any): boolean => {
+const hasDetailedData = (stat: StatItem): boolean => {
   return (
     stat &&
     // Check for CSS structure with variants
@@ -184,6 +178,30 @@ const hasDetailedData = (stat: any): boolean => {
         typeof stat.tools === 'object' &&
         Object.keys(stat.tools || {}).length > 0))
   )
+}
+
+// Helper function to safely get commits
+const getCommits = (stat: StatItem): number => {
+  if (isCSSStats(stat)) {
+    return stat.summary.commits
+  }
+  return stat.commits
+}
+
+// Helper function to safely get repositories
+const getRepositories = (stat: StatItem): number => {
+  if (isCSSStats(stat)) {
+    return stat.summary.repositories
+  }
+  return stat.repositories
+}
+
+// Helper function to safely get bytes
+const getBytes = (stat: StatItem): number | undefined => {
+  if (isCSSStats(stat)) {
+    return stat.summary.bytes
+  }
+  return stat.bytes
 }
 
 // Add this as a new component just before the GithubLanguageStats component definition

@@ -79,7 +79,27 @@ export function DonutChart({
 
   useEffect(() => {
     if (!chartRef.current) return
-    handleHover(chartRef.current, null, [{ index: activeSegment }])
+    const chart = chartRef.current
+    
+    if (activeSegment !== null) {
+      chart.setActiveElements([{ datasetIndex: 0, index: activeSegment }])
+      const meta = chart.getDatasetMeta(0)
+      if (meta.data[activeSegment] && chart.tooltip) {
+        const arc = meta.data[activeSegment]
+        chart.tooltip.setActiveElements(
+          [{ datasetIndex: 0, index: activeSegment }],
+          { x: arc.x, y: arc.y }
+        )
+        chart.tooltip.active = true
+      }
+    } else {
+      chart.setActiveElements([])
+      if (chart.tooltip) {
+        chart.tooltip.setActiveElements([], { x: 0, y: 0 })
+        chart.tooltip.active = false
+      }
+    }
+    chart.update()
   }, [activeSegment])
 
   useEffect(() => {
