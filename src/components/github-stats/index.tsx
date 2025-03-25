@@ -347,9 +347,7 @@ function StatsVisualization({
 }
 
 function useGithubStats(type: Props['type']) {
-  const [stats, setStats] = useState<Record<string, DetailedStats | CSSStats>>(
-    {}
-  )
+  const [stats, setStats] = useState<Record<string, DetailedStats | CSSStats>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
@@ -361,8 +359,10 @@ function useGithubStats(type: Props['type']) {
         const toolStats: Record<string, DetailedStats> = {}
         Object.entries(typedCachedStats.tools).forEach(([key, value]) => {
           toolStats[key] = {
-            repositories: value.summary.repositories,
+            name: key,
             commits: value.summary.commits,
+            repositories: value.summary.repositories,
+            percentage: value.summary.percentage_of_all_commits,
             summary: {
               repositories: value.summary.repositories,
               commits: value.summary.commits,
@@ -374,7 +374,7 @@ function useGithubStats(type: Props['type']) {
         })
         setStats(toolStats)
       } else {
-        setStats(typedCachedStats[type as 'languages' | 'frameworks'])
+        setStats(typedCachedStats[type])
       }
       setLastUpdated(typedCachedStats.lastUpdated)
     } catch (err) {

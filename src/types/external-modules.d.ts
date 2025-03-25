@@ -21,6 +21,39 @@ import type {
  * These declarations provide minimal but type-safe interfaces
  */
 
+// ESLint related modules
+declare module '@eslint/eslintrc' {
+  export interface FlatCompatOptions {
+    baseDirectory?: string
+    recommendedConfig?: Record<string, unknown>
+    [key: string]: unknown
+  }
+
+  export class FlatCompat {
+    constructor(options?: FlatCompatOptions)
+    config(options: Record<string, unknown>): Array<Record<string, unknown>>
+    extends(...configs: string[]): Array<Record<string, unknown>>
+  }
+
+  export const Legacy: {
+    [key: string]: unknown
+  }
+}
+
+declare module '@eslint__eslintrc' {
+  export { FlatCompat, Legacy } from '@eslint/eslintrc'
+}
+
+declare module '@typescript-eslint/parser' {
+  const parser: any
+  export = parser
+}
+
+declare module '@typescript-eslint/eslint-plugin' {
+  const plugin: any
+  export = plugin
+}
+
 // Sanity related modules
 declare module 'sanity/cli' {
   export interface SanityCliConfig {

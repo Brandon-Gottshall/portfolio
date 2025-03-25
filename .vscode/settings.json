@@ -6,5 +6,8 @@
     "Procfile",
     "Starlark",
     "Turbopack"
-  ]
+  ],
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "typescript.tsc.autoDetect": "on",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

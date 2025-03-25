@@ -17,9 +17,9 @@ interface GithubLanguageStatsProps {
 }
 
 interface BaseLanguageStats {
-  repositories: number
-  bytes: number
-  commits: number
+    repositories: number
+    bytes: number
+    commits: number
 }
 
 interface CSSLanguageStats {
@@ -61,7 +61,7 @@ export default function GithubLanguageStats({ type, showBoth }: GithubLanguageSt
   
   const processedStats = Object.entries(stats)
     .map(([name, stat]) => ({
-      name,
+        name,
       percentage: isCSS(stat) 
         ? stat.summary.percentage_of_all_commits
         : (stat.commits / cachedStats.summary.total_commits) * 100,
@@ -75,25 +75,25 @@ export default function GithubLanguageStats({ type, showBoth }: GithubLanguageSt
 
     const data = {
       labels: processedStats.map((stat) => stat.name),
-      datasets: [
-        {
+    datasets: [
+      {
           data: processedStats.map((stat) => stat.percentage),
           backgroundColor: processedStats.map((stat) => stat.color),
           borderColor: isDarkMode ? '#1a1b1e' : '#ffffff',
           borderWidth: 2,
           hoverBorderColor: isDarkMode ? '#2c2e33' : '#f8f9fa',
-          hoverBorderWidth: 4,
+        hoverBorderWidth: 4,
         },
       ],
     }
 
     const options = {
       cutout: '60%',
-      plugins: {
-        legend: {
+    plugins: {
+      legend: {
           display: false,
-        },
-        tooltip: {
+      },
+      tooltip: {
           enabled: false,
         },
       },
@@ -116,7 +116,7 @@ export default function GithubLanguageStats({ type, showBoth }: GithubLanguageSt
     }
   }, [processedStats, isDarkMode])
 
-  return (
+                      return (
     <div className="relative h-[300px] w-full">
       <canvas ref={(element) => {
         if (element && chartRef.current) {
@@ -134,7 +134,7 @@ export default function GithubLanguageStats({ type, showBoth }: GithubLanguageSt
         ) : (
           <p className="text-sm text-gray-500">Hover over chart</p>
         )}
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }

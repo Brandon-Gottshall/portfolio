@@ -123,14 +123,54 @@ export interface Props {
   showBoth?: boolean
 }
 
-export interface ProcessedStat extends DetailedStats {
+/**
+ * Represents a processed statistic with normalized data structure
+ * for consistent rendering across different stat types
+ */
+export interface ProcessedStat {
   name: string
+  commits: number
+  repositories: number
+  bytes: number
+  bytesFormatted: string
   percentage: number
+  tools?: Record<string, { repositories: number; commits: number }>
+  variants?: CSSStats['variants']
+  summary?: {
+    repositories: number
+    commits: number
+    bytes?: number
+    percentage_of_all_commits?: number
+  }
 }
 
-export interface CSSProcessedStat extends CSSStats {
-  name: string
-  percentage: number
+/**
+ * Represents processed CSS statistics with specialized variant data
+ * for both vanilla CSS and Tailwind usage
+ */
+export interface CSSProcessedStat extends ProcessedStat {
+  variants: {
+    vanilla: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+    tailwind: {
+      repositories: number
+      bytes: number
+      commits: number
+      percentage_of_css: number
+      file_types: Record<string, { files: number; bytes: number; commits: number }>
+    }
+  }
+  summary: {
+    repositories: number
+    commits: number
+    bytes: number
+    percentage_of_all_commits: number
+  }
 }
 
 export type StatItem = ProcessedStat | CSSProcessedStat

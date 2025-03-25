@@ -1,8 +1,12 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["eslint.config.js"],
+  "include": [
+    "eslint.config.ts",
+    "src/types/external-modules.d.ts"
+  ],
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node"
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true
   }
 } 
