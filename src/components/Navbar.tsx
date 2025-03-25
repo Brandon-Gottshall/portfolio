@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ThemeSwitch } from './ThemeSwitch'
@@ -16,35 +16,50 @@ const navLinks = [
 export default function Navbar() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [isStudioPage, setIsStudioPage] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
+
+    const checkStudioPage = () => {
+      setIsStudioPage(window.location.pathname.startsWith('/studio'))
+    }
+
     checkMobile()
+    checkStudioPage()
+
     window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
+  const navZIndex = isStudioPage ? 'z-[9999]' : 'z-20'
+
   return (
-    <nav className="p-4 bg-cream dark:bg-navy-darkest border-b border-navy/10 dark:border-cream/10">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav
+      className={`p-4 border-b ${navZIndex} bg-cream dark:bg-navy-darkest border-navy/10 dark:border-cream/10`}
+    >
+      <div className='container flex justify-between items-center mx-auto'>
         {/* Logo/Name that expands */}
         <motion.div
-          className="relative group"
+          className='relative group'
           initial={false}
           onMouseLeave={() => !isMobile && setIsExpanded(false)}
         >
           <motion.div
-            className="flex items-center gap-1 cursor-pointer pb-2 group-hover:text-navy-light dark:group-hover:text-cream/80 transition-colors duration-200"
+            className='flex gap-1 items-center pb-2 transition-colors duration-200 cursor-pointer group-hover:text-navy-light dark:group-hover:text-cream/80'
             initial={{ width: 'auto' }}
             animate={{ width: isExpanded ? 'auto' : '2.5rem' }}
             onClick={() => setIsExpanded(!isExpanded)}
             onHoverStart={() => !isMobile && setIsExpanded(true)}
           >
             <Link
-              href="/"
-              className="whitespace-nowrap text-2xl font-light text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80 transition-colors duration-200"
+              href='/'
+              className='text-2xl font-light whitespace-nowrap transition-colors duration-200 text-navy dark:text-cream hover:text-navy-light dark:hover:text-cream/80'
             >
               {isExpanded ? 'Brandon Gottshall' : 'BG'}
             </Link>
@@ -66,9 +81,9 @@ export default function Navbar() {
                   duration: 0.2
                 }
               }}
-              className="opacity-50 group-hover:opacity-100 transition-opacity duration-200"
+              className='opacity-50 transition-opacity duration-200 group-hover:opacity-100'
             >
-              <ChevronDown className="h-4 w-4 text-navy dark:text-cream" />
+              <ChevronDown className='w-4 h-4 text-navy dark:text-cream' />
             </motion.div>
           </motion.div>
 
@@ -80,18 +95,17 @@ export default function Navbar() {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-full left-0 -mt-2 z-50"
+                className={`absolute left-0 top-full ${isStudioPage ? 'z-[9999]' : 'z-50'} -mt-2`}
               >
-                <div className="py-1 min-w-[160px] bg-cream dark:bg-navy-darkest border border-navy/10 dark:border-cream/10 rounded-lg shadow-lg">
-                  <div className="py-1">
+                <div className='py-1 min-w-[160px] bg-cream dark:bg-navy-darkest border border-navy/10 dark:border-cream/10 rounded-lg shadow-lg'>
+                  <div className='py-1'>
                     {' '}
-                    {/* Extra padding container to maintain hover area */}
                     {navLinks.map((link) => (
                       <Link
                         key={link.title}
                         href={link.href}
                         onClick={() => setIsExpanded(false)}
-                        className="block px-4 py-2 text-navy dark:text-cream hover:bg-navy/5 dark:hover:bg-cream/5 transition-colors duration-200"
+                        className='block px-4 py-2 transition-colors duration-200 text-navy dark:text-cream hover:bg-navy/5 dark:hover:bg-cream/5'
                       >
                         {link.title}
                       </Link>
@@ -104,7 +118,7 @@ export default function Navbar() {
         </motion.div>
 
         {/* Theme Switch */}
-        <div className="flex items-center">
+        <div className='flex items-center'>
           <ThemeSwitch />
         </div>
       </div>
