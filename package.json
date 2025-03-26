@@ -10,9 +10,12 @@
     "lint": "bun run lint:eslint && bun run lint:ts",
     "lint:eslint": "eslint --ext ts,tsx,js,jsx .",
     "lint:ts": "tsc --noEmit --project tsconfig.json",
+    "watch": "tsc --watch --noEmit --project './tsconfig.json' --preserveWatchOutput",
     "update-github-stats": "bun run scripts/update-github-stats.ts",
     "prepare": "husky install",
-    "type-check": "tsc --noEmit --project tsconfig.json"
+    "type-check": "tsc --noEmit --project tsconfig.json",
+    "clean:ts": "rm -rf node_modules/.cache/typescript/",
+    "clean": "npm run clean:ts"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",

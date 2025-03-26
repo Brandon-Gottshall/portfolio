@@ -1,4 +1,8 @@
-import type { DoughnutChartConfig, DoughnutChartInstance, DoughnutEventHandlers } from '@/types/chart'
+import type {
+  DoughnutChartConfig,
+  DoughnutChartInstance,
+  DoughnutEventHandlers
+} from '@/types/chart'
 import { Chart as ChartJS } from 'chart.js'
 import type { ChartEvent, Element, ArcElement } from 'chart.js'
 
@@ -6,12 +10,8 @@ function bindChartEvents(
   chart: DoughnutChartInstance,
   handlers: DoughnutEventHandlers
 ): void {
-  const {
-    onSegmentHover,
-    onSegmentLeave,
-    onLegendHover,
-    onLegendLeave
-  } = handlers
+  const { onSegmentHover, onSegmentLeave, onLegendHover, onLegendLeave } =
+    handlers
 
   if (onSegmentHover || onSegmentLeave) {
     chart.canvas.addEventListener('mousemove', (event: ChartEvent) => {
@@ -21,7 +21,7 @@ function bindChartEvents(
         { intersect: true },
         false
       )
-      
+
       if (elements.length > 0) {
         const firstElement = elements[0]
         onSegmentHover?.(firstElement.index)
@@ -39,8 +39,10 @@ function bindChartEvents(
   if (onLegendHover || onLegendLeave) {
     const meta = chart.getDatasetMeta(0)
     if (meta?.data) {
-      meta.data.forEach((arc: Element<ArcElement>, index: number) => {
-        const arcElement = arc as unknown as { addEventListener: (type: string, handler: () => void) => void }
+      meta.data.forEach((arc: Element<typeof ArcElement>, index: number) => {
+        const arcElement = arc as unknown as {
+          addEventListener: (type: string, handler: () => void) => void
+        }
         arcElement.addEventListener('mouseenter', () => {
           onLegendHover?.(index)
         })
@@ -52,19 +54,24 @@ function bindChartEvents(
   }
 }
 
-export function createDoughnutChart(config: DoughnutChartConfig): DoughnutChartInstance {
+export function createDoughnutChart(
+  config: DoughnutChartConfig
+): DoughnutChartInstance {
   const { data, options, eventHandlers } = config
-  
-  // Create chart instance
-  const chart = new ChartJS(document.createElement('canvas'), {
+
+  // Create chart instance with proper constructor typing
+  const chart = new (ChartJS as unknown as {
+    new (
+      ctx: HTMLCanvasElement,
+      config: DoughnutChartConfig
+    ): DoughnutChartInstance
+  })(document.createElement('canvas'), {
     type: 'doughnut',
     data,
     options: {
       ...options,
-      // Ensure responsive behavior
       responsive: true,
       maintainAspectRatio: false,
-      // Add any default options here
       plugins: {
         ...options.plugins,
         tooltip: {
@@ -73,7 +80,7 @@ export function createDoughnutChart(config: DoughnutChartConfig): DoughnutChartI
         }
       }
     }
-  }) as DoughnutChartInstance
+  })
 
   // Bind event handlers if provided
   if (eventHandlers) {
@@ -81,4 +88,4 @@ export function createDoughnutChart(config: DoughnutChartConfig): DoughnutChartI
   }
 
   return chart
-} 
+}

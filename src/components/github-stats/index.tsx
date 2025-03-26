@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import cachedStats from '@/data/github-stats.json' assert { type: 'json' }

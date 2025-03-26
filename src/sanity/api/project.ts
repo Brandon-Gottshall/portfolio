@@ -1,10 +1,10 @@
 import { client } from '../lib/client'
-import { type Image, type PortableTextBlock } from 'sanity'
+import { type Image, type PortableTextBlock, type Slug } from 'sanity'
 
 export interface Project {
   _id: string
   title: string
-  slug: string
+  slug: Slug
   shortDescription: string
   description: PortableTextBlock[] // Portable Text
   technologies: string[]

@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/typescript/.tsbuildinfo",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
@@ -34,6 +35,27 @@
       "next-sanity": ["./node_modules/next-sanity"],
       "next-sanity/studio": ["./node_modules/next-sanity/studio"]
     }
+  },
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "fallbackPolling": "dynamicPriority",
+    "synchronousWatchDirectory": true,
+    "excludeDirectories": [
+      "**/node_modules",
+      "dist",
+      ".next",
+      "tmp_repos",
+      "Component Archive",
+      "coverage",
+      "build"
+    ],
+    "excludeFiles": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx"
+    ]
   },
   "include": [
     "next-env.d.ts",

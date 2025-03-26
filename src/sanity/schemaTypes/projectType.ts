@@ -1,14 +1,10 @@
 import { defineField, defineType } from 'sanity'
-import type { Rule } from 'sanity'
+import type { Rule, PreviewValue } from 'sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { urlFor } from '../lib/image'
 
 const PROJECT_STATUSES = ['in-development', 'completed', 'archived'] as const
 type ProjectStatus = (typeof PROJECT_STATUSES)[number]
-
-interface PreviewProps {
-  title?: string
-  status?: string
-  media?: unknown
-}
 
 export const projectType = defineType({
   name: 'project',
@@ -98,13 +94,17 @@ export const projectType = defineType({
       status: 'status',
       media: 'thumbnail'
     },
-    prepare(selection: PreviewProps) {
+    prepare(selection: {
+      title?: string
+      status?: ProjectStatus
+      media?: SanityImageSource
+    }): PreviewValue {
       const { title = '', status = '', media } = selection
       return {
         title,
         subtitle:
           status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' '),
-        media
+        media: media ? urlFor(media).width(200).url() : undefined
       }
     }
   }

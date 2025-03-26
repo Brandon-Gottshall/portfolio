@@ -1,8 +1,10 @@
-import { createClient } from 'next-sanity'
+import { createClient } from '@sanity/client'
+import type { SanityClient } from '@sanity/client'
 
 import { apiVersion, dataset, projectId } from '../env'
 
-export const client = createClient({
+// Configure the client with proper typing
+export const client: SanityClient = createClient({
   projectId,
   dataset,
   apiVersion,

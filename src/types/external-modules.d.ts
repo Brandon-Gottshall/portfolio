@@ -104,25 +104,15 @@ declare module 'sanity' {
     [key: string]: unknown
   }
 
-  export interface PortableTextSpan {
-    _type: 'span'
-    text: string
-    marks?: string[]
-    [key: string]: unknown
+  export interface PreviewValue {
+    title?: string
+    subtitle?: string
+    media?: Reference | SanityImage
   }
 
-  export interface PortableTextMark {
-    _key: string
-    _type: string
-    [key: string]: unknown
-  }
-
-  export interface SanityPortableTextBlock {
-    _type: 'block'
-    children: PortableTextSpan[]
-    markDefs?: PortableTextMark[]
-    style?: string
-    [key: string]: unknown
+  export interface PreviewConfig {
+    select?: Record<string, string>
+    prepare?: (value: Record<string, any>) => PreviewValue
   }
 
   export interface SchemaTypeOptions {
@@ -137,19 +127,7 @@ declare module 'sanity' {
       options?: Record<string, unknown>
       [key: string]: unknown
     }>
-    preview?: {
-      select?: Record<string, string>
-      prepare?: (selection: {
-        title?: string
-        subtitle?: string
-        media?: unknown
-        [key: string]: unknown
-      }) => {
-        title?: string
-        subtitle?: string
-        media?: unknown
-      }
-    }
+    preview?: PreviewConfig
     [key: string]: unknown
   }
 

@@ -2,23 +2,21 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "typescript",
-      "tsconfig": "tsconfig.json",
-      "problemMatcher": [
-        "$tsc"
-      ],
+      "type": "npm",
+      "script": "watch",
+      "problemMatcher": "$tsc-watch",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "never",
+        "revealProblems": "onProblem"
+      },
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "presentation": {
-        "reveal": "never"
-      },
-      "label": "tsc: watch - tsconfig.json",
       "runOptions": {
         "runOn": "folderOpen"
-      },
-      "isBackground": true
+      }
     }
   ]
 } 

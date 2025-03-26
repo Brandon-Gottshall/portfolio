@@ -103,7 +103,7 @@ export default [
       'temp/**',
       '.tmp/**',
       'Component Archive/**',
-      '*.tsbuildinfo',
+      'node_modules/.cache/**',
       'next-env.d.ts',
       'eslint.config.js',
       '!sanity.cli.ts',
