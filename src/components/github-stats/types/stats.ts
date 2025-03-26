@@ -338,3 +338,12 @@ export interface DetailedBreakdownProps {
   isDarkMode: boolean
   onSegmentHover: (index: number | null) => void
 }
+
+export interface DonutChartProps {
+  data: ProcessedStat[]
+  allStats: ProcessedStat[]
+  isDarkMode: boolean
+  type: Props['type']
+  activeSegment: number | null
+  onSegmentHover: (index: number | null) => void
+}

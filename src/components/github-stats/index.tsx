@@ -365,6 +365,7 @@ function StatsVisualization({
 
         <DonutChart
           data={finalDonutStats}
+          allStats={processedStats}
           isDarkMode={isDarkMode}
           type={type}
           activeSegment={activeSegment}

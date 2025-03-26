@@ -4,6 +4,7 @@ import type { ChartOptions, ChartEvent, ActiveElement } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import type { DoughnutChartInstance } from '@/types/chart'
+import type { DonutChartProps, ProcessedStat } from '../../types/stats'
 
 // Register required ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels)
@@ -24,20 +25,6 @@ interface ToolCategoryData extends BaseChartData {
   tools: Record<string, ToolData>
 }
 
-interface DonutChartProps {
-  data: Array<{
-    name: string
-    percentage: number
-    commits?: number
-    repositories: number
-    bytes?: number
-  }>
-  isDarkMode: boolean
-  type: 'languages' | 'frameworks' | 'tools'
-  activeSegment: number | null
-  onSegmentHover: (index: number | null) => void
-}
-
 function isToolCategory(
   stat: BaseChartData | ToolCategoryData
 ): stat is ToolCategoryData {
@@ -52,6 +39,7 @@ function isToolCategory(
 
 export function DonutChart({
   data,
+  allStats,
   isDarkMode,
   type,
   activeSegment,
@@ -267,11 +255,64 @@ export function DonutChart({
     onHover: handleHover
   } as const
 
-  // Prepare details content for the active segment
-  const activeSegmentDetails =
-    localActiveSegment !== null && localActiveSegment < data.length
-      ? generateDetailsContent(data[localActiveSegment], type)
-      : null
+  // Updated detail box logic to handle all stats
+  const getActiveStatDetails = () => {
+    if (localActiveSegment === null) return null
+
+    // For main segments (not "Other")
+    if (localActiveSegment < data.length - 1) {
+      return {
+        name: data[localActiveSegment].name,
+        details: generateDetailsContent(data[localActiveSegment], type)
+      }
+    }
+
+    // For "Other" segment
+    if (localActiveSegment === data.length - 1) {
+      // Add a guard clause to check if allStats exists
+      if (!allStats) {
+        return {
+          name: 'Other Languages',
+          details: [
+            `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
+            'Details unavailable'
+          ]
+        }
+      }
+
+      const otherStats = allStats.filter(
+        (stat: ProcessedStat) =>
+          !data.slice(0, -1).find((d: ProcessedStat) => d.name === stat.name)
+      )
+      const totalCommits = otherStats.reduce(
+        (sum: number, stat: ProcessedStat) => sum + (stat.commits || 0),
+        0
+      )
+      const totalRepos = otherStats.reduce(
+        (sum: number, stat: ProcessedStat) => sum + stat.repositories,
+        0
+      )
+      const totalBytes = otherStats.reduce(
+        (sum: number, stat: ProcessedStat) => sum + (stat.bytes || 0),
+        0
+      )
+
+      return {
+        name: 'Other Languages',
+        details: [
+          `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
+          `${otherStats.length} languages`,
+          `${totalCommits.toLocaleString()} total commits`,
+          `${totalRepos} repositories`,
+          `Total size: ${formatBytes(totalBytes)}`
+        ]
+      }
+    }
+
+    return null
+  }
+
+  const activeDetails = getActiveStatDetails()
 
   return (
     <div
@@ -289,13 +330,13 @@ export function DonutChart({
       </div>
 
       <div className='transition-all duration-300 ease-in-out md:h-48'>
-        {localActiveSegment !== null && activeSegmentDetails ? (
+        {activeDetails ? (
           <div className='flex flex-col justify-center p-5 h-full rounded-lg border shadow-sm border-navy/10 dark:border-cream/10 bg-cream/10 dark:bg-navy-light/10 animate-in fade-in-75 slide-in-from-right-5 zoom-in-95'>
             <h3 className='mb-2 text-lg font-medium text-navy dark:text-cream'>
-              {data[localActiveSegment].name}
+              {activeDetails.name}
             </h3>
             <div className='space-y-1 md:space-y-2 overflow-y-auto max-h-[calc(100%-2rem)] md:max-h-none'>
-              {activeSegmentDetails.map((detail, index) => (
+              {activeDetails.details.map((detail, index) => (
                 <p
                   key={index}
                   className='text-sm text-navy-dark/90 dark:text-cream-dark/90'
