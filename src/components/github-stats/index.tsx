@@ -15,7 +15,8 @@ import type {
   Props,
   DetailedStats,
   CSSStats,
-  CachedStatsInput
+  CachedStatsInput,
+  SegmentHoverState
 } from './types/stats'
 
 // Create an adapter function to properly map the JSON data to the expected types
@@ -139,8 +140,8 @@ interface StatsVisualizationProps {
   stats: ProcessedStat[]
   isDarkMode: boolean
   type: Props['type']
-  activeSegment: number | null
-  onSegmentHover: (index: number | null) => void
+  activeSegment: SegmentHoverState
+  onSegmentHover: (index: SegmentHoverState) => void
   showBoth?: boolean
 }
 
@@ -285,40 +286,54 @@ function StatsVisualization({
   ]
 
   // Map donut indices to detailed breakdown indices for hover sync
-  const handleDonutHover = (index: number | null) => {
+  const handleDonutHover = (state: SegmentHoverState) => {
     // If the index is null (no segment hovered) or if it's the "Other" category
-    if (index === null) {
+    if (state === null) {
       onSegmentHover(null)
+      return
+    }
+
+    // If it's a complex object (from detailed breakdown), pass it directly
+    if (typeof state === 'object') {
+      onSegmentHover(state)
       return
     }
 
     // If it's a valid top item, pass the index directly
-    if (index < topItems.length) {
-      onSegmentHover(index)
+    if (state < topItems.length) {
+      onSegmentHover(state)
       return
     }
 
     // Handle "Other" category (last donut segment)
-    if (index === topItems.length) {
-      // You might want to handle the "Other" category differently
-      // For now, we'll just set no active segment
-      onSegmentHover(null)
+    if (state === topItems.length) {
+      onSegmentHover(state)
       return
     }
   }
 
   // Map detailed breakdown indices to donut indices for hover sync
-  const handleDetailedHover = (index: number | null) => {
-    if (index === null) {
+  const handleDetailedHover = (state: SegmentHoverState) => {
+    if (state === null) {
       onSegmentHover(null)
       return
     }
+
+    // If it's an object with mainIndex and otherIndex, pass it through
+    if (typeof state === 'object') {
+      onSegmentHover(state)
+      return
+    }
+
     // If it's in the top items, highlight corresponding donut segment
-    if (index < topItems.length) {
-      onSegmentHover(index)
+    if (state < topItems.length) {
+      onSegmentHover(state)
     } else {
-      // If it's in "Other", highlight the Other segment
-      onSegmentHover(topItems.length)
+      // If it's in "Other", highlight the Other segment with specific language info
+      onSegmentHover({
+        mainIndex: topItems.length,
+        otherIndex: state as number // Type assertion since we know it's a number at this point
+      })
     }
   }
 
@@ -501,8 +516,8 @@ function StatsContent({
   processedStats: ProcessedStat[]
   isDarkMode: boolean
   type: Props['type']
-  activeSegment: number | null
-  setActiveSegment: (index: number | null) => void
+  activeSegment: SegmentHoverState
+  setActiveSegment: (index: SegmentHoverState) => void
   lastUpdated: string | null
   showBoth: boolean
 }) {
@@ -540,7 +555,7 @@ function StatsContent({
 export function GithubLanguageStats({ type, showBoth = false }: Props) {
   const { stats, loading, error, lastUpdated } = useGithubStats(type)
   const isDarkMode = useDarkMode()
-  const [activeSegment, setActiveSegment] = useState<number | null>(null)
+  const [activeSegment, setActiveSegment] = useState<SegmentHoverState>(null)
 
   // Add debug logging
   console.log(`[${type}] Raw stats:`, stats)

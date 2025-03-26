@@ -8,7 +8,13 @@ export function StatRow({
   _type,
   onSegmentHover
 }: StatRowProps) {
-  const isActive = activeSegment === index
+  // Check if this row is active based on the complex activeSegment
+  const isActive =
+    activeSegment === index ||
+    (activeSegment !== null &&
+      typeof activeSegment === 'object' &&
+      activeSegment.otherIndex === index)
+
   const percentage = stat.percentage
   const lastHoveredRef = useRef<boolean>(false)
 

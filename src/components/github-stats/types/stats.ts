@@ -323,20 +323,25 @@ export interface CachedStatsInput {
   found_emails?: string[]
 }
 
+export type SegmentHoverState =
+  | number
+  | null
+  | { mainIndex: number; otherIndex: number }
+
 export interface StatRowProps {
   stat: ProcessedStat
   index: number
-  activeSegment: number | null
+  activeSegment: number | null | { mainIndex: number; otherIndex: number }
   _type: Props['type']
-  onSegmentHover: (index: number | null) => void
+  onSegmentHover: (index: SegmentHoverState) => void
 }
 
 export interface DetailedBreakdownProps {
   stats: ProcessedStat[]
-  activeSegment: number | null
+  activeSegment: number | null | { mainIndex: number; otherIndex: number }
   type: Props['type']
   isDarkMode: boolean
-  onSegmentHover: (index: number | null) => void
+  onSegmentHover: (index: SegmentHoverState) => void
 }
 
 export interface DonutChartProps {
@@ -344,6 +349,6 @@ export interface DonutChartProps {
   allStats: ProcessedStat[]
   isDarkMode: boolean
   type: Props['type']
-  activeSegment: number | null
-  onSegmentHover: (index: number | null) => void
+  activeSegment: number | null | { mainIndex: number; otherIndex: number }
+  onSegmentHover: (index: SegmentHoverState) => void
 }

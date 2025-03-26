@@ -1,6 +1,15 @@
 import React, { useRef, useEffect } from 'react'
-import { type DetailedBreakdownProps } from '../types/stats'
+import {
+  type DetailedBreakdownProps,
+  type SegmentHoverState
+} from '../types/stats'
 import { StatRow } from './StatRow'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
 
 export function DetailedBreakdown({
   stats,
@@ -9,8 +18,44 @@ export function DetailedBreakdown({
   onSegmentHover
 }: DetailedBreakdownProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  // Track the last active segment for potential restoration on re-entry
-  const lastActiveSegmentRef = useRef<number | null>(null)
+  const lastActiveSegmentRef = useRef<SegmentHoverState>(null)
+
+  // Split stats into top 5 and others
+  const topStats = stats.slice(0, 5)
+  const otherStats = stats.slice(5)
+
+  // Calculate combined statistics for "Other" category
+  const otherPercentage = otherStats.reduce(
+    (sum, stat) => sum + stat.percentage,
+    0
+  )
+  const otherCommits = otherStats.reduce((sum, stat) => sum + stat.commits, 0)
+  const otherRepos = otherStats.reduce(
+    (sum, stat) => sum + stat.repositories,
+    0
+  )
+
+  // Create a function to handle hover on items in the "Other" section
+  const handleOtherItemHover = (index: SegmentHoverState) => {
+    // If we're getting null, just pass it through
+    if (index === null) {
+      onSegmentHover(null)
+      return
+    }
+
+    // If we already have a complex object, pass it through
+    if (typeof index === 'object') {
+      onSegmentHover(index)
+      return
+    }
+
+    // If we have a number, convert it to a complex object
+    // Pass both the "Other" segment index (topStats.length) and the specific language index
+    onSegmentHover({
+      mainIndex: topStats.length,
+      otherIndex: index
+    })
+  }
 
   // Handle mouse enter for the entire container
   const handleContainerMouseEnter = (_e: React.MouseEvent) => {
@@ -79,7 +124,8 @@ export function DetailedBreakdown({
         onMouseEnter={handleContainerMouseEnter}
         onMouseLeave={handleContainerMouseLeave}
       >
-        {stats.map((stat, index) => (
+        {/* Top 5 languages */}
+        {topStats.map((stat, index) => (
           <StatRow
             key={stat.name}
             stat={stat}
@@ -89,6 +135,42 @@ export function DetailedBreakdown({
             onSegmentHover={onSegmentHover}
           />
         ))}
+
+        {/* Other languages in accordion */}
+        {otherStats.length > 0 && (
+          <Accordion type='single' collapsible className='mt-4'>
+            <AccordionItem value='other-languages'>
+              <AccordionTrigger className='text-navy dark:text-cream hover:no-underline'>
+                <div className='w-full'>
+                  <div className='flex justify-between items-center'>
+                    <span className='text-sm font-medium'>
+                      Other ({otherStats.length})
+                    </span>
+                    <span className='text-xs font-medium text-navy-light dark:text-cream-light'>
+                      {otherPercentage.toFixed(1)}% •{' '}
+                      {otherCommits.toLocaleString()} commits • {otherRepos}{' '}
+                      repos
+                    </span>
+                  </div>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className='space-y-1 pt-2'>
+                  {otherStats.map((stat, index) => (
+                    <StatRow
+                      key={stat.name}
+                      stat={stat}
+                      index={index + topStats.length}
+                      activeSegment={activeSegment}
+                      _type={type}
+                      onSegmentHover={handleOtherItemHover}
+                    />
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
       </div>
     </div>
   )

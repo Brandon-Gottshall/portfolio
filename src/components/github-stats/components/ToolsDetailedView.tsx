@@ -13,7 +13,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { WarningAccordion } from './WarningAccordion'
-import type { ProcessedStat } from '../types/stats'
+import type { ProcessedStat, SegmentHoverState } from '../types/stats'
 import {
   shouldShowZeroCommitWarning,
   shouldShowRepoWarning
@@ -23,16 +23,16 @@ import { ToolCategoryBreakdown } from './ToolCategoryBreakdown'
 interface ToolsDetailedViewProps {
   processedStats: ProcessedStat[]
   isDarkMode: boolean
-  activeSegment: number | null
-  setActiveSegment: (index: number | null) => void
+  activeSegment: SegmentHoverState
+  setActiveSegment: (index: SegmentHoverState) => void
   lastUpdated: string | null
 }
 
 interface StatItemProps {
   stat: ProcessedStat
   index: number
-  activeSegment: number | null
-  setActiveSegment: (index: number | null) => void
+  activeSegment: SegmentHoverState
+  setActiveSegment: (index: SegmentHoverState) => void
   isDarkMode: boolean
   topItemsLength: number
   chartColors: string[]
@@ -41,7 +41,7 @@ interface StatItemProps {
 interface StatHeaderProps {
   stat: ProcessedStat
   index: number
-  activeSegment: number | null
+  activeSegment: SegmentHoverState
   topItemsLength: number
   chartColors: string[]
 }
@@ -92,7 +92,7 @@ function StatHeader({
 interface StatProgressProps {
   stat: ProcessedStat
   index: number
-  activeSegment: number | null
+  activeSegment: SegmentHoverState
   chartColors: string[]
 }
 

@@ -1,10 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import type { ChartOptions, ChartEvent, ActiveElement } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import type { DoughnutChartInstance } from '@/types/chart'
-import type { DonutChartProps, ProcessedStat } from '../../types/stats'
+import type {
+  DonutChartProps,
+  ProcessedStat,
+  SegmentHoverState
+} from '../../types/stats'
 
 // Register required ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels)
@@ -47,12 +51,27 @@ export function DonutChart({
 }: DonutChartProps) {
   const chartRef = useRef<DoughnutChartInstance>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [localActiveSegment, setLocalActiveSegment] = useState<number | null>(
-    activeSegment
-  )
+  const chartIsReady = useRef<boolean>(false)
+  const [localActiveSegment, setLocalActiveSegment] =
+    useState<SegmentHoverState>(activeSegment)
 
   // Track last active segment to restore when mouse returns to chart
-  const lastActiveSegmentRef = useRef<number | null>(null)
+  const lastActiveSegmentRef = useRef<SegmentHoverState>(null)
+
+  // Safe chart update function
+  const safeChartUpdate = useCallback((chart: DoughnutChartInstance) => {
+    if (!chart || !chartIsReady.current) return
+
+    try {
+      requestAnimationFrame(() => {
+        if (chart.update) {
+          chart.update('none')
+        }
+      })
+    } catch (error) {
+      console.error('Error updating chart:', error)
+    }
+  }, [])
 
   // Update local state when external state changes
   useEffect(() => {
@@ -69,70 +88,95 @@ export function DonutChart({
     }
   }, [activeSegment])
 
-  // Updated handleHover to match Chart.js expected signature
-  const handleHover = (event: ChartEvent, elements: ActiveElement[]) => {
-    if (elements && elements.length > 0) {
-      // Update state and call the callback when hovering a segment
-      setLocalActiveSegment(elements[0].index)
-      onSegmentHover(elements[0].index)
-      lastActiveSegmentRef.current = elements[0].index
-    }
-  }
+  // Updated handleHover to match Chart.js expected signature with safety checks
+  const handleHover = useCallback(
+    (event: ChartEvent, elements: ActiveElement[]) => {
+      if (!chartIsReady.current) return
 
-  // Add a direct event listener for better hover detection
-  useEffect(() => {
-    if (!chartRef.current) return
-    const chart = chartRef.current
-
-    const handleChartHover = (e: MouseEvent) => {
-      const elements = chart.getElementsAtEventForMode(
-        e as unknown as ChartEvent,
-        'nearest',
-        { intersect: true },
-        false
-      )
-
-      if (elements.length > 0) {
+      if (elements && elements.length > 0) {
         const index = elements[0].index
         setLocalActiveSegment(index)
         onSegmentHover(index)
         lastActiveSegmentRef.current = index
       }
-    }
+    },
+    [onSegmentHover]
+  )
 
-    // Add the event listener to the chart canvas
-    chart.canvas.addEventListener('mousemove', handleChartHover)
+  // Safe element activation function
+  const safeSetActiveElements = useCallback(
+    (
+      chart: DoughnutChartInstance,
+      elements: Array<{ datasetIndex: number; index: number }>
+    ) => {
+      if (!chart || !chartIsReady.current) return
 
-    // Clean up the event listener on unmount
-    return () => {
-      chart.canvas.removeEventListener('mousemove', handleChartHover)
-    }
-  }, [onSegmentHover])
+      try {
+        if (typeof chart.setActiveElements === 'function') {
+          chart.setActiveElements(elements)
 
+          if (chart.tooltip) {
+            if (elements.length === 0) {
+              chart.tooltip.setActiveElements([], { x: 0, y: 0 })
+              if ('active' in chart.tooltip) {
+                chart.tooltip.active = false
+              }
+            } else {
+              const meta = chart.getDatasetMeta(0)
+              const element = elements[0]
+              if (meta?.data?.[element.index]) {
+                const arc = meta.data[element.index]
+                if ('x' in arc && 'y' in arc) {
+                  chart.tooltip.setActiveElements(elements, {
+                    x: arc.x,
+                    y: arc.y
+                  })
+                  if ('active' in chart.tooltip) {
+                    chart.tooltip.active = true
+                  }
+                }
+              }
+            }
+          }
+
+          safeChartUpdate(chart)
+        }
+      } catch (error) {
+        console.error('Error setting active elements:', error)
+      }
+    },
+    [safeChartUpdate]
+  )
+
+  // Effect for handling active segment changes
   useEffect(() => {
-    if (!chartRef.current) return
     const chart = chartRef.current
+    if (!chart || !chartIsReady.current) return
 
-    if (localActiveSegment !== null) {
-      chart.setActiveElements([{ datasetIndex: 0, index: localActiveSegment }])
-      const meta = chart.getDatasetMeta(0)
-      if (meta.data[localActiveSegment] && chart.tooltip) {
-        const arc = meta.data[localActiveSegment]
-        chart.tooltip.setActiveElements(
-          [{ datasetIndex: 0, index: localActiveSegment }],
-          { x: arc.x, y: arc.y }
-        )
-        chart.tooltip.active = true
+    try {
+      if (localActiveSegment === null) {
+        safeSetActiveElements(chart, [])
+        return
       }
-    } else {
-      chart.setActiveElements([])
-      if (chart.tooltip) {
-        chart.tooltip.setActiveElements([], { x: 0, y: 0 })
-        chart.tooltip.active = false
+
+      const segmentIndex =
+        typeof localActiveSegment === 'number'
+          ? localActiveSegment
+          : typeof localActiveSegment === 'object' &&
+              localActiveSegment !== null
+            ? localActiveSegment.mainIndex
+            : null
+
+      if (segmentIndex === null) {
+        safeSetActiveElements(chart, [])
+        return
       }
+
+      safeSetActiveElements(chart, [{ datasetIndex: 0, index: segmentIndex }])
+    } catch (error) {
+      console.error('Error updating active segment:', error)
     }
-    chart.update()
-  }, [localActiveSegment])
+  }, [localActiveSegment, safeSetActiveElements])
 
   useEffect(() => {
     const chart = chartRef.current
@@ -257,55 +301,77 @@ export function DonutChart({
 
   // Updated detail box logic to handle all stats
   const getActiveStatDetails = () => {
+    // Handle null localActiveSegment
     if (localActiveSegment === null) return null
 
-    // For main segments (not "Other")
-    if (localActiveSegment < data.length - 1) {
-      return {
-        name: data[localActiveSegment].name,
-        details: generateDetailsContent(data[localActiveSegment], type)
-      }
-    }
-
-    // For "Other" segment
-    if (localActiveSegment === data.length - 1) {
-      // Add a guard clause to check if allStats exists
-      if (!allStats) {
-        return {
-          name: 'Other Languages',
-          details: [
-            `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
-            'Details unavailable'
-          ]
-        }
-      }
+    // Handle object localActiveSegment for specific language in "Other"
+    if (typeof localActiveSegment === 'object' && localActiveSegment !== null) {
+      if (!allStats) return null
 
       const otherStats = allStats.filter(
         (stat: ProcessedStat) =>
           !data.slice(0, -1).find((d: ProcessedStat) => d.name === stat.name)
       )
-      const totalCommits = otherStats.reduce(
-        (sum: number, stat: ProcessedStat) => sum + (stat.commits || 0),
-        0
-      )
-      const totalRepos = otherStats.reduce(
-        (sum: number, stat: ProcessedStat) => sum + stat.repositories,
-        0
-      )
-      const totalBytes = otherStats.reduce(
-        (sum: number, stat: ProcessedStat) => sum + (stat.bytes || 0),
-        0
-      )
 
-      return {
-        name: 'Other Languages',
-        details: [
-          `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
-          `${otherStats.length} languages`,
-          `${totalCommits.toLocaleString()} total commits`,
-          `${totalRepos} repositories`,
-          `Total size: ${formatBytes(totalBytes)}`
-        ]
+      // Calculate which "other" language is being hovered
+      const specificIndex = localActiveSegment.otherIndex - data.length + 1
+      if (specificIndex >= 0 && specificIndex < otherStats.length) {
+        const specificStat = otherStats[specificIndex]
+        return {
+          name: `${specificStat.name} (Other)`,
+          details: generateDetailsContent(specificStat, type)
+        }
+      }
+    }
+
+    // Handle numeric localActiveSegment for main segments (not "Other")
+    if (typeof localActiveSegment === 'number') {
+      if (localActiveSegment < data.length - 1) {
+        return {
+          name: data[localActiveSegment].name,
+          details: generateDetailsContent(data[localActiveSegment], type)
+        }
+      }
+
+      // Handle numeric localActiveSegment for "Other" segment without specific language
+      if (localActiveSegment === data.length - 1) {
+        if (!allStats) {
+          return {
+            name: 'Other Languages',
+            details: [
+              `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
+              'Details unavailable'
+            ]
+          }
+        }
+
+        const otherStats = allStats.filter(
+          (stat: ProcessedStat) =>
+            !data.slice(0, -1).find((d: ProcessedStat) => d.name === stat.name)
+        )
+        const totalCommits = otherStats.reduce(
+          (sum: number, stat: ProcessedStat) => sum + (stat.commits || 0),
+          0
+        )
+        const totalRepos = otherStats.reduce(
+          (sum: number, stat: ProcessedStat) => sum + stat.repositories,
+          0
+        )
+        const totalBytes = otherStats.reduce(
+          (sum: number, stat: ProcessedStat) => sum + (stat.bytes || 0),
+          0
+        )
+
+        return {
+          name: 'Other Languages',
+          details: [
+            `${data[localActiveSegment].percentage.toFixed(1)}% of all commits`,
+            `${otherStats.length} languages`,
+            `${totalCommits.toLocaleString()} total commits`,
+            `${totalRepos} repositories`,
+            `Total size: ${formatBytes(totalBytes)}`
+          ]
+        }
       }
     }
 
@@ -325,7 +391,14 @@ export function DonutChart({
         onMouseEnter={handleChartContainerMouseEnter}
       >
         <div className='relative w-48 h-48 md:w-full'>
-          <Doughnut data={chartData} options={options} ref={chartRef} />
+          <Doughnut
+            data={chartData}
+            options={options}
+            ref={chartRef}
+            onLoad={() => {
+              chartIsReady.current = true
+            }}
+          />
         </div>
       </div>
 
