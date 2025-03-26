@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // TODO: Properly type these definitions during PMVP phase (see README.md)
 
@@ -666,3 +666,23 @@ export interface ReactElement<
 }
 
 // Remove unused type declarations and exports that are causing ESLint errors
+
+// Type definitions for react-text-loop-next
+declare module 'react-text-loop-next' {
+  import React from 'react'
+
+  export interface TextLoopProps {
+    children: React.ReactNode
+    interval?: number
+    delay?: number
+    adjustingSpeed?: number
+    springConfig?: { stiffness: number; damping: number }
+    fade?: boolean
+    mask?: boolean
+    noWrap?: boolean
+    className?: string
+    style?: React.CSSProperties
+  }
+
+  export class TextLoop extends React.Component<TextLoopProps> {}
+}

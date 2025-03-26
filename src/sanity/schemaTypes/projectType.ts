@@ -1,4 +1,14 @@
 import { defineField, defineType } from 'sanity'
+import type { Rule } from 'sanity'
+
+const PROJECT_STATUSES = ['in-development', 'completed', 'archived'] as const
+type ProjectStatus = (typeof PROJECT_STATUSES)[number]
+
+interface PreviewProps {
+  title?: string
+  status?: string
+  media?: unknown
+}
 
 export const projectType = defineType({
   name: 'project',
@@ -9,7 +19,7 @@ export const projectType = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule) => Rule.required()
+      validation: (rule: Rule) => rule.required()
     }),
     defineField({
       name: 'slug',
@@ -19,7 +29,7 @@ export const projectType = defineType({
         source: 'title',
         maxLength: 96
       },
-      validation: (Rule) => Rule.required()
+      validation: (rule: Rule) => rule.required()
     }),
     defineField({
       name: 'featured',
@@ -45,14 +55,14 @@ export const projectType = defineType({
       options: {
         hotspot: true
       },
-      validation: (Rule) => Rule.required()
+      validation: (rule: Rule) => rule.required()
     }),
     defineField({
       name: 'shortDescription',
       title: 'Short Description',
       type: 'text',
       rows: 3,
-      validation: (Rule) => Rule.required().max(200)
+      validation: (rule: Rule) => rule.required().max(200)
     }),
     defineField({
       name: 'technologies',
@@ -73,13 +83,13 @@ export const projectType = defineType({
       title: 'Project Status',
       type: 'string',
       options: {
-        list: [
-          { title: 'In Development', value: 'in-development' },
-          { title: 'Completed', value: 'completed' },
-          { title: 'Archived', value: 'archived' }
-        ]
+        list: PROJECT_STATUSES.map((status) => ({
+          title:
+            status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' '),
+          value: status
+        }))
       },
-      initialValue: 'completed'
+      initialValue: 'completed' as ProjectStatus
     })
   ],
   preview: {
@@ -88,10 +98,12 @@ export const projectType = defineType({
       status: 'status',
       media: 'thumbnail'
     },
-    prepare({ title, status, media }) {
+    prepare(selection: PreviewProps) {
+      const { title = '', status = '', media } = selection
       return {
         title,
-        subtitle: status.charAt(0).toUpperCase() + status.slice(1),
+        subtitle:
+          status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' '),
         media
       }
     }

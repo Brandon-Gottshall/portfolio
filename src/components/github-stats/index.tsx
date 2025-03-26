@@ -74,11 +74,40 @@ function adaptCachedStats(rawData: CachedStatsInput): CachedStats {
     })
   }
 
+  // Process frameworks data
+  const frameworks: Record<string, DetailedStats> = {}
+  if (rawData.frameworks) {
+    // Calculate total commits for percentage calculation
+    const totalCommits = Object.values(rawData.frameworks).reduce(
+      (sum, framework) => sum + (framework.commits || 0),
+      0
+    )
+
+    Object.entries(rawData.frameworks).forEach(([name, data]) => {
+      const commits = data.commits || 0
+      const repositories = data.repositories || 0
+      const percentage = totalCommits > 0 ? (commits / totalCommits) * 100 : 0
+
+      frameworks[name] = {
+        name,
+        commits,
+        repositories,
+        percentage,
+        summary: {
+          repositories,
+          commits,
+          bytes: 0,
+          percentage_of_all_commits: percentage
+        }
+      }
+    })
+  }
+
   return {
     lastUpdated: rawData.lastUpdated || new Date().toISOString(),
     repoCount: rawData.repoCount || 0,
     languages,
-    frameworks: rawData.frameworks || {},
+    frameworks,
     tools: rawData.tools || {},
     summary: rawData.summary || {
       total_repos: 0,
@@ -389,6 +418,37 @@ function useGithubStats(type: Props['type']) {
           }
         })
         setStats(toolStats)
+      } else if (type === 'frameworks') {
+        // Convert frameworks data to DetailedStats
+        const frameworkStats: Record<string, DetailedStats> = {}
+
+        // Get total commits for percentage calculation
+        const totalCommits = Object.values(typedCachedStats.frameworks).reduce(
+          (sum, framework) => sum + (framework.commits || 0),
+          0
+        )
+
+        Object.entries(typedCachedStats.frameworks).forEach(([name, data]) => {
+          const commits = data.commits || 0
+          const repositories = data.repositories || 0
+          const percentage =
+            totalCommits > 0 ? (commits / totalCommits) * 100 : 0
+
+          frameworkStats[name] = {
+            name,
+            commits,
+            repositories,
+            percentage,
+            summary: {
+              repositories,
+              commits,
+              bytes: 0,
+              percentage_of_all_commits: percentage
+            }
+          }
+        })
+
+        setStats(frameworkStats)
       } else {
         setStats(typedCachedStats[type])
       }

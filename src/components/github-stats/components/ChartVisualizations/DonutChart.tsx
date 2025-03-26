@@ -1,12 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import type {
-  ChartOptions,
-  ChartEvent,
-  InteractionMode,
-  ActiveElement,
-  Chart
-} from 'chart.js'
+import type { ChartOptions, ChartEvent, ActiveElement } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import type { DoughnutChartInstance } from '@/types/chart'
@@ -88,11 +82,7 @@ export function DonutChart({
   }, [activeSegment])
 
   // Updated handleHover to match Chart.js expected signature
-  const handleHover = (
-    event: ChartEvent,
-    elements: ActiveElement[],
-    chart: Chart
-  ) => {
+  const handleHover = (event: ChartEvent, elements: ActiveElement[]) => {
     if (elements && elements.length > 0) {
       // Update state and call the callback when hovering a segment
       setLocalActiveSegment(elements[0].index)
