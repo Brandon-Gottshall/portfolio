@@ -10,5 +10,6 @@
     "Turbopack"
   ],
   "typescript.tsc.autoDetect": "on",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "git.repositoryScanMaxDepth": 1
 }

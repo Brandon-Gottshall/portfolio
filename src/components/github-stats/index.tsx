@@ -1,44 +1,30 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from '@/components/ui/accordion'
 import cachedStats from '@/data/github-stats.json' assert { type: 'json' }
 
-import { CSSBreakdown } from './components/CSSBreakdown'
-
 import { formatBytes, getSafePercentage } from './utils/formatters'
-import {
-  NoDataWarning,
-  StaleDataWarning,
-  ZeroCommitWarning,
-  TinyRepoWarning,
-  RepositoryError
-} from './utils/warnings'
-import {
-  isCSSStats,
-  hasDetailedData,
-  calculateCategoryPercentage,
-  shouldShowZeroCommitWarning,
-  shouldShowRepoWarning
-} from './utils/calculations'
-import { ToolCategoryBreakdown } from './components/ToolCategoryBreakdown'
+import { NoDataWarning } from './utils/warnings'
+import { calculateCategoryPercentage } from './utils/calculations'
 import { DonutChart } from './components/ChartVisualizations/DonutChart'
-import { BarChart } from './components/ChartVisualizations/BarChart'
 import { ToolsDetailedView } from './components/ToolsDetailedView'
+import { DetailedBreakdown } from './components/DetailedBreakdown'
+import { WarningSection } from './components/WarningSection'
 
-import type { CachedStats, Props, DetailedStats, CSSStats } from './types/stats'
+import type {
+  CachedStats,
+  Props,
+  DetailedStats,
+  CSSStats,
+  CachedStatsInput
+} from './types/stats'
 
 // Create an adapter function to properly map the JSON data to the expected types
-function adaptCachedStats(rawData: any): CachedStats {
+function adaptCachedStats(rawData: CachedStatsInput): CachedStats {
   // Map languages to the correct interface structure
   const languages: Record<string, DetailedStats | CSSStats> = {}
 
   if (rawData.languages) {
-    Object.entries(rawData.languages).forEach(([lang, data]: [string, any]) => {
+    Object.entries(rawData.languages).forEach(([lang, data]) => {
       if (lang === 'CSS' && data.summary && data.variants) {
         // Handle CSS with its special structure
         languages[lang] = {
@@ -104,7 +90,7 @@ function adaptCachedStats(rawData: any): CachedStats {
       forks: 0
     },
     found_emails: rawData.found_emails || []
-  }
+  } as CachedStats
 }
 
 const typedCachedStats = adaptCachedStats(cachedStats)
@@ -227,90 +213,6 @@ function useStatsProcessing(
   }, [stats, type])
 }
 
-function renderToolBreakdown(stat: ProcessedStat, isDarkMode: boolean) {
-  if (!hasDetailedData(stat) || !('tools' in stat)) return null
-  return (
-    <ToolCategoryBreakdown
-      name={stat.name}
-      stats={{
-        repositories: stat.repositories,
-        commits: stat.commits,
-        tools: stat.tools || {}
-      }}
-      isDarkMode={isDarkMode}
-    />
-  )
-}
-
-function renderWarnings(stat: ProcessedStat) {
-  const hasZeroCommitWarning = shouldShowZeroCommitWarning(
-    stat.commits,
-    stat.repositories
-  )
-  const hasRepoWarning = shouldShowRepoWarning(stat.repositories, stat.commits)
-
-  return (
-    <div className='flex justify-between mt-1.5 text-xs text-navy/80 dark:text-cream/80'>
-      <div className='flex items-center'>
-        <span>{stat.commits} commits</span>
-        {hasZeroCommitWarning && <ZeroCommitWarning />}
-      </div>
-      {hasRepoWarning ? (
-        <TinyRepoWarning />
-      ) : (
-        <span>{stat.repositories} repositories</span>
-      )}
-    </div>
-  )
-}
-
-function renderBreakdowns(stat: ProcessedStat, isDarkMode: boolean) {
-  const isCSS = stat.name === 'CSS' && isCSSStats(stat)
-  const hasRepoWarning = shouldShowRepoWarning(stat.repositories, stat.commits)
-
-  return (
-    <>
-      {isCSS && <CSSBreakdown cssStats={stat} isDarkMode={isDarkMode} />}
-      {renderToolBreakdown(stat, isDarkMode)}
-      {hasRepoWarning && stat.commits > 10 && <RepositoryError />}
-    </>
-  )
-}
-
-function isCSSStat(stat: ProcessedStat) {
-  return stat.name === 'CSS' && isCSSStats(stat)
-}
-
-function hasToolData(stat: ProcessedStat) {
-  return hasDetailedData(stat) && 'tools' in stat
-}
-
-function shouldRenderBreakdown(stat: ProcessedStat) {
-  return (
-    isCSSStat(stat) ||
-    hasToolData(stat) ||
-    shouldShowZeroCommitWarning(stat.commits, stat.repositories) ||
-    shouldShowRepoWarning(stat.repositories, stat.commits)
-  )
-}
-
-function StatBreakdown({
-  stat,
-  isDarkMode
-}: {
-  stat: ProcessedStat
-  isDarkMode: boolean
-}) {
-  if (!shouldRenderBreakdown(stat)) return null
-
-  return (
-    <div>
-      {renderWarnings(stat)}
-      {renderBreakdowns(stat, isDarkMode)}
-    </div>
-  )
-}
-
 function StatsVisualization({
   stats,
   isDarkMode,
@@ -318,6 +220,8 @@ function StatsVisualization({
   activeSegment,
   onSegmentHover
 }: Omit<StatsVisualizationProps, 'showBoth'>) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const processedStats = [...stats]
   const cssIndex = processedStats.findIndex((item) => item.name === 'CSS')
   if (cssIndex > -1 && cssIndex >= 4) {
@@ -351,12 +255,78 @@ function StatsVisualization({
     }
   ]
 
-  const nextFiveItems = smallItems.slice(0, 5)
-  const barStats = [...topItems, ...nextFiveItems]
+  // Map donut indices to detailed breakdown indices for hover sync
+  const handleDonutHover = (index: number | null) => {
+    // If the index is null (no segment hovered) or if it's the "Other" category
+    if (index === null) {
+      onSegmentHover(null)
+      return
+    }
+
+    // If it's a valid top item, pass the index directly
+    if (index < topItems.length) {
+      onSegmentHover(index)
+      return
+    }
+
+    // Handle "Other" category (last donut segment)
+    if (index === topItems.length) {
+      // You might want to handle the "Other" category differently
+      // For now, we'll just set no active segment
+      onSegmentHover(null)
+      return
+    }
+  }
+
+  // Map detailed breakdown indices to donut indices for hover sync
+  const handleDetailedHover = (index: number | null) => {
+    if (index === null) {
+      onSegmentHover(null)
+      return
+    }
+    // If it's in the top items, highlight corresponding donut segment
+    if (index < topItems.length) {
+      onSegmentHover(index)
+    } else {
+      // If it's in "Other", highlight the Other segment
+      onSegmentHover(topItems.length)
+    }
+  }
+
+  // Handle mouse leave for the whole component
+  const handleContainerMouseLeave = (e: React.MouseEvent) => {
+    // Only trigger if we're actually leaving the entire container
+    // and not just moving between children
+    if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+
+      // Use a shorter timeout when leaving the entire container
+      timeoutRef.current = setTimeout(() => {
+        onSegmentHover(null)
+        timeoutRef.current = null
+      }, 50) // Shorter timeout for better responsiveness
+    }
+  }
+
+  // Handle mouse enter for the entire container
+  const handleContainerMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+  }
 
   return (
-    <div className='flex flex-col gap-8'>
-      <div className='flex flex-col items-center'>
+    <div
+      className='flex flex-col space-y-8 w-full'
+      ref={containerRef}
+      onMouseLeave={handleContainerMouseLeave}
+      onMouseEnter={handleContainerMouseEnter}
+    >
+      {/* Donut Chart Section */}
+      <section className='flex flex-col w-full h-auto md:h-auto'>
         <h4 className='mb-3 text-sm font-medium text-center text-navy dark:text-cream'>
           Visual Overview
           <span className='ml-2 text-xs italic text-navy-light/80 dark:text-cream/60'>
@@ -369,76 +339,20 @@ function StatsVisualization({
           isDarkMode={isDarkMode}
           type={type}
           activeSegment={activeSegment}
-          onSegmentHover={onSegmentHover}
+          onSegmentHover={handleDonutHover}
         />
+      </section>
 
-        <div className='flex flex-wrap gap-2 justify-center mt-4'>
-          {finalDonutStats.map((stat, index) => (
-            <div
-              key={stat.name}
-              className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md cursor-pointer transition-colors
-                ${
-                  activeSegment === index
-                    ? 'bg-cream/50 dark:bg-navy-light/50 shadow-sm'
-                    : 'hover:bg-cream/40 dark:hover:bg-navy-light/30'
-                }`}
-              onMouseEnter={() => onSegmentHover(index)}
-              onMouseLeave={() => onSegmentHover(null)}
-            >
-              <span
-                className='w-2.5 h-2.5 rounded-full'
-                style={{
-                  backgroundColor: `rgba(30, 136, 229, ${0.95 - index * 0.15})`
-                }}
-              />
-              <span className='text-xs font-medium text-navy dark:text-cream'>
-                {stat.name}
-              </span>
-              {stat.name === 'Other' && (
-                <span className='text-xs text-navy-light/80 dark:text-cream/60'>
-                  {stat.percentage.toFixed(1)}%
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Accordion
-        type='single'
-        collapsible
-        defaultValue='details'
-        className='dark:border-cream/10'
-      >
-        <AccordionItem
-          value='details'
-          className='border-navy/10 dark:border-cream/10'
-        >
-          <AccordionTrigger className='text-sm font-medium text-navy dark:text-cream py-2 [&>svg]:text-navy dark:[&>svg]:text-cream'>
-            Detailed Breakdown
-            <span className='ml-2 text-xs italic text-navy-light/80 dark:text-cream/60'>
-              Top {barStats.length} Categories
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className='dark:text-cream'>
-            <BarChart
-              data={barStats}
-              isDarkMode={isDarkMode}
-              type={type}
-              activeSegment={activeSegment}
-              onSegmentHover={onSegmentHover}
-            />
-
-            {barStats.map((stat) => (
-              <StatBreakdown
-                key={stat.name}
-                stat={stat}
-                isDarkMode={isDarkMode}
-              />
-            ))}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      {/* Details Section */}
+      <section className='w-full'>
+        <DetailedBreakdown
+          stats={processedStats}
+          activeSegment={activeSegment}
+          type={type}
+          isDarkMode={isDarkMode}
+          onSegmentHover={handleDetailedHover}
+        />
+      </section>
     </div>
   )
 }
@@ -545,7 +459,7 @@ function StatsContent({
 
   return (
     <div>
-      {lastUpdated && <StaleDataWarning lastUpdated={lastUpdated} />}
+      <WarningSection stats={processedStats} lastUpdated={lastUpdated} />
       <div className='p-6 rounded-xl border shadow-sm bg-white/95 dark:bg-navy-darkest/95 border-navy/10 dark:border-cream/10'>
         <h4 className='mb-6 text-lg font-medium text-center text-navy-dark dark:text-cream-dark'>
           {type.charAt(0).toUpperCase() + type.slice(1)} Distribution

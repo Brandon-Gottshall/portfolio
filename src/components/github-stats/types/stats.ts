@@ -253,3 +253,88 @@ export function getBytes(stat: StatItem): number | undefined {
   }
   return stat.bytes
 }
+
+export interface CachedStatsInput {
+  lastUpdated?: string
+  repoCount?: number
+  languages?: Record<
+    string,
+    {
+      commits?: number
+      repositories?: number
+      bytes?: number
+      summary?: {
+        repositories?: number
+        commits?: number
+        bytes?: number
+        percentage_of_all_commits?: number
+      }
+      variants?: {
+        vanilla?: {
+          repositories: number
+          bytes: number
+          commits: number
+          percentage_of_css: number
+          file_types: Record<
+            string,
+            { files: number; bytes: number; commits: number }
+          >
+        }
+        tailwind?: {
+          repositories: number
+          bytes: number
+          commits: number
+          percentage_of_css: number
+          file_types: Record<
+            string,
+            { files: number; bytes: number; commits: number }
+          >
+        }
+      }
+    }
+  >
+  frameworks?: Record<
+    string,
+    {
+      repositories?: number
+      commits?: number
+    }
+  >
+  tools?: Record<
+    string,
+    {
+      summary?: {
+        repositories?: number
+        commits?: number
+        percentage_of_all_commits?: number
+      }
+      tools?: Record<string, { repositories: number; commits: number }>
+    }
+  >
+  summary?: {
+    total_repos: number
+    owned_repos: number
+    contributed_repos: number
+    total_commits: number
+    public_repos: number
+    private_repos: number
+    forks: number
+  }
+  found_emails?: string[]
+}
+
+export interface StatRowProps {
+  stat: ProcessedStat
+  index: number
+  activeSegment: number | null
+  _type: Props['type']
+  onSegmentHover: (index: number | null) => void
+}
+
+export interface DetailedBreakdownProps {
+  stats: ProcessedStat[]
+  activeSegment: number | null
+  type: Props['type']
+  isDarkMode: boolean
+  onSegmentHover: (index: number | null) => void
+}
