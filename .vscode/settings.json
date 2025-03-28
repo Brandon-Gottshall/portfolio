@@ -4,11 +4,16 @@
     "datalabels",
     "GROQ",
     "hotspot",
+    "neondatabase",
     "Oxanium",
     "PMVP",
+    "pooler",
+    "portabletext",
     "Procfile",
+    "sslcert",
     "Starlark",
-    "Turbopack"
+    "Turbopack",
+    "UNPOOLED"
   ],
   "typescript.tsc.autoDetect": "on",
   "typescript.tsdk": "node_modules/typescript/lib",

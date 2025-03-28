@@ -8,7 +8,7 @@ This document details the specific implementation of Sanity CMS in the portfolio
 
 The Sanity implementation follows a clean, modular structure:
 
-```
+``` sh
 src/sanity/
 ├── api/             # Content fetching functions organized by schema type
 ├── lib/             # Utility libraries (client, image, live preview)
@@ -77,6 +77,7 @@ export const projectType = defineType({
 ```
 
 Key implementation patterns:
+
 - TypeScript literal types for constrained field values (`ProjectStatus`)
 - Custom preview formatting for the Sanity Studio
 - Validation rules for required fields
@@ -153,4 +154,4 @@ Components (e.g., `ProjectCard`) receive strictly typed Sanity content as props,
 - **Modularity**: Clear separation of concerns in the `src/sanity` directory.
 - **Performance**: Server Component data fetching, CDN enabled.
 - **Developer Experience**: Custom studio structure, reusable types.
-- **Component Design**: Minimal props via `Omit`, consistent patterns. 
+- **Component Design**: Minimal props via `Omit`, consistent patterns.

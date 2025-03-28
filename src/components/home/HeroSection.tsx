@@ -15,7 +15,7 @@ export default function HeroSection() {
     <section className='pt-20 bg-cream dark:bg-navy-darkest md:py-32'>
       <div className='container px-6 mx-auto'>
         <div className='flex flex-col items-center md:flex-row'>
-          <div className='z-10 mb-10 md:w-1/2 md:mb-0'>
+          <div className='z-10 mb-10 md:w-1/2 md:bm-0'>
             <div className='inline-flex items-center px-3 py-1 mb-6 text-sm rounded-full bg-navy/10 dark:bg-cream/10 text-navy dark:text-cream'>
               <span className='mr-2'>✓</span> Available for new projects
             </div>
@@ -23,7 +23,15 @@ export default function HeroSection() {
               Brandon Gottshall
             </h1>
             <div className='mb-6'>
-              <TextLoop interval={2000}>
+              <TextLoop
+                interval={2000}
+                springConfig={{ stiffness: 180, damping: 8 }}
+                adjustingSpeed={200}
+                fade={true}
+                delay={0}
+                mask={true}
+                noWrap={false}
+              >
                 <span className='text-2xl font-light font-code md:text-3xl text-gray-dark dark:text-tan'>
                   Software Engineer
                 </span>

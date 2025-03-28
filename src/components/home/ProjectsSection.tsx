@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import type { Project } from '@/sanity/api/project'
+import type { ProjectUI } from '@/types/ui'
 
 const FeaturedProjects = dynamic(
   () => import('@/components/projects/FeaturedProjects'),
@@ -12,7 +12,7 @@ const FeaturedProjects = dynamic(
 )
 
 interface ProjectsSectionProps {
-  projects: Project[]
+  projects: ProjectUI[]
 }
 
 export default function ProjectsSection({ projects }: ProjectsSectionProps) {

@@ -24,16 +24,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "sanity": ["./node_modules/sanity/lib"],
-      "sanity/cli": ["./node_modules/sanity/cli"],
-      "sanity/desk": ["./node_modules/sanity/desk"],
-      "sanity/structure": ["./node_modules/sanity/structure"],
-      "@sanity/image-url": ["./node_modules/@sanity/image-url/lib"],
-      "@sanity/types": ["./node_modules/@sanity/types"],
-      "@sanity/vision": ["./node_modules/@sanity/vision"],
-      "@sanity/icons": ["./node_modules/@sanity/icons/lib"],
-      "next-sanity": ["./node_modules/next-sanity"],
-      "next-sanity/studio": ["./node_modules/next-sanity/studio"]
+      "@components/*": ["./src/components/*"],
+      "@payload-config": ["./src/payload/payload.config.ts"]
     }
   },
   "watchOptions": {
