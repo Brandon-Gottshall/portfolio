@@ -1,3 +1,23 @@
-# My own personal portfolio
+# Brandon Gottshall Portfolio
 
-www.brandongottshall.com
+Personal site and chronological portfolio for Brandon Gottshall.
+
+This is the current public anchor for my work. It is meant to connect current systems work with older projects that are still worth keeping visible as historical case studies.
+
+## What It Shows
+
+- A curated portfolio surface instead of a loose repository list.
+- A chronology model for older work: original version, restoration pass, and future v2 ideas.
+- A maintained Next.js codebase that can keep carrying current profile and project presentation work.
+
+## Current Role
+
+This repo is the canonical portfolio line. Older public projects should point back here when they need more context, and this site should eventually explain why each historical repo still exists.
+
+## Maintenance Status
+
+Actively maintained. Dependency cleanup is ongoing, and new portfolio entries should be treated as product/story updates rather than one-off repo links.
+
+## Site
+
+[BrandonGottshall.com](https://brandongottshall.com)
