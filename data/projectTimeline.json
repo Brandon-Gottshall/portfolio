@@ -1,0 +1,146 @@
+[
+  {
+    "title": "portfolio",
+    "period": "2026 - now",
+    "lane": "Current public anchor",
+    "status": "active system",
+    "summary": "Live chronological portfolio for current systems, restored originals, and future v2 rebuilds.",
+    "whyItMatters": "This is the surface that turns the cleaned-up GitHub account into a readable career story instead of a loose repository list.",
+    "intent": "Keep as the canonical portfolio line and release log for the work that remains public.",
+    "links": [
+      {
+        "label": "Live site",
+        "href": "https://brandongottshall.com"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/portfolio"
+      }
+    ],
+    "tags": ["Next.js", "Portfolio", "Chronology"]
+  },
+  {
+    "title": "review-game-core",
+    "period": "2026 - now",
+    "lane": "Learning systems",
+    "status": "active system",
+    "summary": "Concept-layer learning toolkit for study products: TypeScript primitives, workflow contracts, and WF-tested docs.",
+    "whyItMatters": "This is the strongest signal for current product thinking: it shows reusable abstractions, documentation, testing doctrine, and a clearer point of view about learning tools.",
+    "intent": "Use as a foundation for consumer-facing study products and keep the docs visible as the system matures.",
+    "links": [
+      {
+        "label": "Docs",
+        "href": "https://review-game-core-site.vercel.app"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/review-game-core"
+      }
+    ],
+    "tags": ["TypeScript", "Learning tools", "WF"]
+  },
+  {
+    "title": "astronomy-future-compute",
+    "period": "2026",
+    "lane": "Interactive presentation",
+    "status": "shipped rebuild",
+    "summary": "Interactive astronomy presentation rebuilt in Next.js with live controls, a deployed site, and WF coverage.",
+    "whyItMatters": "It shows the ability to turn a presentation idea into a usable web product with a clear path through the experience.",
+    "intent": "Keep as a polished shipped example of presentation-as-product work.",
+    "links": [
+      {
+        "label": "Live site",
+        "href": "https://astronomy-future-compute.vercel.app"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/astronomy-future-compute"
+      }
+    ],
+    "tags": ["Next.js", "Interactive", "Presentation"]
+  },
+  {
+    "title": "About-Me",
+    "period": "2026",
+    "lane": "Career document pipeline",
+    "status": "active system",
+    "summary": "YAML-to-LaTeX career document pipeline for resumes, CVs, cover letters, portfolio exports, and agent-assisted tailoring.",
+    "whyItMatters": "It belongs beside the portfolio because it generates the structured career artifacts the public site can eventually expose or reference.",
+    "intent": "Clean up the fork history, document the reworked architecture, and connect generated artifacts back to the portfolio story.",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/About-Me"
+      }
+    ],
+    "tags": ["Python", "LaTeX", "Automation"]
+  },
+  {
+    "title": "lfx",
+    "period": "2026",
+    "lane": "Terminal tooling",
+    "status": "focused utility",
+    "summary": "Go CLI for managing lf themes, icons, and plugins: a small terminal control plane with a clear job.",
+    "whyItMatters": "It is compact, practical tooling that shows comfort working below the web-app layer.",
+    "intent": "Keep visible as a focused developer-tool example and improve docs only when the CLI behavior changes.",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/lfx"
+      }
+    ],
+    "tags": ["Go", "CLI", "Terminal"]
+  },
+  {
+    "title": "Crime-NY",
+    "period": "2020 - first career year",
+    "lane": "Historical artifact",
+    "status": "preserved original",
+    "summary": "First-year SE bootcamp map using NYC OpenData, Mapbox, and year-based exploration.",
+    "whyItMatters": "It is not a flagship data-science claim. It is worth keeping because it quietly points toward later interest in visual workflows, maps, public data, and user-facing exploration tools.",
+    "intent": "Preserve the restored original and revisit only if a v2 can meaningfully improve the original civic-data vision.",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/Crime-NY"
+      }
+    ],
+    "tags": ["React", "Mapbox", "Historical"]
+  },
+  {
+    "title": "dogPark",
+    "period": "2020",
+    "lane": "Hackathon prototype",
+    "status": "historical artifact",
+    "summary": "Datadog-sponsored hackathon prototype around lightweight social and organizational discovery.",
+    "whyItMatters": "It shows early product collaboration under time pressure, but should be read as a prototype rather than a current bar for craft.",
+    "intent": "Keep as historical context unless a future rebuild has a sharper product reason.",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/dogPark"
+      },
+      {
+        "label": "Original deploy",
+        "href": "https://dog-park.now.sh"
+      }
+    ],
+    "tags": ["Hackathon", "Next.js", "Prototype"]
+  },
+  {
+    "title": "SEI-Trivia",
+    "period": "2020",
+    "lane": "Bootcamp build",
+    "status": "historical artifact",
+    "summary": "Historical full-stack trivia project spanning Rails and mobile clients.",
+    "whyItMatters": "It gives context for the early full-stack training period without pretending to be current product work.",
+    "intent": "Keep as an early learning artifact and only elevate it if a future v2 creates a stronger learning-game angle.",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Brandon-Gottshall/SEI-Trivia"
+      }
+    ],
+    "tags": ["Rails", "React Native", "Trivia"]
+  }
+]

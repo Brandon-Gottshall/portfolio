@@ -1,6 +1,5 @@
 import { LanguageIcon } from './LanguageIcon'
 import Tooltip from './Tooltip'
-import { Link } from 'next'
 import { useState, useEffect } from 'react'
 import { BrowserView, MobileView } from 'react-device-detect'
 
@@ -44,7 +43,7 @@ export default function ProjectCard ({
                     {description ||
                       <p className='w-auto h-auto'>"This is a project description. It has many words. It's a placeholder for the description to come."</p>}
                     {mobile &&
-                      <div className='w-3/4 h-auto p-2 mx-auto mt-4 bg-red-500'>  <Link href={link}><a href={link}>See The Project</a></Link></div>}
+                      <div className='w-3/4 h-auto p-2 mx-auto mt-4 bg-red-500'><a href={link}>See The Project</a></div>}
                   </div>
                   <div className='flex flex-wrap self-end justify-center flex-shrink w-full py-2 mb-1'>
                     {languages
@@ -100,7 +99,7 @@ export default function ProjectCard ({
                     {description ||
                       <p className='w-auto h-auto'>"This is a project description. It has many words. It's a placeholder for the description to come."</p>}
                     {mobile &&
-                      <div className='w-3/4 h-auto p-2 mx-auto mt-4 bg-red-500'>  <Link href={link}><a href={link}>See The Project</a></Link></div>}
+                      <div className='w-3/4 h-auto p-2 mx-auto mt-4 bg-red-500'><a href={link}>See The Project</a></div>}
                   </div>
                   <div className='flex flex-wrap self-end justify-center flex-shrink w-full py-2 mb-1'>
                     {languages

@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div>
+    <div className='overflow-x-hidden'>
       <Head>
         <title> Gott Codes </title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
       </Head>
       <div className='flex bg-red-500 h-fit'>
         <div
-          className={`z-20 flex-col justify-between w-screen bg-white transform-gpu duration-1000 ${
+          className={`z-20 flex-col justify-between w-full bg-white transform-gpu duration-1000 ${
             menuOpenBool ? '-translate-x-64 xs:-translate-x-80' : ''
           }`}
           onTouchStart={closeMenu}
@@ -38,15 +38,16 @@ const Layout = ({ children }) => {
           <header className='sticky top-0 z-10 h-24 text-gray-600 bg-white sm:h-28 xs:justify-center'>
             <div className='flex items-center justify-between w-10/12 h-full mx-4 px-auto xs:w-11/12'>
               <div className='w-32 xs:w-64'>
-                <Link href='/'>
-                  <a className='flex items-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out justify-CENTER sm:text-2xl lg:text-3xl sm:whitespace-nowrap'>
-                    <div className='flex items-center h-auto pb-2'>
-                      <h1 className='h-auto pl-1 font-bold align-middle py-auto font-ox'>
-                        {' '}
-                        Gott Codes{' '}
-                      </h1>
-                    </div>
-                  </a>
+                <Link
+                  href='/'
+                  className='flex items-center w-full pl-4 -space-y-4 text-lg font-bold text-red-500 transition duration-500 ease-in-out justify-CENTER sm:text-2xl lg:text-3xl sm:whitespace-nowrap'
+                >
+                  <div className='flex items-center h-auto pb-2'>
+                    <h1 className='h-auto pl-1 font-bold align-middle py-auto font-ox'>
+                      {' '}
+                      Gott Codes{' '}
+                    </h1>
+                  </div>
                 </Link>
               </div>
               <div className='w-10 h-10 my-auto'>
@@ -75,8 +76,8 @@ const Layout = ({ children }) => {
           </header>
           {/* The body Div */}
           <div className='min-h-screen m-0 bg-red flex-fill'>{children}</div>
-          <div className='absolute bottom-0'>
-            <footer className='flex-col w-screen h-24 border-t nm-flat-white-lg'>
+          <div className='absolute bottom-0 left-0 w-full'>
+            <footer className='flex-col w-full h-24 border-t nm-flat-white-lg'>
               <div className='grid items-center justify-center w-full h-full grid-cols-3 grid-row-1'>
                 <div className='w-full h-full text-center'>
                   <SocialIcon
@@ -139,17 +140,12 @@ const Layout = ({ children }) => {
 }
 function NavLink  ({ href, text }) {
   return (
-      <Link href={href}>
-    <a
-      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm xs:w-64 nm-flat-black-xs'
+    <Link
       href={href}
-      target='_self'
-      rel='noopener noreferrer'
+      className='w-48 h-20 pt-6 text-xl font-bold text-center text-white rounded-sm xs:w-64 nm-flat-black-xs'
     >
       {text}
-    </a>
-  </Link>
-    
- ) 
+    </Link>
+  )
 }
 export default Layout

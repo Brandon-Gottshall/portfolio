@@ -1,28 +1,31 @@
 [
   {
     "title": "My Portfolio",
-    "description": "You're on it! My own Personal Portfolio",
+    "description": "The public anchor for my current systems, restored originals, and future v2 rebuilds.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.brandongottshall.com",
+    "linkLabel": "View Live",
     "imageHash": ",XR{x%of_NWV8_%MayIUoexv-;ayIUj[xuoej[ogWBaeR*ays:oLWBRjfQt6jtRkozj[Rjayt7xuf6Rjj[of",
     "imageURI": "/portfolioSC.png",
     "id": 0
   },
   {
     "title": "Crime NY",
-    "description": "A historical experience of the ever changing climate of crime in NYC. Using data from NYC Open Data",
+    "description": "First-year SE bootcamp map using NYC OpenData, Mapbox, and year-based exploration. It is preserved as historical context, not presented as a current data-science claim.",
     "languages": ["React", "JS"],
-    "link": "/sorryWIP",
+    "link": "https://github.com/Brandon-Gottshall/Crime-NY",
+    "linkLabel": "View Source",
     "imageHash": "K5Bg0kt70000Rj~qJQxurX",
     "imageURI": "/crimeNY.gif",
     "id": 1
   },
   {
     "title": "Dog Park",
-    "description": "This Project was put together for a DataDog sponsored Hackathon. The goal was to create a way for new hires to more easily familiarize themselves with company hierarchy and make contacting the appropriate staff member simple",
+    "description": "Datadog-sponsored hackathon prototype around lightweight social and organizational discovery.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Ruby",
     "Rails"],
     "link": "https://dog-park.vercel.app",
+    "linkLabel": "View Live",
     "imageHash": "KiM%sP4.9F_LRQRQIUofof",
     "imageURI": "/dogPark.gif",
     "id": 2
@@ -33,6 +36,7 @@
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting"],
     "imageHash": "K5PGjh*J0[0eRPUb00aK-:",
     "link": "https://ipixcovid19tracker.com",
+    "linkLabel": "View Live",
     "imageURI": "/tracker.gif",
     "id": 3
   },
@@ -41,6 +45,7 @@
     "description": "Company Site of Strategy HR Solutions an HR consulting & Solutions company out of Brooklyn NY.",
     "languages": ["Next.js", "React", "Tailwind", "JS", "Vercel Hosting", "Serverless Functions"],
     "link": "https://www.strategyhrsolutions.com",
+    "linkLabel": "View Live",
     "imageHash": "K8M@fns9It00aKIW.TbbM_",
     "imageURI": "/strategy.gif",
     "id": 4

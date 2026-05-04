@@ -54,7 +54,7 @@ export default function ProjectTitle() {
         <button className="h-12 px-8 m-4 font-semibold text-white rounded nm-convex-red-500-sm font-ox" onClick={() => 
           project.link ? window.open(project.link) : null
         }>
-          View Live
+          {project.linkLabel || 'View Live'}
         </button>
       </div>
     </div>
@@ -65,8 +65,8 @@ function imageWrapper(project, imageWidth, imageHeight) {
   return <Image
     src={`${project.imageURI}`}
     blurDataURL={blurDataUrl}
+    alt={`Screenshot of ${project.title}`}
     width={imageWidth}
     height={imageHeight}
     className="rounded" />;
 }
-

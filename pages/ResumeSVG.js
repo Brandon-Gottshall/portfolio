@@ -11,7 +11,7 @@ export default function ResumeSVG () {
 
   return (
     <div className='flex-col items-center justify-center w-full pt-8 overflow-y-scroll border-b-8 border-b-red-500'>
-      <Image src={resume} width={windowWidth} height={windowWidth * 1.3} />
+      <Image src={resume} width={windowWidth} height={windowWidth * 1.3} alt='Resume preview' />
       <div className='flex justify-center'>
         <button className='h-12 px-8 m-4 font-semibold text-white rounded nm-convex-red-500-sm font-ox'>Download PDF</button>
       </div>
