@@ -1,7 +1,28 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import { getAllProjects } from '@/payload/api/projects'
 import ProjectCard from '@/components/projects/ProjectCard'
 import type { Project } from '@/payload/payload-types'
+
+export const metadata: Metadata = {
+  title: 'Projects',
+  description:
+    'Explore my portfolio of web development projects, showcasing modern technologies like Next.js, React, and TypeScript.',
+  keywords: [
+    'projects',
+    'portfolio',
+    'web development',
+    'Next.js',
+    'React',
+    'TypeScript'
+  ],
+  openGraph: {
+    title: 'Projects | Brandon Gottshall',
+    description:
+      'Explore my portfolio of web development projects, showcasing modern technologies like Next.js, React, and TypeScript.',
+    type: 'website'
+  }
+}
 
 export default async function ProjectsPage() {
   const projects = await getAllProjects()
@@ -31,13 +52,13 @@ export default async function ProjectsPage() {
               typeof project.thumbnail === 'object' &&
               project.thumbnail !== null
                 ? {
-                    url: project.thumbnail.url || '',
+                    url: project.thumbnail.url || '/placeholder.svg',
                     alt: project.thumbnail.alt || project.title,
                     width: project.thumbnail.width || 300,
                     height: project.thumbnail.height || 200
                   }
                 : {
-                    url: '',
+                    url: '/placeholder.svg',
                     alt: project.title,
                     width: 300,
                     height: 200

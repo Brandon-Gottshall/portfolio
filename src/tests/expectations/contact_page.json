@@ -1,0 +1,11 @@
+{
+  "page": "Contact",
+  "expectations": [
+    "Navbar is visible",
+    "Contact form with fields for name, email, message",
+    "Social links or alternative contact methods displayed",
+    "Form validation and submission button present",
+    "Footer is visible"
+  ],
+  "screenshot_base64": "[BASE64_DATA_FROM_TOOL_RESULT]"
+}

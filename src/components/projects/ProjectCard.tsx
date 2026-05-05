@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
-import type { Project, Media } from '@/payload/payload-types'
+import type { Project } from '@/payload/payload-types'
 
 type ProjectCardProps = Pick<
   Project,
@@ -36,10 +36,10 @@ export default function ProjectCard({
 
   return (
     <Card
-      className='group relative overflow-hidden bg-white dark:bg-navy-light/30 transition-all duration-300 
+      className='group relative overflow-hidden bg-white dark:bg-navy-light/30 transition-all duration-300
       border border-navy/5 dark:border-[#4A9DFF]/40
-      dark:shadow-[0_0_1px_#4A9DFF,inset_0_0_1px_#4A9DFF] 
-      dark:hover:shadow-[0_0_2px_#4A9DFF,inset_0_0_2px_#4A9DFF] 
+      dark:shadow-[0_0_1px_#4A9DFF,inset_0_0_1px_#4A9DFF]
+      dark:hover:shadow-[0_0_2px_#4A9DFF,inset_0_0_2px_#4A9DFF]
       dark:hover:border-[#4A9DFF]/70
       hover:scale-[1.02]
       w-[280px]'

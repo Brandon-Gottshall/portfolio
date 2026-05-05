@@ -25,7 +25,7 @@ export default [
     languageOptions: {
       parser: parser,
       parserOptions: {
-        project: path.resolve('./tsconfig.json'),
+        project: path.resolve('./tsconfig.eslint.json'),
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
@@ -37,6 +37,7 @@ export default [
       '@typescript-eslint': tseslint
     },
     rules: {
+      'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
@@ -55,10 +56,15 @@ export default [
     ...(nextConfig || {}),
     languageOptions: {
       parserOptions: {
-        project: path.resolve('./tsconfig.json'),
+        project: path.resolve('./tsconfig.eslint.json'),
         ecmaVersion: 'latest',
         sourceType: 'module'
       }
+    },
+    rules: {
+      ...((nextConfig as { rules?: Record<string, unknown> }).rules ?? {}),
+      // Next 15 + React 18 use the new JSX transform — no React import needed.
+      'react/react-in-jsx-scope': 'off'
     }
   },
 
@@ -105,7 +111,7 @@ export default [
       'Component Archive/**',
       'node_modules/.cache/**',
       'next-env.d.ts',
-      'eslint.config.js',
+      'eslint.config.ts',
       '!sanity.cli.ts',
       '!sanity.config.ts'
     ]

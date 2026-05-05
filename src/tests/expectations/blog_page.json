@@ -1,0 +1,11 @@
+{
+  "page": "Blog",
+  "expectations": [
+    "Navbar is visible",
+    "If blog is implemented, list of posts with titles, dates, excerpts",
+    "If under construction, placeholder message or coming soon notice",
+    "No broken links or errors",
+    "Footer is visible"
+  ],
+  "screenshot_base64": "[BASE64_DATA_FROM_TOOL_RESULT]"
+}

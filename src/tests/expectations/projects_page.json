@@ -1,0 +1,11 @@
+{
+  "page": "Projects",
+  "expectations": [
+    "Navbar is visible",
+    "Grid or list of project cards, each with title, description, technologies (badges), GitHub link, and optional demo link",
+    "Cards are responsive and hover effects work",
+    "Data loaded from Payload CMS without errors",
+    "Footer is visible"
+  ],
+  "screenshot_base64": "[BASE64_DATA_FROM_TOOL_RESULT]"
+}

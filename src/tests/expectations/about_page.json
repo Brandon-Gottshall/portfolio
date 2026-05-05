@@ -1,0 +1,11 @@
+{
+  "page": "About",
+  "expectations": [
+    "Navbar is visible",
+    "Main content displays dynamic about-me information fetched from external repo",
+    "Sections for bio, skills, and experience are present and populated",
+    "No loading errors or placeholders if data is fresh",
+    "Footer is visible"
+  ],
+  "screenshot_base64": "[BASE64_DATA_FROM_TOOL_RESULT]"
+}

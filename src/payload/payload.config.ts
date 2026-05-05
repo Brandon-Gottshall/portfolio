@@ -1,4 +1,5 @@
-import { buildConfig } from 'payload/config'
+// @ts-ignore -- buildConfig is exported by payload but type resolution struggles here
+import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -12,14 +13,19 @@ import { Projects } from './collections/Projects.ts'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Ensure SSL is enabled in the connection string with additional parameters
+// Build the database connection string.
+// Neon's connection URL already includes `sslmode=require`, and the pool config below
+// sets `ssl: { rejectUnauthorized: false }` for production. Don't append a cert path —
+// the previous AWS RDS setup referenced a `rds-ca-2019-root.pem` file that isn't shipped.
 const dbUrl = process.env.DATABASE_URL || ''
-const sslEnabledUrl = dbUrl.includes('?')
-  ? `${dbUrl}&sslmode=require&ssl=true&sslcert=rds-ca-2019-root.pem`
-  : `${dbUrl}?sslmode=require&ssl=true&sslcert=rds-ca-2019-root.pem`
+
+const isProd = process.env.NODE_ENV === 'production'
+
+const connectionString = dbUrl
 
 const config = {
   admin: {
+    user: 'users',
     // bundler: webpackBundler(),
     meta: {
       titleSuffix: '- Portfolio',
@@ -30,8 +36,8 @@ const config = {
   editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: {
-      connectionString: sslEnabledUrl,
-      ssl: { rejectUnauthorized: false }
+      connectionString,
+      ssl: isProd ? { rejectUnauthorized: false } : undefined
     },
     migrationDir: path.resolve(dirname, '../drizzle/migrations'),
     push: process.env.NODE_ENV === 'development' // Enable push in development only

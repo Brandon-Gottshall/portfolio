@@ -15,8 +15,8 @@ export type ProjectUI = Omit<Project, 'thumbnail'> & {
 export function toProjectUI(project: Project): ProjectUI {
   const thumbnail =
     typeof project.thumbnail === 'number'
-      ? '/placeholder.jpg' // Fallback if only ID is available
-      : (project.thumbnail as Media)?.url || '/placeholder.jpg'
+      ? '/placeholder.svg' // Fallback if only ID is available
+      : (project.thumbnail as Media)?.url || '/placeholder.svg'
 
   return {
     ...project,
