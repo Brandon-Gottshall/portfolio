@@ -1,0 +1,13 @@
+{
+  "ignore_dirs": [
+    "node_modules",
+    "dist",
+    ".next",
+    "tmp_repos",
+    "Component Archive",
+    "coverage",
+    "build"
+  ],
+  "fsevents_latency": 0.01,
+  "fsevents_try_resync": true
+} 

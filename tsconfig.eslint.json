@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "eslint.config.ts",
+    "src/**/*",
+    "src/types/external-modules.d.ts",
+    "src/tests/**/*",
+    "tailwind.config.ts",
+    "vitest.config.ts",
+    "sanity-structure.d.ts"
+  ],
+  "exclude": [],
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
+    font-feature-settings:
+      'liga' 1,
+      'calt' 1; /* Enable standard ligatures */
+  }
+  :root {
+    --background: 45 41 25; /* cream background */
+    --foreground: 26 35 126; /* navy text */
+    --card: 255 255 255; /* white */
+    --card-foreground: 26 35 126; /* navy */
+    --popover: 227 222 200; /* cream */
+    --popover-foreground: 26 35 126;
+    --primary: 26 35 126; /* navy */
+    --primary-foreground: 227 222 200; /* cream */
+    --secondary: 215 203 169; /* tan */
+    --secondary-foreground: 26 35 126;
+    --muted: 197 183 151; /* muted tan */
+    --muted-foreground: 26 35 126;
+    --accent: 26 35 126; /* navy */
+    --accent-foreground: 227 222 200;
+    --destructive: 151 73 81; /* red */
+    --destructive-foreground: 227 222 200;
+    --border: 26 35 126;
+    --input: 26 35 126;
+    --ring: 26 35 126;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 11 14 41; /* navy-darkest */
+    --foreground: 227 222 200; /* cream */
+    --card: 26 35 126; /* navy */
+    --card-foreground: 227 222 200;
+    --popover: 11 14 41; /* navy-darkest */
+    --popover-foreground: 227 222 200;
+    --primary: 227 222 200; /* cream */
+    --primary-foreground: 26 35 126;
+    --secondary: 48 63 159; /* navy-light */
+    --secondary-foreground: 227 222 200;
+    --muted: 48 63 159; /* navy-light */
+    --muted-foreground: 215 203 169;
+    --accent: 48 63 159; /* navy-light */
+    --accent-foreground: 227 222 200;
+    --destructive: 151 73 81; /* red */
+    --destructive-foreground: 227 222 200;
+    --border: 48 63 159; /* navy-light */
+    --input: 48 63 159;
+    --ring: 227 222 200;
+    /* Harmonized chart colors - blues with one accent */
+    --chart-1: 210 100% 50%; /* Primary blue */
+    --chart-2: 220 85% 65%; /* Lighter blue */
+    --chart-3: 200 75% 55%; /* Teal-blue */
+    --chart-4: 230 70% 45%; /* Darker blue */
+    --chart-5: 240 60% 60%; /* Purple-blue */
+  }
+  /* Enable ligatures for Fira Code wherever it's used */
+  .font-code {
+    font-family: 'Fira Code', monospace;
+    font-feature-settings: 'liga' 1;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

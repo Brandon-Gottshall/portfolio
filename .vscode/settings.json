@@ -1,14 +1,21 @@
 {
-    "cSpell.words": [
-        "afill",
-        "cdnjs",
-        "Gott",
-        "phuocng",
-        "projectcard",
-        "pspdfkit",
-        "Scroller",
-        "SVGs",
-        "vcard"
-    ],
-    "standard.enable": true,
+  "cSpell.words": [
+    "chartjs",
+    "datalabels",
+    "GROQ",
+    "hotspot",
+    "neondatabase",
+    "Oxanium",
+    "PMVP",
+    "pooler",
+    "portabletext",
+    "Procfile",
+    "sslcert",
+    "Starlark",
+    "Turbopack",
+    "UNPOOLED"
+  ],
+  "typescript.tsc.autoDetect": "on",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "git.repositoryScanMaxDepth": 1
 }

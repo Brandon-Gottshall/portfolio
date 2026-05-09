@@ -1,0 +1,6 @@
+---
+description: 
+globs: src/components/github-stats/*
+alwaysApply: false
+---
+- Always make sure to keep the typing of this component and it's modules in the [stats.ts](mdc:src/components/github-stats/types/stats.ts) file to reduce complexity.
