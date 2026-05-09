@@ -2,6 +2,7 @@ import type { Project } from '@/types/payload-types'
 
 const PAYLOAD_API_URL =
   process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000'
+const PROJECT_FETCH_TIMEOUT_MS = 5000
 
 // Share same flag used by getPayload
 const DISABLE_PAYLOAD = process.env.NEXT_PUBLIC_DISABLE_PAYLOAD === 'true'
@@ -182,7 +183,8 @@ export async function getAllProjects(): Promise<Project[]> {
     const response = await fetch(
       `${PAYLOAD_API_URL}/api/projects?limit=100&depth=1`,
       {
-        next: { tags: ['projects'] }
+        next: { tags: ['projects'] },
+        signal: AbortSignal.timeout(PROJECT_FETCH_TIMEOUT_MS)
       }
     )
 
@@ -206,7 +208,8 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const response = await fetch(
       `${PAYLOAD_API_URL}/api/projects?where[slug][equals]=${slug}&limit=1&depth=2`,
       {
-        next: { tags: [`project_${slug}`] }
+        next: { tags: [`project_${slug}`] },
+        signal: AbortSignal.timeout(PROJECT_FETCH_TIMEOUT_MS)
       }
     )
 
