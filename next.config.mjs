@@ -10,15 +10,13 @@ const nextConfig = {
     // Allow publishing without blocking on ESLint during build
     ignoreDuringBuilds: true
   },
-  experimental: {
-    // Payload recommends disabling reactCompiler for now if issues arise
-    // reactCompiler: false,
-    turbo: {
-      rules: {
-        '**/*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js'
-        }
+  // Payload recommends disabling reactCompiler for now if issues arise
+  // experimental: { reactCompiler: false },
+  turbopack: {
+    rules: {
+      '**/*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js'
       }
     }
   },
