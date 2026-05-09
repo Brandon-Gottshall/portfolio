@@ -9,7 +9,7 @@ interface FooterProps {
   lastUpdated: string
 }
 
-export function Footer ({ lastUpdated }: FooterProps): JSX.Element {
+export function Footer({ lastUpdated }: FooterProps): JSX.Element {
   console.log('Footer component is rendering')
   const currentYear = new Date().getFullYear()
 
@@ -58,7 +58,7 @@ export function Footer ({ lastUpdated }: FooterProps): JSX.Element {
                 <Github className='w-6 h-6' />
               </a>
               <a
-                href='mailto:Brandon.Gottshall@gmail.com'
+                href='mailto:blgottshall@gmail.com'
                 className='transition-colors duration-300 hover:text-accent'
                 aria-label='Email Contact'
               >

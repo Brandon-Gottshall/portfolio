@@ -1,6 +1,7 @@
 'use client'
 
 import { AnimatedSection } from '@/components/AnimatedSection'
+import Link from 'next/link'
 import {
   FileText,
   Github,
@@ -157,9 +158,66 @@ export function ResumeContent() {
   if (!data || (data as any).documents.length === 0) {
     return (
       <div className='container mx-auto px-4 py-16'>
-        <h1 className='text-4xl font-light mb-8'>Resume</h1>
-        <div className='text-gray-600'>
-          No resume documents available at this time.
+        <div className='mx-auto max-w-4xl rounded-3xl border border-navy/10 bg-white/70 p-8 dark:border-cream/10 dark:bg-navy-light/20 md:p-12'>
+          <p className='font-code text-sm font-semibold uppercase tracking-[0.24em] text-red-500'>
+            Resume pipeline
+          </p>
+          <h1 className='mt-3 text-4xl font-light tracking-tight text-navy dark:text-cream'>
+            Resume documents are being regenerated from About-Me.
+          </h1>
+          <p className='mt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
+            The live document endpoint is not publishing downloadable artifacts
+            yet. The adjacent About-Me system is the source of truth for the
+            resume, CV, cover-letter, and portfolio-export pipeline while this
+            portfolio integration is being cleaned up.
+          </p>
+
+          <div className='mt-8 grid gap-4 md:grid-cols-3'>
+            <div className='rounded-2xl border border-navy/10 bg-cream/50 p-4 dark:border-cream/10 dark:bg-navy/40'>
+              <h2 className='font-code text-sm font-semibold uppercase tracking-[0.18em] text-red-500'>
+                Current signal
+              </h2>
+              <p className='mt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
+                Portfolio, project chronology, and About-Me show the active
+                product/document direction.
+              </p>
+            </div>
+            <div className='rounded-2xl border border-navy/10 bg-cream/50 p-4 dark:border-cream/10 dark:bg-navy/40'>
+              <h2 className='font-code text-sm font-semibold uppercase tracking-[0.18em] text-red-500'>
+                Next artifact
+              </h2>
+              <p className='mt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
+                Resume downloads will land here once the generator publishes a
+                stable current version.
+              </p>
+            </div>
+            <div className='rounded-2xl border border-navy/10 bg-cream/50 p-4 dark:border-cream/10 dark:bg-navy/40'>
+              <h2 className='font-code text-sm font-semibold uppercase tracking-[0.18em] text-red-500'>
+                Hiring path
+              </h2>
+              <p className='mt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
+                Use the contact page for the current resume while the automated
+                document feed is staged.
+              </p>
+            </div>
+          </div>
+
+          <div className='mt-8 flex flex-wrap gap-3'>
+            <Link
+              href='/contact'
+              className='rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue dark:bg-cream dark:text-navy dark:hover:bg-blue dark:hover:text-white'
+            >
+              Contact Brandon
+            </Link>
+            <a
+              href='https://github.com/Brandon-Gottshall/About-Me'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='rounded-full border border-navy/10 px-5 py-3 text-sm font-semibold text-navy transition hover:border-blue hover:text-blue dark:border-cream/20 dark:text-cream dark:hover:border-blue dark:hover:text-blue'
+            >
+              View About-Me pipeline
+            </a>
+          </div>
         </div>
       </div>
     )
