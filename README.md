@@ -1,4 +1,15 @@
-# Portfolio Development Roadmap
+# Brandon Gottshall Portfolio
+
+Canonical portfolio and release surface for Brandon Gottshall’s current systems,
+historical artifacts, and future v2 rebuilds.
+
+- **Live site:** https://brandongottshall.com
+- **Current direction:** App Router portfolio with Payload-backed content,
+  About-Me document integration, and chronological project storytelling.
+- **Portfolio rule:** current work leads; historical work stays visible when it
+  explains the career arc without pretending to be the current bar for craft.
+
+## Development Roadmap
 
 ## 📊 Current Status
 
