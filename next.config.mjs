@@ -53,7 +53,7 @@ const nextConfig = {
   async redirects () {
     return [
       { source: '/resume', destination: '/about', permanent: false },
-      { source: '/blog', destination: '/projects', permanent: false }
+      { source: '/blog', destination: '/notes', permanent: false }
     ]
   },
   webpack: (config, options) => {

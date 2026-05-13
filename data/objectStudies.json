@@ -1,0 +1,34 @@
+[
+  {
+    "title": "3D object studies",
+    "status": "staged",
+    "medium": "Blender / 3D modeling",
+    "summary": "A future gallery for objects, materials, and small modeled scenes.",
+    "progression": "The important part will be the story of the object: first pass, constraints, revisions, what improved, and what still feels unfinished.",
+    "tags": ["3D", "Objects", "Progression"],
+    "links": []
+  },
+  {
+    "title": "Visual system sketches",
+    "status": "draft",
+    "medium": "Interface / visual experiments",
+    "summary": "Small visual studies that connect software surfaces, diagrams, presentation systems, and object-making.",
+    "progression": "These should show how a visual idea changes as it moves from a sketch into something usable.",
+    "tags": ["Visual systems", "Interfaces", "Sketches"],
+    "links": []
+  },
+  {
+    "title": "Interactive presentation artifacts",
+    "status": "archive",
+    "medium": "Next.js / presentation software",
+    "summary": "Presentation work that behaves more like a designed object than a slide deck.",
+    "progression": "Astronomy: Future Compute is the current reference point for this lane: a static talk rebuilt into a navigable web object.",
+    "tags": ["Presentation", "Web object", "Archive"],
+    "links": [
+      {
+        "label": "Astronomy project",
+        "href": "https://astronomy-future-compute.vercel.app"
+      }
+    ]
+  }
+]

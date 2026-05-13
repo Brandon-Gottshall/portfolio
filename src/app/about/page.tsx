@@ -3,8 +3,7 @@ import { ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'About',
-  description:
-    'Where Brandon Gottshall fits: workflow-heavy tools, learning systems, structured content pipelines, and maintainable internal software.'
+  description: 'A short orientation note for Brandon Gottshall’s field record.'
 }
 
 export default function AboutPage() {
@@ -16,54 +15,44 @@ export default function AboutPage() {
             About
           </p>
           <h1 className='max-w-3xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-5xl'>
-            A useful fit for software that has to become explicit, testable, and
-            maintainable.
+            This site is a record, not a pitch.
           </h1>
           <p className='max-w-3xl pt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
             Brandon Gottshall is a software engineer and data science student
-            whose strongest public work sits around workflow-heavy tools,
-            concept-learning systems, structured document pipelines, and
-            practical web interfaces.
+            keeping track of software systems, research notes, visual studies,
+            and older artifacts that still explain the direction.
           </p>
         </div>
 
         <section className='mt-12 grid gap-6 md:grid-cols-2'>
           <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
             <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
-              Best-fit work
+              Current threads
             </h2>
             <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
+              <li>Learning systems, study tools, and review flows.</li>
               <li>
-                Internal tools or web products where the workflow is more
-                important than the landing-page polish.
+                Structured documents, generated artifacts, and repeatable
+                publishing workflows.
               </li>
               <li>
-                Learning or training systems that need clear state, progression,
-                recovery, and testable user paths.
-              </li>
-              <li>
-                Structured content, document, or data-facing workflows that need
-                one reliable source of truth.
+                Visual systems, interactive presentations, and object studies.
               </li>
             </ul>
           </div>
 
           <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
             <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
-              What to look for
+              How to read it
             </h2>
             <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
               <li>
-                Public artifacts with docs, contracts, tests, and visible
-                product boundaries.
+                Work can be active, staged, draft, archive, or early context.
               </li>
+              <li>Unfinished areas stay marked as unfinished.</li>
               <li>
-                Code organized around the real workflow instead of around
-                impressive-sounding abstractions.
-              </li>
-              <li>
-                Evidence that the software can be understood and maintained
-                after the first implementation pass.
+                The record should show direction without pretending every item
+                has the same maturity.
               </li>
             </ul>
           </div>
@@ -76,8 +65,7 @@ export default function AboutPage() {
           <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
             Military service and software instruction are supporting context:
             they explain the preference for clear procedures, teachable systems,
-            and handoff-ready work. The current public evidence is in the
-            project artifacts, not the biography.
+            and repeatable work. The biography stays secondary to the record.
           </p>
         </section>
 
@@ -86,13 +74,13 @@ export default function AboutPage() {
             href='/projects'
             className='inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-cream transition hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
           >
-            See the work <ArrowRight className='h-4 w-4' />
+            Work <ArrowRight className='h-4 w-4' />
           </Link>
           <Link
-            href='/contact'
+            href='/notes'
             className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
           >
-            Get in touch
+            Notes
           </Link>
         </section>
       </div>

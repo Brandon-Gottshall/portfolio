@@ -7,9 +7,10 @@ import { ThemeSwitch } from './ThemeSwitch'
 import { ChevronDown } from 'lucide-react'
 
 const navLinks = [
-  { title: 'Projects', href: '/projects' },
-  { title: 'About', href: '/about' },
-  { title: 'Contact', href: '/contact' }
+  { title: 'Work', href: '/projects' },
+  { title: 'Notes', href: '/notes' },
+  { title: 'Objects', href: '/objects' },
+  { title: 'About', href: '/about' }
 ]
 
 export default function Navbar() {

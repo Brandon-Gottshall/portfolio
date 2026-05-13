@@ -10,31 +10,30 @@ export default function HeroSection() {
         <div className='flex flex-col items-center md:flex-row'>
           <div className='z-10 mb-10 md:w-1/2 md:bm-0'>
             <div className='inline-flex items-center px-3 py-1 mb-6 text-sm rounded-full bg-navy/10 dark:bg-cream/10 text-navy dark:text-cream'>
-              <span className='mr-2'>✓</span> Public software evidence
+              <span className='mr-2'>·</span> Field record
             </div>
             <h1 className='mb-2 text-5xl font-light tracking-tight leading-tight md:text-6xl text-navy dark:text-cream'>
               Brandon Gottshall
             </h1>
             <p className='mb-6 text-2xl font-light md:text-3xl text-gray-dark dark:text-tan'>
-              Software Engineer &amp; Data Science Student
+              Software, research notes, tools, and visual systems.
             </p>
             <p className='mb-8 max-w-xl text-lg font-normal text-gray-dark dark:text-tan'>
-              I build practical software for teams that need clear execution,
-              reliable handoff, and artifacts they can inspect before they trust
-              the work.
+              A public record of what is being built, studied, shaped, and
+              revised.
             </p>
             <div className='flex flex-col gap-4 sm:flex-row'>
               <Link
                 href='#current-work'
                 className='inline-flex gap-2 items-center px-6 py-3 font-medium rounded-lg transition-colors bg-navy text-cream hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
               >
-                Review the work <ArrowRight className='w-4 h-4' />
+                Work <ArrowRight className='w-4 h-4' />
               </Link>
               <Link
-                href='/contact'
+                href='/notes'
                 className='inline-flex gap-2 items-center px-6 py-3 font-medium bg-transparent rounded-lg border transition-colors border-navy/20 dark:border-cream/20 text-navy dark:text-cream hover:border-navy/40 hover:bg-navy/5 dark:hover:border-cream/40 dark:hover:bg-cream/5'
               >
-                Get in touch
+                Notes
               </Link>
             </div>
           </div>

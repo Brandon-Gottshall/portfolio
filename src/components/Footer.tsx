@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Linkedin, Github, Mail, Calendar } from 'lucide-react'
+import { Linkedin, Github, Mail } from 'lucide-react'
 
 import type { JSX } from 'react'
 
@@ -13,21 +13,14 @@ export function Footer(): JSX.Element {
       <div className='container px-4 py-8 mx-auto text-cream'>
         <div className='flex flex-col gap-8 justify-center items-center md:flex-row md:justify-evenly md:items-start'>
           <div className='flex flex-col items-center text-center md:items-start md:text-left'>
-            <h3 className='mb-4 text-xl font-semibold'>
-              Need workflow-heavy software?
-            </h3>
-            <Link
-              href='/contact'
-              className='inline-flex gap-2 items-center px-6 py-3 font-medium rounded-lg transition-colors duration-300 bg-cream text-navy hover:bg-cream/90'
-            >
-              <Calendar className='w-5 h-5' />
-              Start a conversation
-            </Link>
+            <h3 className='mb-4 text-xl font-semibold'>Field record</h3>
+            <p className='max-w-xs text-sm leading-6 text-cream/70'>
+              Software, notes, objects, and older traces from Brandon Gottshall.
+            </p>
           </div>
 
           <div className='flex flex-col items-center text-center md:items-start md:text-left'>
             <h3 className='mb-4 text-xl font-semibold'>Channels</h3>
-            <p className='mb-4 text-cream/80'>Email is the fastest channel.</p>
             <div className='flex gap-4'>
               <a
                 href='https://linkedin.com/in/brandon-gottshall'
@@ -70,7 +63,19 @@ export function Footer(): JSX.Element {
                 href='/projects'
                 className='transition-colors duration-300 hover:text-blue-accent'
               >
-                Projects
+                Work
+              </Link>
+              <Link
+                href='/notes'
+                className='transition-colors duration-300 hover:text-blue-accent'
+              >
+                Notes
+              </Link>
+              <Link
+                href='/objects'
+                className='transition-colors duration-300 hover:text-blue-accent'
+              >
+                Objects
               </Link>
               <Link
                 href='/about'

@@ -38,9 +38,11 @@ describe('Visual Tests', () => {
         { url: '/', name: 'home' },
         { url: '/about', name: 'about' },
         { url: '/projects', name: 'projects' },
+        { url: '/notes', name: 'notes' },
+        { url: '/objects', name: 'objects' },
         { url: '/contact', name: 'contact' },
         { url: '/resume', name: 'resume-redirect-to-about' },
-        { url: '/blog', name: 'blog-redirect-to-projects' }
+        { url: '/blog', name: 'blog-redirect-to-notes' }
       ]
 
       for (const { url, name } of pages) {
@@ -52,5 +54,5 @@ describe('Visual Tests', () => {
     } finally {
       await browser.close()
     }
-  }, 30000)
+  }, 60000)
 })

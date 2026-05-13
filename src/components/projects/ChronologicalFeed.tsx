@@ -156,37 +156,34 @@ export default function ChronologicalFeed() {
     <section className='w-full'>
       <div className='rounded-3xl border border-navy/10 bg-cream/40 p-6 dark:border-cream/10 dark:bg-navy-light/20 sm:p-10'>
         <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
-          Project record
+          Work
         </p>
         <h1 className='max-w-4xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-6xl'>
-          Proof first, context after.
+          Working systems, tools, and older traces.
         </h1>
         <p className='max-w-3xl pt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
-          The first entries are the best public artifacts to evaluate now.
-          Supporting tools, site infrastructure, and older work follow with
-          clearer boundaries so the record does not treat every repository as
-          equal proof.
+          The first entries are active systems and recent artifacts. Supporting
+          tools, site infrastructure, and older work follow as part of the same
+          record, with their age and status left visible.
         </p>
         <div className='grid gap-4 pt-8 text-sm text-gray-dark dark:text-tan sm:grid-cols-3'>
           <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
             <span className='block font-code text-2xl font-black text-red'>
               01
             </span>
-            Primary proof comes from inspectable artifacts with docs, tests, or
-            deployed surfaces.
+            Active systems show what is currently being shaped.
           </div>
           <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
             <span className='block font-code text-2xl font-black text-red'>
               02
             </span>
-            Supporting work adds range without pretending to be the main sales
-            argument.
+            Smaller tools and rebuilt artifacts keep their original scale.
           </div>
           <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
             <span className='block font-code text-2xl font-black text-red'>
               03
             </span>
-            Older projects stay useful only when the context is visible.
+            Older projects stay useful when the context is visible.
           </div>
         </div>
       </div>

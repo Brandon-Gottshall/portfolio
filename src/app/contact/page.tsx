@@ -2,8 +2,7 @@ import { Mail, Linkedin, Github } from 'lucide-react'
 
 export const metadata = {
   title: 'Contact',
-  description:
-    'Contact Brandon Gottshall about workflow-heavy tools, learning systems, structured content pipelines, and maintainable internal software.'
+  description: 'Contact channels for Brandon Gottshall.'
 }
 
 export default function ContactPage() {
@@ -14,12 +13,10 @@ export default function ContactPage() {
           Contact
         </p>
         <h1 className='mt-3 text-4xl font-light tracking-tight text-navy dark:text-cream sm:text-5xl'>
-          Start with the work that needs a clear handoff.
+          Channels.
         </h1>
         <p className='mt-4 text-lg leading-8 text-gray-dark dark:text-tan'>
-          Best fit: practical software, learning tools, structured content
-          pipelines, and internal systems where maintainability matters. Email
-          is the fastest channel.
+          Email, GitHub, and LinkedIn.
         </p>
       </div>
 
@@ -34,7 +31,7 @@ export default function ContactPage() {
               Email
             </h2>
             <p className='font-code text-sm text-gray-dark dark:text-tan'>
-              Fastest for project fit and availability.
+              blgottshall@gmail.com
             </p>
           </div>
         </a>
@@ -52,7 +49,7 @@ export default function ContactPage() {
               LinkedIn
             </h2>
             <p className='text-sm text-gray-dark dark:text-tan'>
-              Useful for professional context and asynchronous intros.
+              Professional context.
             </p>
           </div>
         </a>
@@ -70,7 +67,7 @@ export default function ContactPage() {
               GitHub
             </h2>
             <p className='text-sm text-gray-dark dark:text-tan'>
-              Public repositories, docs, and project history.
+              Repositories, docs, and project history.
             </p>
           </div>
         </a>

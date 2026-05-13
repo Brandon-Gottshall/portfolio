@@ -6,9 +6,9 @@ import getPayload from '@/payload/getPayload'
 import type { Project } from '@/payload/payload-types'
 
 export const metadata: Metadata = {
-  title: 'Projects',
+  title: 'Work',
   description:
-    'A project record for Brandon Gottshall: public proof lanes, supporting tools, site infrastructure, and older background work.',
+    'Working systems, tools, rebuilt artifacts, and archive traces from Brandon Gottshall.',
   keywords: [
     'projects',
     'workflow tools',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Projects | Brandon Gottshall',
     description:
-      'Public proof lanes, supporting tools, site infrastructure, and older background work from Brandon Gottshall.',
+      'Working systems, tools, rebuilt artifacts, and archive traces from Brandon Gottshall.',
     type: 'website'
   }
 }
@@ -55,9 +55,9 @@ export default async function ProjectsPage() {
               Additional structured entries.
             </h2>
             <p className='max-w-3xl text-lg leading-relaxed text-gray-dark dark:text-tan'>
-              These cards come from the project content model. The curated
-              record above remains the primary evaluation path until the CMS
-              entries are fully populated.
+              These cards come from the project content model. The hand-curated
+              record above remains the stable surface while the CMS entries are
+              filled in.
             </p>
           </div>
 
