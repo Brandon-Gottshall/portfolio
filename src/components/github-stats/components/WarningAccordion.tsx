@@ -76,7 +76,7 @@ export function WarningAccordion({
                         stat.repositories,
                         stat.commits
                       ) ? (
-                        <span className='inline-flex items-center text-red-600 dark:text-red-400'>
+                        <span className='inline-flex items-center text-red'>
                           <AlertTriangle className='w-3 h-3 mr-0.5' />
                           Repository issue
                         </span>

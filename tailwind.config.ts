@@ -1,72 +1,85 @@
 import type { Config } from 'tailwindcss'
 
+/**
+ * Color values live in src/app/globals.css as CSS custom properties
+ * (--color-* for the brand palette, semantic aliases like --primary
+ * point to those). Edit the palette there, not here.
+ *
+ * Channel format ("<r> <g> <b>") makes Tailwind's <alpha-value>
+ * placeholder work, so utilities like bg-navy/40 compose cleanly.
+ */
+const channel = (token: string) => `rgb(var(--${token}) / <alpha-value>)`
+
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        // Brand palette
         navy: {
-          darkest: '#0B0E29',
-          DEFAULT: '#1A237E',
-          light: '#303F9F'
-        },
-        blue: {
-          DEFAULT: '#1E88E5',
-          light: '#64B5F6',
-          dark: '#0D47A1',
-          accent: '#4FC3F7'
-        },
-        gray: {
-          DEFAULT: '#959991',
-          dark: '#2A2A2A'
-        },
-        tan: {
-          DEFAULT: '#D7CBA9',
-          muted: '#C5B797'
+          darkest: channel('color-navy-darkest'),
+          dark: channel('color-navy-dark'),
+          DEFAULT: channel('color-navy'),
+          light: channel('color-navy-light')
         },
         cream: {
-          DEFAULT: '#E3DEC8',
-          dark: '#D1CCB6'
+          light: channel('color-cream-light'),
+          DEFAULT: channel('color-cream'),
+          dark: channel('color-cream-dark')
         },
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        tan: {
+          DEFAULT: channel('color-tan'),
+          muted: channel('color-tan-muted')
+        },
+        gray: {
+          DEFAULT: channel('color-gray'),
+          dark: channel('color-gray-dark')
+        },
+        red: {
+          DEFAULT: channel('color-red'),
+          dark: channel('color-red-dark')
+        },
+        blue: {
+          DEFAULT: channel('color-blue'),
+          light: channel('color-blue-light'),
+          dark: channel('color-blue-dark'),
+          accent: channel('color-blue-accent')
+        },
+
+        // Semantic aliases (shadcn/ui primitives consume these)
+        background: channel('background'),
+        foreground: channel('foreground'),
+        border: channel('border'),
+        input: channel('input'),
+        ring: channel('ring'),
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))'
+          DEFAULT: channel('card'),
+          foreground: channel('card-foreground')
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))'
+          DEFAULT: channel('popover'),
+          foreground: channel('popover-foreground')
         },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
+          DEFAULT: channel('primary'),
+          foreground: channel('primary-foreground')
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))'
+          DEFAULT: channel('secondary'),
+          foreground: channel('secondary-foreground')
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))'
+          DEFAULT: channel('muted'),
+          foreground: channel('muted-foreground')
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))'
+          DEFAULT: channel('accent'),
+          foreground: channel('accent-foreground')
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))'
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))'
+          DEFAULT: channel('destructive'),
+          foreground: channel('destructive-foreground')
         }
       },
       borderRadius: {
@@ -80,20 +93,12 @@ export default {
       },
       keyframes: {
         'accordion-down': {
-          from: {
-            height: '0'
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)'
-          }
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' }
         },
         'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)'
-          },
-          to: {
-            height: '0'
-          }
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' }
         }
       },
       animation: {
@@ -102,6 +107,5 @@ export default {
       }
     }
   },
-  plugins: [],
-  darkMode: 'class'
+  plugins: []
 } satisfies Config

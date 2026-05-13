@@ -20,7 +20,7 @@
     "prepare": "husky install",
     "type-check": "tsc --noEmit --project tsconfig.json",
     "clean:ts": "rm -rf node_modules/.cache/typescript/",
-    "clean": "npm run clean:ts",
+    "clean": "bun run clean:ts",
     "clear-cache": "rm -rf .next/cache && rm -rf node_modules/.cache && bun run tsc --build --clean",
     "test:db": "bun run src/payload/connection.test.ts",
     "drizzle:generate": "drizzle-kit generate:pg",

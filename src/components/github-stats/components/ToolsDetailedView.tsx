@@ -175,7 +175,7 @@ function StatItem({
           )}
         </div>
         {shouldShowRepoWarning(stat.repositories, stat.commits) ? (
-          <span className='inline-flex items-center text-red-600 dark:text-red-400'>
+          <span className='inline-flex items-center text-red'>
             <AlertTriangle className='w-3 h-3 mr-0.5' />
             Repository issue
           </span>
@@ -231,7 +231,7 @@ export function ToolsDetailedView({
       <div className='mb-4'>
         <WarningAccordion stats={warningStats} lastUpdated={lastUpdated} />
       </div>
-      <div className='p-6 rounded-xl border shadow-sm bg-white/95 dark:bg-navy-darkest/95 border-navy/10 dark:border-cream/10'>
+      <div>
         <h4 className='mb-6 text-lg font-medium text-center text-navy-dark dark:text-cream-dark'>
           Tool Usage by Repository
         </h4>

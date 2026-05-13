@@ -70,7 +70,7 @@ async function testPayloadConnection() {
     }
 
     console.log('\nPayload connection test completed successfully.') // Add spacing
-    // process.exit(0) // Optional: exit cleanly
+    process.exit(0)
   } catch (error) {
     console.error('Error during Payload connection test:', error)
     process.exit(1) // Exit with error code if test fails

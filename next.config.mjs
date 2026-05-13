@@ -50,6 +50,12 @@ const nextConfig = {
       }
     ]
   },
+  async redirects () {
+    return [
+      { source: '/resume', destination: '/about', permanent: false },
+      { source: '/blog', destination: '/projects', permanent: false }
+    ]
+  },
   webpack: (config, options) => {
     // Exclude TypeScript declaration files from module resolution to avoid parsing errors
     if (config.resolve && Array.isArray(config.resolve.extensions)) {

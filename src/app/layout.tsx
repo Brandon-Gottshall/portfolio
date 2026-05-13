@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 }
 
 // Root layout (combines _app.js and Layout.js)
-export default function RootLayout ({
+export default function RootLayout({
   children
 }: {
   children: React.ReactNode
 }) {
   return (
     <html lang='en' className={oxanium.variable} suppressHydrationWarning>
-      <body className='min-h-screen transition-colors duration-300 bg-cream text-navy dark:bg-black dark:text-tan'>
+      <body className='min-h-screen transition-colors duration-300 bg-background text-foreground'>
         <Providers attribute='class' defaultTheme='system' enableSystem>
           <div className='flex flex-col min-h-screen'>
             <Navbar />

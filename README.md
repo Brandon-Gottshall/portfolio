@@ -1,13 +1,14 @@
 # Brandon Gottshall Portfolio
 
-Canonical portfolio and release surface for Brandon Gottshall’s current systems,
-historical artifacts, and future v2 rebuilds.
+Canonical portfolio and release surface for Brandon Gottshall’s current
+software systems, shipped web products, developer tools, and early foundations.
 
 - **Live site:** https://brandongottshall.com
 - **Current direction:** App Router portfolio with Payload-backed content,
-  About-Me document integration, and chronological project storytelling.
-- **Portfolio rule:** current work leads; historical work stays visible when it
-  explains the career arc without pretending to be the current bar for craft.
+  About-Me document integration, and project storytelling aimed at external
+  reviewers.
+- **Portfolio rule:** lead with what the work demonstrates: ownership,
+  judgment, delivery, range, and learning speed.
 
 ## Development Roadmap
 
@@ -172,19 +173,19 @@ historical artifacts, and future v2 rebuilds.
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
+bun run dev
 
 # Build for production
-npm run build
+bun run build
 
-# Run tests
-npm run test
+# Test Payload connection
+bun run test:db
 
 # Lint code
-npm run lint
+bun run lint
 ```
 
 ---

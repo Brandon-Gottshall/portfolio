@@ -13,23 +13,19 @@ interface FeaturedProjectsProps {
 export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
   if (!projects.length) {
     return (
-      <div className='rounded-2xl border border-navy/10 bg-white/70 p-8 text-center dark:border-cream/10 dark:bg-navy/60'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.24em] text-red-500'>
-          Project chronology is live
-        </p>
-        <h3 className='mt-3 text-2xl font-light text-navy dark:text-cream'>
-          The curated portfolio feed is ready.
+      <div className='rounded-2xl border border-navy/15 bg-white/80 p-8 text-center dark:border-cream/20 dark:bg-navy-light/40'>
+        <h3 className='text-2xl font-light text-navy dark:text-cream'>
+          Selected work is available on the Projects page.
         </h3>
         <p className='mx-auto mt-3 max-w-2xl text-gray-dark dark:text-tan'>
-          Featured CMS cards are still being populated, but the Projects page
-          already separates active systems, shipped rebuilds, focused utilities,
-          and historical artifacts.
+          The public record is organized around what each item demonstrates, not
+          a complete list of everything touched.
         </p>
         <Link
           href='/projects'
-          className='mt-6 inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue dark:bg-cream dark:text-navy dark:hover:bg-blue dark:hover:text-white'
+          className='mt-6 inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-cream transition hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
         >
-          Open chronological portfolio <ArrowRight className='h-4 w-4' />
+          Open Projects <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
     )
@@ -40,7 +36,7 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
       {projects.map((project) => (
         <div
           key={project.id}
-          className='overflow-hidden rounded-xl border transition-all cursor-pointer group bg-white/80 dark:bg-navy border-navy/10 dark:border-cream/10 hover:border-navy/30 dark:hover:border-cream/30 hover:shadow-lg'
+          className='overflow-hidden rounded-2xl border transition-all cursor-pointer group bg-white/80 dark:bg-navy-light/40 border-navy/15 dark:border-cream/20 hover:border-navy/30 dark:hover:border-cream/40 hover:shadow-lg'
         >
           <div className='overflow-hidden'>
             <Image

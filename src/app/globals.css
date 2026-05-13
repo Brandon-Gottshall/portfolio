@@ -5,6 +5,84 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Brand palette — single source of truth.
+   * Channel format is "<r> <g> <b>" so Tailwind can apply alpha:
+   *   bg-navy/40  →  rgb(var(--color-navy) / 0.4)
+   * Adjust a brand color here and every utility that references it updates.
+   */
+  :root {
+    --color-navy-darkest: 11 14 41;       /* #0B0E29 */
+    --color-navy-dark: 21 28 100;         /* #151C64 */
+    --color-navy: 26 35 126;              /* #1A237E */
+    --color-navy-light: 48 63 159;        /* #303F9F */
+
+    --color-cream-light: 237 234 220;     /* #EDEADC */
+    --color-cream: 227 222 200;           /* #E3DEC8 */
+    --color-cream-dark: 209 204 182;      /* #D1CCB6 */
+
+    --color-tan: 215 203 169;             /* #D7CBA9 */
+    --color-tan-muted: 197 183 151;       /* #C5B797 */
+
+    --color-gray: 149 153 145;            /* #959991 */
+    --color-gray-dark: 42 42 42;          /* #2A2A2A */
+
+    --color-red: 239 68 68;               /* #EF4444 */
+    --color-red-dark: 151 73 81;          /* #974951 */
+
+    --color-blue: 30 136 229;             /* #1E88E5 */
+    --color-blue-light: 100 181 246;      /* #64B5F6 */
+    --color-blue-dark: 13 71 161;         /* #0D47A1 */
+    --color-blue-accent: 79 195 247;      /* #4FC3F7 */
+
+    /*
+     * Semantic tokens for shadcn/ui primitives.
+     * They reference brand tokens — DO NOT hardcode channel values here.
+     */
+    --background: var(--color-cream);
+    --foreground: var(--color-navy);
+    --card: 255 255 255;
+    --card-foreground: var(--color-navy);
+    --popover: var(--color-cream);
+    --popover-foreground: var(--color-navy);
+    --primary: var(--color-navy);
+    --primary-foreground: var(--color-cream);
+    --secondary: var(--color-tan);
+    --secondary-foreground: var(--color-navy);
+    --muted: var(--color-tan-muted);
+    --muted-foreground: var(--color-navy);
+    --accent: var(--color-red);
+    --accent-foreground: var(--color-cream);
+    --destructive: var(--color-red-dark);
+    --destructive-foreground: var(--color-cream);
+    --border: var(--color-navy);
+    --input: var(--color-navy);
+    --ring: var(--color-navy);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: var(--color-navy-darkest);
+    --foreground: var(--color-cream);
+    --card: var(--color-navy);
+    --card-foreground: var(--color-cream);
+    --popover: var(--color-navy-darkest);
+    --popover-foreground: var(--color-cream);
+    --primary: var(--color-cream);
+    --primary-foreground: var(--color-navy);
+    --secondary: var(--color-navy-light);
+    --secondary-foreground: var(--color-cream);
+    --muted: var(--color-navy-light);
+    --muted-foreground: var(--color-tan);
+    --accent: var(--color-red);
+    --accent-foreground: var(--color-cream);
+    --destructive: var(--color-red-dark);
+    --destructive-foreground: var(--color-cream);
+    --border: var(--color-navy-light);
+    --input: var(--color-navy-light);
+    --ring: var(--color-cream);
+  }
+
   body {
     font-family:
       'Inter',
@@ -13,65 +91,14 @@
       sans-serif;
     font-feature-settings:
       'liga' 1,
-      'calt' 1; /* Enable standard ligatures */
+      'calt' 1;
   }
-  :root {
-    --background: 45 41 25; /* cream background */
-    --foreground: 26 35 126; /* navy text */
-    --card: 255 255 255; /* white */
-    --card-foreground: 26 35 126; /* navy */
-    --popover: 227 222 200; /* cream */
-    --popover-foreground: 26 35 126;
-    --primary: 26 35 126; /* navy */
-    --primary-foreground: 227 222 200; /* cream */
-    --secondary: 215 203 169; /* tan */
-    --secondary-foreground: 26 35 126;
-    --muted: 197 183 151; /* muted tan */
-    --muted-foreground: 26 35 126;
-    --accent: 26 35 126; /* navy */
-    --accent-foreground: 227 222 200;
-    --destructive: 151 73 81; /* red */
-    --destructive-foreground: 227 222 200;
-    --border: 26 35 126;
-    --input: 26 35 126;
-    --ring: 26 35 126;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 11 14 41; /* navy-darkest */
-    --foreground: 227 222 200; /* cream */
-    --card: 26 35 126; /* navy */
-    --card-foreground: 227 222 200;
-    --popover: 11 14 41; /* navy-darkest */
-    --popover-foreground: 227 222 200;
-    --primary: 227 222 200; /* cream */
-    --primary-foreground: 26 35 126;
-    --secondary: 48 63 159; /* navy-light */
-    --secondary-foreground: 227 222 200;
-    --muted: 48 63 159; /* navy-light */
-    --muted-foreground: 215 203 169;
-    --accent: 48 63 159; /* navy-light */
-    --accent-foreground: 227 222 200;
-    --destructive: 151 73 81; /* red */
-    --destructive-foreground: 227 222 200;
-    --border: 48 63 159; /* navy-light */
-    --input: 48 63 159;
-    --ring: 227 222 200;
-    /* Harmonized chart colors - blues with one accent */
-    --chart-1: 210 100% 50%; /* Primary blue */
-    --chart-2: 220 85% 65%; /* Lighter blue */
-    --chart-3: 200 75% 55%; /* Teal-blue */
-    --chart-4: 230 70% 45%; /* Darker blue */
-    --chart-5: 240 60% 60%; /* Purple-blue */
-  }
-  /* Enable ligatures for Fira Code wherever it's used */
+
   .font-code {
     font-family: 'Fira Code', monospace;
     font-feature-settings: 'liga' 1;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }

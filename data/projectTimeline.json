@@ -1,12 +1,13 @@
 [
   {
     "title": "portfolio",
+    "displayTitle": "This portfolio site",
     "period": "2026 - now",
     "lane": "Current public anchor",
     "status": "active system",
-    "summary": "Live chronological portfolio for current systems, restored originals, and future v2 rebuilds.",
-    "whyItMatters": "This is the surface that turns the cleaned-up GitHub account into a readable career story instead of a loose repository list.",
-    "intent": "Keep as the canonical portfolio line and release log for the work that remains public.",
+    "summary": "This Next.js site: the public surface for project records, contact paths, and deployment cleanup.",
+    "whyItMatters": "Shows App Router implementation, Payload-backed content wiring, production deployment cleanup, and package-manager authority.",
+    "intent": "Useful as infrastructure context in the full project record. It is not treated as the strongest homepage evidence.",
     "links": [
       {
         "label": "Live site",
@@ -17,16 +18,17 @@
         "href": "https://github.com/Brandon-Gottshall/portfolio"
       }
     ],
-    "tags": ["Next.js", "Portfolio", "Chronology"]
+    "tags": ["Next.js", "Portfolio", "Project record"]
   },
   {
     "title": "review-game-core",
+    "displayTitle": "Review Game Core",
     "period": "2026 - now",
     "lane": "Learning systems",
     "status": "active system",
-    "summary": "Concept-layer learning toolkit for study products: TypeScript primitives, workflow contracts, and WF-tested docs.",
-    "whyItMatters": "This is the strongest signal for current product thinking: it shows reusable abstractions, documentation, testing doctrine, and a clearer point of view about learning tools.",
-    "intent": "Use as a foundation for consumer-facing study products and keep the docs visible as the system matures.",
+    "summary": "Concept-layer toolkit for study products: TypeScript primitives, workflow contracts, and documentation that can support multiple learning apps.",
+    "whyItMatters": "Demonstrates domain modeling, reusable abstractions, documentation as a product interface, and a clear testing doctrine for user-facing learning workflows.",
+    "intent": "Active system work. Intended to support consumer-facing study tools while proving the underlying concepts in public.",
     "links": [
       {
         "label": "Docs",
@@ -37,16 +39,17 @@
         "href": "https://github.com/Brandon-Gottshall/review-game-core"
       }
     ],
-    "tags": ["TypeScript", "Learning tools", "WF"]
+    "tags": ["TypeScript", "Learning tools", "Workflow tests"]
   },
   {
     "title": "astronomy-future-compute",
+    "displayTitle": "Astronomy: Future Compute",
     "period": "2026",
     "lane": "Interactive presentation",
     "status": "shipped rebuild",
-    "summary": "Interactive astronomy presentation rebuilt in Next.js with live controls, a deployed site, and WF coverage.",
-    "whyItMatters": "It shows the ability to turn a presentation idea into a usable web product with a clear path through the experience.",
-    "intent": "Keep as a polished shipped example of presentation-as-product work.",
+    "summary": "Interactive astronomy presentation rebuilt in Next.js with live controls, a deployed site, and visible progression through the story.",
+    "whyItMatters": "Demonstrates turning a static presentation idea into a usable web experience with navigation, interaction design, and browser-validated workflow behavior.",
+    "intent": "Shipped product example showing educational or presentation content behaving like a real interface.",
     "links": [
       {
         "label": "Live site",
@@ -57,16 +60,17 @@
         "href": "https://github.com/Brandon-Gottshall/astronomy-future-compute"
       }
     ],
-    "tags": ["Next.js", "Interactive", "Presentation"]
+    "tags": ["Next.js", "Interactive", "Workflow tests"]
   },
   {
     "title": "About-Me",
+    "displayTitle": "About-Me document pipeline",
     "period": "2026",
     "lane": "Career document pipeline",
     "status": "active system",
-    "summary": "YAML-to-LaTeX career document pipeline for resumes, CVs, cover letters, portfolio exports, and agent-assisted tailoring.",
-    "whyItMatters": "It belongs beside the portfolio because it generates the structured career artifacts the public site can eventually expose or reference.",
-    "intent": "Clean up the fork history, document the reworked architecture, and connect generated artifacts back to the portfolio story.",
+    "summary": "YAML-to-LaTeX document pipeline for resumes, CVs, cover letters, portfolio exports, and agent-assisted tailoring.",
+    "whyItMatters": "Demonstrates automation around structured content, document generation, repeatable workflows, and the ability to connect personal tooling to a public product surface.",
+    "intent": "Active companion system. The next step is tighter integration with the portfolio and clearer generated-document publishing.",
     "links": [
       {
         "label": "GitHub",
@@ -77,12 +81,13 @@
   },
   {
     "title": "lfx",
+    "displayTitle": "lfx — lf theme manager",
     "period": "2026",
     "lane": "Terminal tooling",
     "status": "focused utility",
-    "summary": "Go CLI for managing lf themes, icons, and plugins: a small terminal control plane with a clear job.",
-    "whyItMatters": "It is compact, practical tooling that shows comfort working below the web-app layer.",
-    "intent": "Keep visible as a focused developer-tool example and improve docs only when the CLI behavior changes.",
+    "summary": "Go CLI for managing lf themes, icons, and plugins: a small terminal control plane with a focused job.",
+    "whyItMatters": "Demonstrates comfort outside the web-app layer: CLI design, filesystem-oriented workflows, and practical tooling for repeated developer tasks.",
+    "intent": "Focused developer-tool example. Maintained when behavior changes or the workflow needs clearer documentation.",
     "links": [
       {
         "label": "GitHub",
@@ -93,12 +98,13 @@
   },
   {
     "title": "Crime-NY",
+    "displayTitle": "Crime-NY map",
     "period": "2020 - first career year",
-    "lane": "Historical artifact",
+    "lane": "Early data-visualization work",
     "status": "preserved original",
-    "summary": "First-year SE bootcamp map using NYC OpenData, Mapbox, and year-based exploration.",
-    "whyItMatters": "It is not a flagship data-science claim. It is worth keeping because it quietly points toward later interest in visual workflows, maps, public data, and user-facing exploration tools.",
-    "intent": "Preserve the restored original and revisit only if a v2 can meaningfully improve the original civic-data vision.",
+    "summary": "Early React map project using NYC OpenData, Mapbox, and year-based exploration of public safety data.",
+    "whyItMatters": "Demonstrates early interest in visual workflows, public data, mapping interfaces, and user-facing exploration tools.",
+    "intent": "Early-career work. Presented as foundation and range, not as the current bar for production data products.",
     "links": [
       {
         "label": "GitHub",
@@ -109,12 +115,13 @@
   },
   {
     "title": "dogPark",
+    "displayTitle": "Dog Park",
     "period": "2020",
     "lane": "Hackathon prototype",
     "status": "historical artifact",
-    "summary": "Datadog-sponsored hackathon prototype around lightweight social and organizational discovery.",
-    "whyItMatters": "It shows early product collaboration under time pressure, but should be read as a prototype rather than a current bar for craft.",
-    "intent": "Keep as historical context unless a future rebuild has a sharper product reason.",
+    "summary": "Hackathon prototype around lightweight social and organizational discovery.",
+    "whyItMatters": "Demonstrates early product collaboration, fast prototyping, and the ability to shape a small idea under time pressure.",
+    "intent": "Hackathon prototype. Useful as context for collaboration and product instincts, not as a current engineering baseline.",
     "links": [
       {
         "label": "GitHub",
@@ -129,12 +136,13 @@
   },
   {
     "title": "SEI-Trivia",
+    "displayTitle": "SEI Trivia",
     "period": "2020",
     "lane": "Bootcamp build",
     "status": "historical artifact",
-    "summary": "Historical full-stack trivia project spanning Rails and mobile clients.",
-    "whyItMatters": "It gives context for the early full-stack training period without pretending to be current product work.",
-    "intent": "Keep as an early learning artifact and only elevate it if a future v2 creates a stronger learning-game angle.",
+    "summary": "Early full-stack trivia project spanning Rails and mobile clients.",
+    "whyItMatters": "Demonstrates early full-stack training, game-like learning flows, and willingness to work across backend and client surfaces.",
+    "intent": "Early learning project. It provides background for later interest in study tools and review-game systems.",
     "links": [
       {
         "label": "GitHub",
