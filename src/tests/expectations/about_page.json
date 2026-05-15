@@ -4,7 +4,7 @@
     "Navbar is visible",
     "Main content orients the site as a record of work",
     "Current threads, reading guidance, and background sections are present",
-    "Documents CTA is visible",
+    "Downloads section lists Resume and Curriculum Vitae linking to /documents",
     "No loading errors or placeholders if data is fresh",
     "Footer is visible"
   ],
