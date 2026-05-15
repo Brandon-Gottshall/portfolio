@@ -1,12 +1,12 @@
+const documentsBaseUrl =
+  process.env.NEXT_PUBLIC_ABOUT_ME_DOCUMENTS_BASE_URL ??
+  'https://brandon-gottshall.github.io/About-Me'
+
 export const aboutMeConfig = {
   repoOwner: 'Brandon-Gottshall',
   repoName: 'About-Me',
-  branch: 'main',
-  webhookSecret: process.env.GITHUB_WEBHOOK_SECRET ?? '',
-  cacheDuration: 24 * 60 * 60 * 1000,
-  documents: {
-    resume: 'output/resume.pdf',
-    cv: 'output/cv.pdf',
-    'cover-letter': 'output/cover-letter.pdf'
-  }
+  sourceBranch: 'master',
+  documentsBaseUrl,
+  manifestPath: 'documents.json',
+  cacheDuration: 30 * 60 * 1000
 }

@@ -1,26 +1,13 @@
-import type { AboutMeDocument, AboutMeResponse } from '@/types/documents'
-import { aboutMeResponseSchema } from '@/types/documents'
+import { aboutMeConfig } from '@/config/aboutMe'
+import type { AboutMeManifest, AboutMeResponse } from '@/types/documents'
+import { aboutMeManifestSchema, aboutMeResponseSchema } from '@/types/documents'
 
-const GITHUB_API_BASE =
-  'https://api.github.com/repos/Brandon-Gottshall/About-Me'
-const RAW_BASE =
-  'https://raw.githubusercontent.com/Brandon-Gottshall/About-Me/main'
-const DOCUMENTS = {
-  resume: 'output/resume.pdf',
-  cv: 'output/cv.pdf',
-  'cover-letter': 'output/cover-letter.pdf'
-} as const
-
-type DocumentType = keyof typeof DOCUMENTS
-
-// Rate limiting and retry configuration
 const RETRY_CONFIG = {
   maxRetries: 3,
-  baseDelay: 1000, // 1 second
-  maxDelay: 10000 // 10 seconds
+  baseDelay: 1000,
+  maxDelay: 10000
 }
 
-// Simple in-memory cache for API responses
 const apiCache = new Map<
   string,
   { data: unknown; timestamp: number; ttl: number }
@@ -36,8 +23,7 @@ function getCachedResponse<T>(key: string): T | null {
   return cached.data as T
 }
 
-function setCachedResponse<T>(key: string, data: T, ttlMs: number = 300000) {
-  // 5 min default
+function setCachedResponse<T>(key: string, data: T, ttlMs: number) {
   apiCache.set(key, {
     data,
     timestamp: Date.now(),
@@ -56,35 +42,22 @@ async function fetchWithRetry(
 ): Promise<Response> {
   try {
     const response = await fetch(url, options)
-
-    // Handle rate limiting
-    if (response.status === 429) {
+    if (response.status === 429 && retryCount < RETRY_CONFIG.maxRetries) {
       const retryAfter = response.headers.get('retry-after')
       const delay = retryAfter
-        ? parseInt(retryAfter) * 1000
+        ? parseInt(retryAfter, 10) * 1000
         : Math.min(
             RETRY_CONFIG.baseDelay * Math.pow(2, retryCount),
             RETRY_CONFIG.maxDelay
           )
-
-      if (retryCount < RETRY_CONFIG.maxRetries) {
-        console.warn(
-          `Rate limited. Retrying after ${delay}ms (attempt ${retryCount + 1}/${RETRY_CONFIG.maxRetries})`
-        )
-        await sleep(delay)
-        return fetchWithRetry(url, options, retryCount + 1)
-      }
-      throw new Error('GitHub API rate limit exceeded. Please try again later.')
+      await sleep(delay)
+      return fetchWithRetry(url, options, retryCount + 1)
     }
 
-    // Handle other errors with exponential backoff
     if (!response.ok && retryCount < RETRY_CONFIG.maxRetries) {
       const delay = Math.min(
         RETRY_CONFIG.baseDelay * Math.pow(2, retryCount),
         RETRY_CONFIG.maxDelay
-      )
-      console.warn(
-        `Request failed (${response.status}). Retrying after ${delay}ms (attempt ${retryCount + 1}/${RETRY_CONFIG.maxRetries})`
       )
       await sleep(delay)
       return fetchWithRetry(url, options, retryCount + 1)
@@ -97,9 +70,6 @@ async function fetchWithRetry(
         RETRY_CONFIG.baseDelay * Math.pow(2, retryCount),
         RETRY_CONFIG.maxDelay
       )
-      console.warn(
-        `Network error. Retrying after ${delay}ms (attempt ${retryCount + 1}/${RETRY_CONFIG.maxRetries})`
-      )
       await sleep(delay)
       return fetchWithRetry(url, options, retryCount + 1)
     }
@@ -107,71 +77,38 @@ async function fetchWithRetry(
   }
 }
 
-async function getLatestCommit() {
-  const cacheKey = 'latest-commit'
-  const cached = getCachedResponse<Record<string, any>>(cacheKey)
-  if (cached) return cached
-
-  const response = await fetchWithRetry(`${GITHUB_API_BASE}/commits/main`)
-  if (!response.ok) {
-    throw new Error(
-      'Failed to fetch latest commit from About-Me repository. Please check back later.'
-    )
-  }
-  const data = await response.json()
-  setCachedResponse(cacheKey, data, 300000) // Cache for 5 minutes
-  return data
+function documentsBaseUrl() {
+  return aboutMeConfig.documentsBaseUrl.replace(/\/+$/, '')
 }
 
-async function generateDocumentHash(url: string) {
-  const response = await fetchWithRetry(url, { method: 'HEAD' })
-  if (!response.ok) {
-    throw new Error(
-      'Failed to fetch document metadata. The document may be temporarily unavailable.'
-    )
-  }
-  const lastModified = response.headers.get('last-modified') ?? ''
-  const etag = response.headers.get('etag') ?? ''
-  return btoa(lastModified + etag).slice(0, 32)
+function manifestUrl() {
+  const manifestPath = aboutMeConfig.manifestPath.replace(/^\/+/, '')
+  return `${documentsBaseUrl()}/${manifestPath}`
 }
 
-function toIsoDate(value: string) {
-  const timestamp = Date.parse(value)
-  return Number.isNaN(timestamp)
-    ? new Date().toISOString()
-    : new Date(timestamp).toISOString()
+function resolveDocumentUrl(path: string) {
+  return new URL(path, `${documentsBaseUrl()}/`).toString()
 }
 
-async function getDocumentMetadata(
-  type: DocumentType
-): Promise<AboutMeDocument> {
-  const cacheKey = `document-metadata-${type}`
-  const cached = getCachedResponse<AboutMeDocument>(cacheKey)
-  if (cached) return cached
+async function fetchManifest(): Promise<AboutMeManifest> {
+  const response = await fetchWithRetry(manifestUrl(), {
+    headers: { Accept: 'application/json' }
+  })
 
-  const url = `${RAW_BASE}/${DOCUMENTS[type]}`
-  const response = await fetchWithRetry(url, { method: 'HEAD' })
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch metadata for ${type}. Please try again later.`
+      'Failed to fetch the About-Me documents manifest. Please check back later.'
     )
   }
-  const size = parseInt(response.headers.get('content-length') ?? '0', 10)
-  const lastModifiedHeader = response.headers.get('last-modified')
-  const lastModified = lastModifiedHeader
-    ? toIsoDate(lastModifiedHeader)
-    : new Date().toISOString()
-  const contentHash = await generateDocumentHash(url)
 
-  const metadata: AboutMeDocument = {
-    type,
-    url,
-    lastModified,
-    contentHash,
-    size
+  const parsed = aboutMeManifestSchema.safeParse(await response.json())
+  if (!parsed.success) {
+    throw new Error(
+      'Invalid About-Me documents manifest. Data format may have changed.'
+    )
   }
-  setCachedResponse<AboutMeDocument>(cacheKey, metadata, 600000) // Cache for 10 minutes
-  return metadata
+
+  return parsed.data
 }
 
 export async function fetchAboutMeDocuments(): Promise<AboutMeResponse> {
@@ -179,43 +116,39 @@ export async function fetchAboutMeDocuments(): Promise<AboutMeResponse> {
   const cached = getCachedResponse<AboutMeResponse>(cacheKey)
   if (cached) return cached
 
-  const commit = await getLatestCommit()
-  const lastUpdated = commit.commit.committer.date
-  const repoCommitHash = commit.sha
-  const documents = await Promise.all(
-    Object.keys(DOCUMENTS).map((type) =>
-      getDocumentMetadata(type as DocumentType)
-    )
-  )
+  const manifest = await fetchManifest()
+  const documents = manifest.documents.map((document) => ({
+    ...document,
+    pdfUrl: resolveDocumentUrl(document.pdf),
+    htmlUrl: resolveDocumentUrl(document.html)
+  }))
   const parsed = aboutMeResponseSchema.safeParse({
-    documents,
-    lastUpdated,
-    repoCommitHash
+    version: manifest.version,
+    generatedAt: manifest.generatedAt,
+    sourceUrl: manifestUrl(),
+    documents
   })
+
   if (!parsed.success) {
-    throw new Error(
-      'Invalid response from About-Me repository. Data format may have changed.'
-    )
+    throw new Error('Invalid About-Me document links. Please check back later.')
   }
 
-  setCachedResponse<AboutMeResponse>(cacheKey, parsed.data, 1800000) // Cache for 30 minutes
+  setCachedResponse(cacheKey, parsed.data, aboutMeConfig.cacheDuration)
   return parsed.data
 }
 
 export async function validateDocumentFreshness(
-  hash: string,
-  url: string
+  generatedAt: string
 ): Promise<boolean> {
   try {
-    const currentHash = await generateDocumentHash(url)
-    return currentHash === hash
+    const documents = await fetchAboutMeDocuments()
+    return documents.generatedAt === generatedAt
   } catch (error) {
     console.warn('Failed to validate document freshness:', error)
-    return false // Assume stale on error
+    return false
   }
 }
 
-// Clear cache utility for webhook invalidation
 export function clearDocumentCache() {
   apiCache.clear()
   console.log('Document cache cleared')

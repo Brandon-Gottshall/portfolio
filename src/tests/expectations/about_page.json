@@ -2,8 +2,9 @@
   "page": "About",
   "expectations": [
     "Navbar is visible",
-    "Main content displays dynamic about-me information fetched from external repo",
-    "Sections for bio, skills, and experience are present and populated",
+    "Main content orients the site as a record of work",
+    "Current threads, reading guidance, and background sections are present",
+    "Documents CTA is visible",
     "No loading errors or placeholders if data is fresh",
     "Footer is visible"
   ],

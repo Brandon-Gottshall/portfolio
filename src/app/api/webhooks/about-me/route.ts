@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import crypto from 'crypto'
 import { clearDocumentCache } from '@/services/about-me'
 
@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
 
     const event = JSON.parse(payload)
 
-    // Only respond to main branch pushes
-    if (event.ref === 'refs/heads/main') {
+    // Only respond to the About-Me source branch that publishes documents.
+    if (event.ref === 'refs/heads/master') {
       console.log(
         'About-Me repository updated, clearing cache and revalidating...'
       )
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
 
       // Invalidate Next.js cache
       revalidateTag('about-me-documents')
+      revalidatePath('/documents')
 
       console.log('Cache cleared and revalidation triggered')
     } else {

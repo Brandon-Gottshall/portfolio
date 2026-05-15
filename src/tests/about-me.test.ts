@@ -1,12 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  it,
-  expect,
-  vi,
-  type Mock
-} from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   clearDocumentCache,
   fetchAboutMeDocuments,
@@ -14,24 +6,25 @@ import {
 } from '@/services/about-me'
 
 describe('About-Me Integration', () => {
-  const fetchMock = () => global.fetch as unknown as Mock
-
-  const mockCommitResponse = {
-    sha: 'abc123def456',
-    commit: {
-      committer: {
-        date: '2024-03-29T12:00:00Z'
+  const mockManifest = {
+    version: 1,
+    generatedAt: '2026-05-14T04:44:06.486482Z',
+    documents: [
+      {
+        type: 'resume',
+        title: 'Resume',
+        summary: 'Concise professional resume for software engineering roles.',
+        pdf: 'resume.pdf',
+        html: 'resume.html'
+      },
+      {
+        type: 'cv',
+        title: 'CV',
+        summary: 'Expanded curriculum vitae with education and credentials.',
+        pdf: 'cv.pdf',
+        html: 'cv.html'
       }
-    }
-  }
-
-  const mockHeadResponse = {
-    ok: true,
-    headers: new Map([
-      ['content-length', '1024'],
-      ['last-modified', 'Wed, 29 Mar 2024 12:00:00 GMT'],
-      ['etag', '"abc123"']
-    ])
+    ]
   }
 
   beforeEach(() => {
@@ -44,92 +37,64 @@ describe('About-Me Integration', () => {
     vi.useRealTimers()
   })
 
-  it('should fetch documents successfully', async () => {
-    // Mock GitHub API responses
-    fetchMock()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockCommitResponse)
-      })
-      .mockResolvedValue({
-        ...mockHeadResponse,
-        headers: {
-          get: (key: string) => {
-            const headers: Record<string, string> = {
-              'content-length': '1024',
-              'last-modified': 'Wed, 29 Mar 2024 12:00:00 GMT',
-              etag: '"abc123"'
-            }
-            return headers[key] || null
-          }
-        }
-      })
+  it('fetches public documents from the GitHub Pages manifest', async () => {
+    vi.mocked(global.fetch).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve(mockManifest),
+      headers: { get: () => null }
+    } as unknown as Response)
 
     const result = await fetchAboutMeDocuments()
 
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://brandon-gottshall.github.io/About-Me/documents.json',
+      { headers: { Accept: 'application/json' } }
+    )
     expect(result).toMatchObject({
-      documents: expect.arrayContaining([
-        expect.objectContaining({
-          type: 'resume',
-          url: expect.stringContaining('resume.pdf'),
-          size: 1024
-        }),
-        expect.objectContaining({
-          type: 'cv',
-          url: expect.stringContaining('cv.pdf'),
-          size: 1024
-        }),
-        expect.objectContaining({
-          type: 'cover-letter',
-          url: expect.stringContaining('cover-letter.pdf'),
-          size: 1024
-        })
-      ]),
-      lastUpdated: '2024-03-29T12:00:00Z',
-      repoCommitHash: 'abc123def456'
+      version: 1,
+      generatedAt: mockManifest.generatedAt,
+      sourceUrl: 'https://brandon-gottshall.github.io/About-Me/documents.json'
     })
+    expect(result.documents.map((document) => document.type)).toEqual([
+      'resume',
+      'cv'
+    ])
+    expect(result.documents[0]?.pdfUrl).toBe(
+      'https://brandon-gottshall.github.io/About-Me/resume.pdf'
+    )
+    expect(result.documents[0]?.htmlUrl).toBe(
+      'https://brandon-gottshall.github.io/About-Me/resume.html'
+    )
+    expect(
+      result.documents.map((document) => document.type as string)
+    ).not.toContain('cover-letter')
   })
 
-  it('should handle GitHub API errors gracefully', async () => {
+  it('handles manifest fetch failures clearly', async () => {
     vi.useFakeTimers()
-    fetchMock().mockResolvedValue({
+    vi.mocked(global.fetch).mockResolvedValue({
       ok: false,
       status: 404,
-      headers: {
-        get: () => null
-      }
-    })
+      headers: { get: () => null }
+    } as unknown as Response)
 
     const assertion = expect(fetchAboutMeDocuments()).rejects.toThrow(
-      'Failed to fetch latest commit from About-Me repository'
+      'Failed to fetch the About-Me documents manifest'
     )
     await vi.runAllTimersAsync()
     await assertion
   })
 
-  it('should validate document freshness correctly', async () => {
-    const mockUrl = 'https://example.com/test.pdf'
-
-    fetchMock().mockResolvedValueOnce({
+  it('validates document freshness from the manifest timestamp', async () => {
+    vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
-      headers: {
-        get: (key: string) => {
-          const headers: Record<string, string> = {
-            'last-modified': 'Wed, 29 Mar 2024 12:00:00 GMT',
-            etag: '"abc123"'
-          }
-          return headers[key] || null
-        }
-      }
-    })
+      status: 200,
+      json: () => Promise.resolve(mockManifest),
+      headers: { get: () => null }
+    } as unknown as Response)
 
-    // Generate expected hash for comparison
-    const expectedHash = btoa('Wed, 29 Mar 2024 12:00:00 GMT"abc123"').slice(
-      0,
-      32
-    )
-
-    const isValid = await validateDocumentFreshness(expectedHash, mockUrl)
+    const isValid = await validateDocumentFreshness(mockManifest.generatedAt)
     expect(isValid).toBe(true)
   })
 })

@@ -40,8 +40,9 @@ describe('Visual Tests', () => {
         { url: '/projects', name: 'projects' },
         { url: '/notes', name: 'notes' },
         { url: '/objects', name: 'objects' },
+        { url: '/documents', name: 'documents' },
         { url: '/contact', name: 'contact' },
-        { url: '/resume', name: 'resume-redirect-to-about' },
+        { url: '/resume', name: 'resume-redirect-to-documents' },
         { url: '/blog', name: 'blog-redirect-to-notes' }
       ]
 

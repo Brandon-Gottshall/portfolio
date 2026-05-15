@@ -78,6 +78,12 @@ export function Footer(): JSX.Element {
                 Objects
               </Link>
               <Link
+                href='/documents'
+                className='transition-colors duration-300 hover:text-blue-accent'
+              >
+                Documents
+              </Link>
+              <Link
                 href='/about'
                 className='transition-colors duration-300 hover:text-blue-accent'
               >

@@ -82,6 +82,12 @@ export default function AboutPage() {
           >
             Notes
           </Link>
+          <Link
+            href='/documents'
+            className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
+          >
+            Documents
+          </Link>
         </section>
       </div>
     </div>
