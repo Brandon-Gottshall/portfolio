@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, FileText } from 'lucide-react'
 
 export const metadata = {
   title: 'About',
@@ -69,6 +69,37 @@ export default function AboutPage() {
           </p>
         </section>
 
+        <section
+          aria-labelledby='downloads-heading'
+          className='mt-12 rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'
+        >
+          <h2
+            id='downloads-heading'
+            className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'
+          >
+            Downloads
+          </h2>
+          <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
+            Resume and curriculum vitae are published as versioned artifacts
+            from the About-Me repository. Available as PDF for download and as
+            HTML for inline reading.
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <Link
+              href='/documents'
+              className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-4 py-2 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
+            >
+              <FileText className='h-4 w-4' /> Resume
+            </Link>
+            <Link
+              href='/documents'
+              className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-4 py-2 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
+            >
+              <FileText className='h-4 w-4' /> Curriculum Vitae
+            </Link>
+          </div>
+        </section>
+
         <section className='mt-12 flex flex-wrap gap-3'>
           <Link
             href='/projects'
@@ -81,12 +112,6 @@ export default function AboutPage() {
             className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
           >
             Notes
-          </Link>
-          <Link
-            href='/documents'
-            className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
-          >
-            Documents
           </Link>
         </section>
       </div>

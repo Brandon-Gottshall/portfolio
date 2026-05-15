@@ -10,7 +10,6 @@ const navLinks = [
   { title: 'Work', href: '/projects' },
   { title: 'Notes', href: '/notes' },
   { title: 'Objects', href: '/objects' },
-  { title: 'Documents', href: '/documents' },
   { title: 'About', href: '/about' }
 ]
 
