@@ -14,6 +14,7 @@ type TimelineLink = {
 
 type TimelineProject = {
   title: string
+  displayTitle: string
   period: string
   lane: string
   status: TimelineStatus
@@ -25,14 +26,38 @@ type TimelineProject = {
 }
 
 const statusStyles: Record<TimelineStatus, string> = {
-  'active system': 'border-red-500 bg-red-500 text-white',
+  'active system': 'border-red bg-red text-white',
   'shipped rebuild':
     'border-navy bg-navy text-white dark:border-cream dark:bg-cream dark:text-navy',
   'focused utility': 'border-blue bg-blue text-white',
-  'preserved original':
-    'border-red-500 bg-white text-red-500 dark:bg-navy-light/30',
+  'preserved original': 'border-red bg-white text-red dark:bg-navy-light/30',
   'historical artifact':
     'border-gray bg-white text-gray-dark dark:bg-navy-light/30 dark:text-tan'
+}
+
+const statusLabels: Record<TimelineStatus, string> = {
+  'active system': 'Current system',
+  'shipped rebuild': 'Shipped web product',
+  'focused utility': 'Developer tool',
+  'preserved original': 'Early project',
+  'historical artifact': 'Early work'
+}
+
+const projectOrder = [
+  'review-game-core',
+  'About-Me',
+  'astronomy-future-compute',
+  'lfx',
+  'portfolio',
+  'Crime-NY',
+  'dogPark',
+  'SEI-Trivia'
+]
+
+function projectRank(project: TimelineProject) {
+  const index = projectOrder.indexOf(project.title)
+
+  return index === -1 ? projectOrder.length : index
 }
 
 function LinkList({ links }: { links: TimelineLink[] }) {
@@ -61,14 +86,14 @@ function TimelineCard({
   index: number
 }) {
   return (
-    <article className='relative overflow-hidden rounded-2xl border border-navy/10 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-cream/10 dark:bg-navy-light/30 sm:grid sm:grid-cols-3 sm:gap-6'>
-      <div className='absolute left-0 top-0 h-full w-2 bg-red-500' />
+    <article className='relative overflow-hidden rounded-2xl border border-navy/15 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-cream/20 dark:bg-navy-light/40 sm:grid sm:grid-cols-3 sm:gap-6'>
+      <div className='absolute left-0 top-0 h-full w-2 bg-red' />
       <div className='pl-2'>
         <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-gray dark:text-tan'>
           {project.period}
         </p>
         <h2 className='pt-3 text-3xl font-light tracking-tight text-navy dark:text-cream'>
-          {project.title}
+          {project.displayTitle}
         </h2>
         <p className='pt-2 text-sm font-semibold text-gray-dark dark:text-tan'>
           {project.lane}
@@ -76,7 +101,7 @@ function TimelineCard({
         <span
           className={`mt-5 inline-flex rounded-full border px-3 py-1 font-code text-xs font-semibold uppercase tracking-[0.18em] ${statusStyles[project.status]}`}
         >
-          {project.status}
+          {statusLabels[project.status]}
         </span>
       </div>
 
@@ -86,16 +111,16 @@ function TimelineCard({
         </p>
         <div className='grid gap-5 pt-6 md:grid-cols-2'>
           <div>
-            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-500'>
-              Why it stays
+            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+              What to inspect
             </h3>
             <p className='pt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
               {project.whyItMatters}
             </p>
           </div>
           <div>
-            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-500'>
-              Intent
+            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+              Current status
             </h3>
             <p className='pt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
               {project.intent}
@@ -115,7 +140,7 @@ function TimelineCard({
         <LinkList links={project.links} />
       </div>
 
-      <div className='absolute -bottom-5 -right-1 font-code text-7xl font-black text-red-500/10'>
+      <div className='absolute -bottom-5 -right-1 font-code text-7xl font-black text-red/10'>
         {String(index + 1).padStart(2, '0')}
       </div>
     </article>
@@ -123,40 +148,42 @@ function TimelineCard({
 }
 
 export default function ChronologicalFeed() {
-  const projects = timeline as TimelineProject[]
+  const projects = [...(timeline as TimelineProject[])].sort(
+    (left, right) => projectRank(left) - projectRank(right)
+  )
 
   return (
     <section className='w-full'>
       <div className='rounded-3xl border border-navy/10 bg-cream/40 p-6 dark:border-cream/10 dark:bg-navy-light/20 sm:p-10'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-500'>
-          Chronological portfolio
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+          Work
         </p>
         <h1 className='max-w-4xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-6xl'>
-          Current systems first. Historical work with context.
+          Working systems, tools, and older traces.
         </h1>
         <p className='max-w-3xl pt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
-          This feed is the public reading order for active systems, shipped
-          rebuilds, focused utilities, and historical artifacts that still
-          explain the direction.
+          The first entries are active systems and recent artifacts. Supporting
+          tools, site infrastructure, and older work follow as part of the same
+          record, with their age and status left visible.
         </p>
         <div className='grid gap-4 pt-8 text-sm text-gray-dark dark:text-tan sm:grid-cols-3'>
-          <div className='rounded-2xl border border-navy/10 bg-white/70 p-4 dark:border-cream/10 dark:bg-navy/40'>
-            <span className='block font-code text-2xl font-black text-red-500'>
+          <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
+            <span className='block font-code text-2xl font-black text-red'>
               01
             </span>
-            Lead with maintained systems and deployed work.
+            Active systems show what is currently being shaped.
           </div>
-          <div className='rounded-2xl border border-navy/10 bg-white/70 p-4 dark:border-cream/10 dark:bg-navy/40'>
-            <span className='block font-code text-2xl font-black text-red-500'>
+          <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
+            <span className='block font-code text-2xl font-black text-red'>
               02
             </span>
-            Keep historical repos when they clarify the arc.
+            Smaller tools and rebuilt artifacts keep their original scale.
           </div>
-          <div className='rounded-2xl border border-navy/10 bg-white/70 p-4 dark:border-cream/10 dark:bg-navy/40'>
-            <span className='block font-code text-2xl font-black text-red-500'>
+          <div className='rounded-2xl border border-navy/15 bg-white/80 p-4 dark:border-cream/20 dark:bg-navy-light/40'>
+            <span className='block font-code text-2xl font-black text-red'>
               03
             </span>
-            Rebuild only when v2 improves the original vision.
+            Older projects stay useful when the context is visible.
           </div>
         </div>
       </div>

@@ -1,0 +1,12 @@
+{
+  "page": "Documents",
+  "expectations": [
+    "Navbar is visible",
+    "Resume and CV cards are visible",
+    "Each public document has PDF and HTML links",
+    "Generated timestamp or clear unavailable state is visible",
+    "Cover-letter links are not listed",
+    "Footer is visible"
+  ],
+  "screenshot_base64": "[BASE64_DATA_FROM_TOOL_RESULT]"
+}

@@ -538,18 +538,13 @@ function StatsContent({
   return (
     <div>
       <WarningSection stats={processedStats} lastUpdated={lastUpdated} />
-      <div className='p-6 rounded-xl border shadow-sm bg-white/95 dark:bg-navy-darkest/95 border-navy/10 dark:border-cream/10'>
-        <h4 className='mb-6 text-lg font-medium text-center text-navy-dark dark:text-cream-dark'>
-          {type.charAt(0).toUpperCase() + type.slice(1)} Distribution
-        </h4>
-        <StatsVisualization
-          stats={processedStats}
-          isDarkMode={isDarkMode}
-          type={type}
-          activeSegment={activeSegment}
-          onSegmentHover={setActiveSegment}
-        />
-      </div>
+      <StatsVisualization
+        stats={processedStats}
+        isDarkMode={isDarkMode}
+        type={type}
+        activeSegment={activeSegment}
+        onSegmentHover={setActiveSegment}
+      />
     </div>
   )
 }

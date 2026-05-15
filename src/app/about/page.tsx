@@ -1,110 +1,94 @@
-import { AnimatedSection } from '@/components/AnimatedSection'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+
+export const metadata = {
+  title: 'About',
+  description: 'A short orientation note for Brandon Gottshall’s field record.'
+}
 
 export default function AboutPage() {
   return (
-    <div className='container px-4 py-16 mx-auto'>
+    <div className='container mx-auto px-4 py-16'>
       <div className='mx-auto max-w-4xl'>
-        <AnimatedSection>
-          {/* Main heading with elegant light weight and tight tracking */}
-          <h1 className='mb-8 text-4xl font-light tracking-tight text-navy dark:text-cream'>
-            About Me
+        <div className='rounded-3xl border border-navy/10 bg-cream/40 p-8 dark:border-cream/10 dark:bg-navy-light/20 sm:p-12'>
+          <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+            About
+          </p>
+          <h1 className='max-w-3xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-5xl'>
+            This site is a record, not a pitch.
           </h1>
+          <p className='max-w-3xl pt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
+            Brandon Gottshall is a software engineer and data science student
+            keeping track of software systems, research notes, visual studies,
+            and older artifacts that still explain the direction.
+          </p>
+        </div>
 
-          {/* Introduction Section - using regular weight for better readability */}
-          <section className='mb-16'>
-            <p className='mb-6 text-lg leading-relaxed text-gray'>
-              I&apos;m Brandon Gottshall, a{' '}
-              <span className='font-code'>software engineer</span> passionate
-              about creating elegant solutions to complex problems. With a focus
-              on <span className='font-code'>modern web technologies</span>, I
-              specialize in building scalable, user-centric applications that
-              make a difference.
-            </p>
-            <p className='text-lg leading-relaxed text-gray'>
-              My journey in software development has been driven by a constant
-              desire to learn and grow, embracing new technologies while
-              maintaining a strong foundation in software engineering
-              principles.
-            </p>
-          </section>
-        </AnimatedSection>
-
-        <AnimatedSection delay={0.3}>
-          {/* Philosophy Section */}
-          <section className='mb-16'>
-            <h2 className='mb-6 text-2xl font-light tracking-tight text-navy dark:text-cream'>
-              My Philosophy
+        <section className='mt-12 grid gap-6 md:grid-cols-2'>
+          <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
+            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+              Current threads
             </h2>
-            <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
-              <div className='p-6 rounded-xl border transition-shadow border-navy/10 dark:border-cream/10 hover:shadow-md'>
-                <h3 className='mb-3 text-xl font-light text-navy dark:text-cream'>
-                  <span className='font-code'>Clean Code</span>
-                </h3>
-                <p className='text-gray dark:text-tan'>
-                  I believe in writing maintainable, well-documented code that
-                  solves real problems while being easy to understand and
-                  modify.
-                </p>
-              </div>
-              <div className='p-6 rounded-xl border transition-shadow border-navy/10 dark:border-cream/10 hover:shadow-md'>
-                <h3 className='mb-3 text-xl font-light text-navy dark:text-cream'>
-                  User-First
-                </h3>
-                <p className='text-gray dark:text-tan'>
-                  Every technical decision is made with the end user in mind,
-                  ensuring the best possible experience.
-                </p>
-              </div>
-            </div>
-          </section>
-        </AnimatedSection>
+            <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
+              <li>Learning systems, study tools, and review flows.</li>
+              <li>
+                Structured documents, generated artifacts, and repeatable
+                publishing workflows.
+              </li>
+              <li>
+                Visual systems, interactive presentations, and object studies.
+              </li>
+            </ul>
+          </div>
 
-        <AnimatedSection delay={0.6}>
-          {/* Interests Section */}
-          <section className='mb-16'>
-            <h2 className='mb-6 text-2xl font-light tracking-tight text-navy dark:text-cream'>
-              Beyond Coding
+          <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
+            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+              How to read it
             </h2>
-            <div className='p-6 rounded-xl border transition-shadow border-navy/10 dark:border-cream/10 hover:shadow-md'>
-              <p className='mb-4 text-gray dark:text-tan'>
-                When I&apos;m not coding, you&apos;ll find me:
-              </p>
-              <ul className='space-y-2 list-disc list-inside text-gray dark:text-tan'>
-                <li>
-                  Exploring new <span className='font-code'>technologies</span>{' '}
-                  and <span className='font-code'>frameworks</span>
-                </li>
-                <li>
-                  Contributing to <span className='font-code'>open-source</span>{' '}
-                  projects
-                </li>
-                <li>Writing technical blog posts</li>
-                <li>Mentoring aspiring developers</li>
-              </ul>
-            </div>
-          </section>
-        </AnimatedSection>
+            <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
+              <li>
+                Work can be active, staged, draft, archive, or early context.
+              </li>
+              <li>Unfinished areas stay marked as unfinished.</li>
+              <li>
+                The record should show direction without pretending every item
+                has the same maturity.
+              </li>
+            </ul>
+          </div>
+        </section>
 
-        <AnimatedSection delay={0.9}>
-          {/* Call to Action */}
-          <section>
-            <div className='p-8 text-center rounded-xl transition-all bg-navy/5 dark:bg-navy hover:bg-navy/10 dark:hover:bg-navy-light'>
-              <h2 className='mb-4 text-2xl font-light tracking-tight text-navy dark:text-cream'>
-                Let&apos;s Connect
-              </h2>
-              <p className='mb-6 text-gray dark:text-tan'>
-                I&apos;m always open to discussing new projects, creative ideas,
-                or opportunities to be part of your visions.
-              </p>
-              <a
-                href='/contact'
-                className='inline-block px-6 py-3 font-medium rounded-lg transition-colors duration-300 transform bg-navy text-cream hover:bg-red hover:scale-105'
-              >
-                Get in Touch
-              </a>
-            </div>
-          </section>
-        </AnimatedSection>
+        <section className='mt-12 rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
+          <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+            Background
+          </h2>
+          <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
+            Military service and software instruction are supporting context:
+            they explain the preference for clear procedures, teachable systems,
+            and repeatable work. The biography stays secondary to the record.
+          </p>
+        </section>
+
+        <section className='mt-12 flex flex-wrap gap-3'>
+          <Link
+            href='/projects'
+            className='inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-cream transition hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
+          >
+            Work <ArrowRight className='h-4 w-4' />
+          </Link>
+          <Link
+            href='/notes'
+            className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
+          >
+            Notes
+          </Link>
+          <Link
+            href='/documents'
+            className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
+          >
+            Documents
+          </Link>
+        </section>
       </div>
     </div>
   )

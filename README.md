@@ -1,21 +1,21 @@
 # Brandon Gottshall Portfolio
 
-Canonical portfolio and release surface for Brandon Gottshall’s current systems,
-historical artifacts, and future v2 rebuilds.
+Canonical field record for Brandon Gottshall’s software systems, research
+notes, visual studies, developer tools, and older traces.
 
 - **Live site:** https://brandongottshall.com
-- **Current direction:** App Router portfolio with Payload-backed content,
-  About-Me document integration, and chronological project storytelling.
-- **Portfolio rule:** current work leads; historical work stays visible when it
-  explains the career arc without pretending to be the current bar for craft.
+- **Current direction:** App Router field record with static Work, Notes, and
+  Objects surfaces plus Payload-backed project content.
+- **Portfolio rule:** keep active, staged, draft, and archive work visibly
+  labeled so the site can grow without pretending everything is finished.
 
 ## Development Roadmap
 
 ## 📊 Current Status
 
 **Foundation:** ✅ Complete - Next.js 15, Payload CMS, TypeScript, responsive design
-**Core Pages:** ✅ Home, About, Projects, Contact functional
-**Critical Gap:** ❌ Professional documents (Resume/CV, Cover Letters) not CMS-integrated
+**Core Pages:** ✅ Home, Work/Projects, Notes, Objects, About, Contact functional
+**Current Gap:** Notes and Objects are seeded static surfaces, not full publishing systems yet
 
 👉 **[Complete Project Status & Development Plan →](./PROJECT_STATUS.md)**
 
@@ -49,19 +49,17 @@ historical artifacts, and future v2 rebuilds.
 - **Code Quality:** ESLint, Prettier, Husky, Vitest testing setup
 
 ### ✅ Homepage (Complete)
-- Hero section with animated text loop
-- "Why Choose Me" value propositions
-- GitHub stats visualization (Ruby script)
-- Featured projects (Payload CMS integration)
-- Contact section with call-to-action
+- Field-record hero
+- Work, Notes, Objects, Archive, and minimal contact sections
+- Featured projects can still render from Payload when populated
 
 ### ✅ Pages & Navigation (Functional)
 - **Home:** Complete with all sections
-- **About:** Professional introduction and philosophy
-- **Projects:** CMS-driven project showcase
-- **Contact:** Contact form and information
-- **Resume:** Basic structure (needs CMS integration)
-- **Blog:** Page structure (needs content/CMS)
+- **Work/Projects:** Static record plus optional CMS-backed project cards
+- **Notes:** Static field-note staging surface
+- **Objects:** Static 3D/visual-study staging surface
+- **About:** Short orientation note
+- **Contact:** Minimal contact channels
 
 ### ✅ CMS Collections (Active)
 - **Projects:** Full CRUD, featured projects, rich content
@@ -72,20 +70,10 @@ historical artifacts, and future v2 rebuilds.
 
 ## 🚧 Critical Gaps (High Priority)
 
-### Professional Documents System
-- [ ] **Resume/CV Collection:** No CMS integration for resume data
-- [ ] **Cover Letter Templates:** Missing template system
-- [ ] **PDF Generation:** No downloadable documents
-- [ ] **Professional Document Management:** No unified system
-
-### Navigation & UX Polish
-- [ ] **Logo Animation:** Too fast, needs 200-300ms timing
-- [ ] **Dropdown Animations:** Missing smooth transitions
-- [ ] **Resume Navigation:** Not properly integrated into nav flow
-
-### Content Automation
-- [ ] **GitHub Stats:** Still using Ruby script (needs Vercel function + CRON)
-- [ ] **Blog System:** No CMS integration or content
+### Field Record Content
+- [ ] **Notes publishing:** Decide whether field notes should stay static JSON or move into Payload.
+- [ ] **Object studies:** Add real object images, progression frames, and project stories.
+- [ ] **Document publishing:** Decide how About-Me generated outputs should surface publicly.
 
 ---
 
@@ -102,16 +90,9 @@ historical artifacts, and future v2 rebuilds.
 
 - **Content**
   - [x] Connect homepage featured projects to Payload CMS
-  - [ ] Add resume page with content from Payload CMS
-    - [ ] Create Resume collection in Payload CMS
-    - [ ] Add resume content structure to CMS
-    - [x] Add resume page to navigation (basic structure exists)
-    - [ ] Implement resume page with CMS content
-    - [x] Add resume page to footer
-  - [ ] Write and publish first blog post
-    - [ ] Create Blog collection in Payload CMS
-    - [ ] Brainstorm blog post ideas for next 5 posts
-    - [ ] Add blog post content to CMS
+  - [x] Add Notes route for field notes, research logs, and build fragments
+  - [x] Add Objects route for 3D/visual studies and progression stories
+  - [ ] Replace seeded Notes/Object placeholders with real artifacts over time
   - [ ] Convert GitHub stats script to Vercel function with CRON updates
     - [ ] Move the ruby script to a Vercel function
     - [ ] Add the cron job to the Vercel config
@@ -172,19 +153,19 @@ historical artifacts, and future v2 rebuilds.
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
+bun run dev
 
 # Build for production
-npm run build
+bun run build
 
-# Run tests
-npm run test
+# Test Payload connection
+bun run test:db
 
 # Lint code
-npm run lint
+bun run lint
 ```
 
 ---

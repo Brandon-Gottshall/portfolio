@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Summer research log",
+    "status": "active",
+    "date": "Summer 2026",
+    "kind": "Research",
+    "summary": "A place to collect the questions, methods, reading trails, and small artifacts that come out of the summer research work.",
+    "tags": ["Research", "Data science", "Field notes"],
+    "links": []
+  },
+  {
+    "title": "Blog idea backlog",
+    "status": "draft",
+    "date": "2026",
+    "kind": "Writing",
+    "summary": "Short technical notes, unfinished ideas, project retrospectives, and observations that are worth keeping before they become polished essays.",
+    "tags": ["Writing", "Ideas", "Retrospectives"],
+    "links": []
+  },
+  {
+    "title": "Build notes",
+    "status": "staged",
+    "date": "2026",
+    "kind": "Process",
+    "summary": "Working notes about how systems change over time: decisions, reversals, constraints, and the parts that still feel unresolved.",
+    "tags": ["Build logs", "Systems", "Process"],
+    "links": []
+  }
+]
