@@ -48,7 +48,7 @@ export default async function ProjectsPage() {
       {projects.length > 0 && (
         <section>
           <div className='mb-10'>
-            <p className='mb-3 font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+            <p className='mb-3 font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
               CMS project records
             </p>
             <h2 className='mb-4 text-3xl font-light tracking-tight text-navy dark:text-cream'>

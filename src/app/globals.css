@@ -29,6 +29,10 @@
 
     --color-red: 239 68 68;               /* #EF4444 */
     --color-red-dark: 151 73 81;          /* #974951 */
+    /* Label-safe accent pair: red-deep passes 4.5:1 on cream/white cards,
+       red-soft passes 4.5:1 on navy card surfaces (WCAG AA at 12px). */
+    --color-red-deep: 155 55 48;          /* #9B3730 */
+    --color-red-soft: 244 154 143;        /* #F49A8F */
 
     --color-blue: 30 136 229;             /* #1E88E5 */
     --color-blue-light: 100 181 246;      /* #64B5F6 */

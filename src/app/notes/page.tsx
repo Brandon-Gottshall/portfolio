@@ -33,7 +33,7 @@ export default function NotesPage() {
   return (
     <main className='container mx-auto px-4 py-16'>
       <section className='mx-auto max-w-4xl'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
           Notes
         </p>
         <h1 className='mt-3 max-w-3xl text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-6xl'>
@@ -53,7 +53,7 @@ export default function NotesPage() {
             className='rounded-2xl border border-navy/15 bg-white/85 p-6 dark:border-cream/20 dark:bg-navy-light/40'
           >
             <div className='flex flex-wrap items-center gap-3'>
-              <span className='rounded-full bg-red/10 px-3 py-1 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red'>
+              <span className='rounded-full bg-red-deep/10 px-3 py-1 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red-deep dark:bg-red-soft/10 dark:text-red-soft'>
                 {statusLabels[note.status]}
               </span>
               <span className='text-sm text-gray-dark dark:text-tan'>

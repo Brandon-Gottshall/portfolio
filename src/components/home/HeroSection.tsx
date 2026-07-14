@@ -16,24 +16,25 @@ export default function HeroSection() {
               Brandon Gottshall
             </h1>
             <p className='mb-6 text-2xl font-light md:text-3xl text-gray-dark dark:text-tan'>
-              Software, research notes, tools, and visual systems.
+              Software engineer building learning systems, document tooling, and
+              interactive web experiences.
             </p>
             <p className='mb-8 max-w-xl text-lg font-normal text-gray-dark dark:text-tan'>
-              A public record of what is being built, studied, shaped, and
-              revised.
+              This site is a public record of that work — what is being built,
+              studied, and revised, with its status left visible.
             </p>
             <div className='flex flex-col gap-4 sm:flex-row'>
               <Link
                 href='#current-work'
                 className='inline-flex gap-2 items-center px-6 py-3 font-medium rounded-lg transition-colors bg-navy text-cream hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
               >
-                Work <ArrowRight className='w-4 h-4' />
+                See current work <ArrowRight className='w-4 h-4' />
               </Link>
               <Link
-                href='/notes'
+                href='/contact'
                 className='inline-flex gap-2 items-center px-6 py-3 font-medium bg-transparent rounded-lg border transition-colors border-navy/20 dark:border-cream/20 text-navy dark:text-cream hover:border-navy/40 hover:bg-navy/5 dark:hover:border-cream/40 dark:hover:bg-cream/5'
               >
-                Notes
+                Get in touch
               </Link>
             </div>
           </div>

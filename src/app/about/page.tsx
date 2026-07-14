@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className='container mx-auto px-4 py-16'>
       <div className='mx-auto max-w-4xl'>
         <div className='rounded-3xl border border-navy/10 bg-cream/40 p-8 dark:border-cream/10 dark:bg-navy-light/20 sm:p-12'>
-          <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+          <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
             About
           </p>
           <h1 className='max-w-3xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-5xl'>
@@ -26,7 +26,7 @@ export default function AboutPage() {
 
         <section className='mt-12 grid gap-6 md:grid-cols-2'>
           <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
               Current threads
             </h2>
             <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
@@ -42,7 +42,7 @@ export default function AboutPage() {
           </div>
 
           <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
               How to read it
             </h2>
             <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
@@ -59,7 +59,7 @@ export default function AboutPage() {
         </section>
 
         <section className='mt-12 rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-          <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+          <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
             Background
           </h2>
           <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
@@ -75,7 +75,7 @@ export default function AboutPage() {
         >
           <h2
             id='downloads-heading'
-            className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'
+            className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'
           >
             Downloads
           </h2>

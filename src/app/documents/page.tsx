@@ -46,7 +46,7 @@ export default async function DocumentsPage() {
     <div className='container mx-auto px-4 py-16'>
       <div className='mx-auto max-w-5xl'>
         <section className='border-b border-navy/10 pb-10 dark:border-cream/10'>
-          <p className='font-code text-sm font-semibold uppercase text-red'>
+          <p className='font-code text-sm font-semibold uppercase text-red-deep dark:text-red-soft'>
             Documents
           </p>
           <div className='mt-4 grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end'>
@@ -61,7 +61,7 @@ export default async function DocumentsPage() {
             </div>
             <div className='rounded-2xl border border-navy/10 bg-white/70 p-5 dark:border-cream/10 dark:bg-navy/40'>
               <div className='flex items-center gap-3 text-navy dark:text-cream'>
-                <ShieldCheck className='h-5 w-5 text-red' />
+                <ShieldCheck className='h-5 w-5 text-red-deep dark:text-red-soft' />
                 <p className='font-code text-xs font-semibold uppercase'>
                   Public set
                 </p>
@@ -121,7 +121,7 @@ export default async function DocumentsPage() {
             </section>
 
             <section className='mt-8 flex flex-wrap items-center gap-3 text-sm text-gray-dark dark:text-tan'>
-              <RefreshCw className='h-4 w-4 text-red' />
+              <RefreshCw className='h-4 w-4 text-red-deep dark:text-red-soft' />
               <span>Generated {formatGeneratedAt(documents.generatedAt)}</span>
               <a
                 href={documents.sourceUrl}
