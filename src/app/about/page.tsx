@@ -44,9 +44,10 @@ export default async function AboutPage() {
             as an engineer electrical systems technician at MCAS Cherry Point —
             maintaining generators and power distribution, building micro-grids
             from AMMPS generators, and deploying to Incirlik Air Base in 2017,
-            where the redundant power I ran kept communications online through
-            live outages during VMAQ-3&apos;s electronic-warfare operations
-            against Da&apos;esh. I was later picked as a corporal to fill a
+            where another electrician and I kept the generator site, HVAC, and
+            power distribution running for VMAQ-3&apos;s electronic-warfare
+            operations against Da&apos;esh — carrying communications through
+            live grid outages. I was later picked as a corporal to fill a
             sergeant&apos;s billet running the shop&apos;s maintenance
             scheduling, and finished my service as a quality-control NCO — which
             is where my habits around SOPs, checklists, and audit-ready work
