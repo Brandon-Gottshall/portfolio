@@ -43,10 +43,12 @@ export default async function AboutPage() {
             I came to software from the Marine Corps, where I spent four years
             as an engineer electrical systems technician at MCAS Cherry Point —
             maintaining generators and power distribution, building micro-grids
-            from AMMPS generators, and deploying in 2017 to run redundant power
-            for forward sites supporting Operation Inherent Resolve. I finished
-            my service as a quality-control NCO, which is where my habits around
-            SOPs, checklists, and audit-ready work come from.
+            from AMMPS generators, and deploying to Incirlik Air Base in 2017,
+            where the redundant power I ran kept communications online through
+            live outages during VMAQ-3&apos;s electronic-warfare operations
+            against Da&apos;esh. I finished my service as a quality-control NCO,
+            which is where my habits around SOPs, checklists, and audit-ready
+            work come from.
           </p>
           <p>
             Since then: a software engineering immersive at General Assembly,
