@@ -9,7 +9,7 @@ export default function ContactPage() {
   return (
     <div className='container mx-auto px-4 py-16'>
       <div className='mx-auto max-w-2xl text-center'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
           Contact
         </p>
         <h1 className='mt-3 text-4xl font-light tracking-tight text-navy dark:text-cream sm:text-5xl'>

@@ -90,7 +90,7 @@ export function Footer(): JSX.Element {
                 Contact
               </Link>
               <Link
-                href='/documents'
+                href='/about#documents'
                 className='transition-colors duration-300 hover:text-blue-accent'
               >
                 Resume / CV

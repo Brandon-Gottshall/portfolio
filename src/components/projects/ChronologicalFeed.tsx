@@ -30,7 +30,8 @@ const statusStyles: Record<TimelineStatus, string> = {
   'shipped rebuild':
     'border-navy bg-navy text-white dark:border-cream dark:bg-cream dark:text-navy',
   'focused utility': 'border-blue bg-blue text-white',
-  'preserved original': 'border-red bg-white text-red dark:bg-navy-light/30',
+  'preserved original':
+    'border-red-deep bg-white text-red-deep dark:border-red-soft dark:bg-navy-light/30 dark:text-red-soft',
   'historical artifact':
     'border-gray bg-white text-gray-dark dark:bg-navy-light/30 dark:text-tan'
 }
@@ -111,7 +112,7 @@ function TimelineCard({
         </p>
         <div className='grid gap-5 pt-6 md:grid-cols-2'>
           <div>
-            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
               What to inspect
             </h3>
             <p className='pt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
@@ -119,7 +120,7 @@ function TimelineCard({
             </p>
           </div>
           <div>
-            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red'>
+            <h3 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
               Current status
             </h3>
             <p className='pt-2 text-sm leading-6 text-gray-dark dark:text-tan'>
@@ -155,7 +156,7 @@ export default function ChronologicalFeed() {
   return (
     <section className='w-full'>
       <div className='rounded-3xl border border-navy/10 bg-cream/40 p-6 dark:border-cream/10 dark:bg-navy-light/20 sm:p-10'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
           Work
         </p>
         <h1 className='max-w-4xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-6xl'>

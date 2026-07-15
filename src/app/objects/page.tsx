@@ -33,7 +33,7 @@ export default function ObjectsPage() {
   return (
     <main className='container mx-auto px-4 py-16'>
       <section className='mx-auto max-w-4xl'>
-        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red'>
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
           Objects
         </p>
         <h1 className='mt-3 max-w-3xl text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-6xl'>
@@ -53,11 +53,11 @@ export default function ObjectsPage() {
             className='flex min-h-[22rem] flex-col rounded-2xl border border-navy/15 bg-white/85 p-6 dark:border-cream/20 dark:bg-navy-light/40'
           >
             <div className='flex flex-wrap items-center gap-3'>
-              <span className='rounded-full bg-red/10 px-3 py-1 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red'>
+              <span className='rounded-full bg-red-deep/10 px-3 py-1 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red-deep dark:bg-red-soft/10 dark:text-red-soft'>
                 {statusLabels[study.status]}
               </span>
             </div>
-            <p className='mt-5 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red'>
+            <p className='mt-5 font-code text-xs font-semibold uppercase tracking-[0.18em] text-red-deep dark:text-red-soft'>
               {study.medium}
             </p>
             <h2 className='mt-3 text-2xl font-light tracking-tight text-navy dark:text-cream'>

@@ -104,7 +104,7 @@
     "status": "preserved original",
     "summary": "Early React map project using NYC OpenData, Mapbox, and year-based exploration of public safety data.",
     "whyItMatters": "Demonstrates early interest in visual workflows, public data, mapping interfaces, and user-facing exploration tools.",
-    "intent": "Early-career work. Presented as foundation and range, not as the current bar for production data products.",
+    "intent": "First-career-year React map built on NYC OpenData and Mapbox — the start of an ongoing interest in visual data tools.",
     "links": [
       {
         "label": "GitHub",
@@ -121,7 +121,7 @@
     "status": "historical artifact",
     "summary": "Hackathon prototype around lightweight social and organizational discovery.",
     "whyItMatters": "Demonstrates early product collaboration, fast prototyping, and the ability to shape a small idea under time pressure.",
-    "intent": "Hackathon prototype. Useful as context for collaboration and product instincts, not as a current engineering baseline.",
+    "intent": "Team hackathon prototype — a fast, collaborative build shaped under time pressure.",
     "links": [
       {
         "label": "GitHub",
@@ -142,7 +142,7 @@
     "status": "historical artifact",
     "summary": "Early full-stack trivia project spanning Rails and mobile clients.",
     "whyItMatters": "Demonstrates early full-stack training, game-like learning flows, and willingness to work across backend and client surfaces.",
-    "intent": "Early learning project. It provides background for later interest in study tools and review-game systems.",
+    "intent": "Early full-stack trivia build — the first trace of the study-tool and review-game thread that continues today.",
     "links": [
       {
         "label": "GitHub",

@@ -38,7 +38,9 @@ export default {
         },
         red: {
           DEFAULT: channel('color-red'),
-          dark: channel('color-red-dark')
+          dark: channel('color-red-dark'),
+          deep: channel('color-red-deep'),
+          soft: channel('color-red-soft')
         },
         blue: {
           DEFAULT: channel('color-blue'),

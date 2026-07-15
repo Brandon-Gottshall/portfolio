@@ -6,11 +6,12 @@ import Link from 'next/link'
 import { ThemeSwitch } from './ThemeSwitch'
 import { ChevronDown } from 'lucide-react'
 
+// Notes and Objects stay reachable from the footer, but leave the top nav
+// until they hold real entries — an empty shelf costs more than no shelf.
 const navLinks = [
   { title: 'Work', href: '/projects' },
-  { title: 'Notes', href: '/notes' },
-  { title: 'Objects', href: '/objects' },
-  { title: 'About', href: '/about' }
+  { title: 'About', href: '/about' },
+  { title: 'Contact', href: '/contact' }
 ]
 
 export default function Navbar() {
@@ -37,6 +38,7 @@ export default function Navbar() {
       <div className='container flex justify-between items-center mx-auto'>
         <Link
           href='/'
+          aria-label='Brandon Gottshall — home'
           className='flex items-baseline gap-3 text-navy transition-colors duration-200 hover:text-navy-light dark:text-cream dark:hover:text-cream/80'
           onClick={() => setIsMenuOpen(false)}
         >
