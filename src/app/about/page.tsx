@@ -56,9 +56,9 @@ export default async function AboutPage() {
           <p>
             Since then: a software engineering immersive at General Assembly,
             co-founding a small development agency in Brooklyn, teaching as an
-            accredited technology instructor with Nebula Academy, and now
-            technical director at Moons Out, an Ohio media studio, while
-            studying data science.
+            accredited technology instructor with Nebula Academy, and a run as
+            technical director at an Ohio media studio. Now I&apos;m studying
+            data science and building Scrutable, a community-education effort.
           </p>
           <p>
             This site is the working record of all of that — current systems,
