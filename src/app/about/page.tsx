@@ -5,7 +5,8 @@ import type { AboutMeResponse } from '@/types/documents'
 
 export const metadata = {
   title: 'About',
-  description: 'A short orientation note for Brandon Gottshall’s field record.'
+  description:
+    'Brandon Gottshall — software engineer, Marine Corps veteran, and technology instructor building learning systems and document tooling.'
 }
 
 export const revalidate = 1800
@@ -21,86 +22,60 @@ async function getDocuments(): Promise<AboutMeResponse | null> {
 
 export default async function AboutPage() {
   const documents = await getDocuments()
+
   return (
-    <div className='container mx-auto px-4 py-16'>
-      <div className='mx-auto max-w-4xl'>
-        <div className='rounded-3xl border border-navy/10 bg-cream/40 p-8 dark:border-cream/10 dark:bg-navy-light/20 sm:p-12'>
-          <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
-            About
+    <div className='container mx-auto px-6 py-20'>
+      <div className='mx-auto max-w-2xl'>
+        <p className='font-code text-sm font-semibold uppercase tracking-[0.28em] text-red-deep dark:text-red-soft'>
+          About
+        </p>
+        <h1 className='mt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-5xl'>
+          Brandon Gottshall
+        </h1>
+        <p className='mt-6 text-xl leading-9 text-gray-dark dark:text-tan'>
+          Software engineer and data science student in South Georgia. I build
+          learning systems, document tooling, and interactive web experiences —
+          and I keep the work public, with its status left visible.
+        </p>
+
+        <div className='mt-10 space-y-6 text-base leading-8 text-gray-dark dark:text-tan'>
+          <p>
+            I came to software from the Marine Corps, where I spent four years
+            as an engineer electrical systems technician at MCAS Cherry Point —
+            maintaining generators and power distribution, building micro-grids
+            from AMMPS generators, and deploying in 2017 to run redundant power
+            for forward sites supporting Operation Inherent Resolve. I finished
+            my service as a quality-control NCO, which is where my habits around
+            SOPs, checklists, and audit-ready work come from.
           </p>
-          <h1 className='max-w-3xl pt-3 text-4xl font-light leading-tight tracking-tight text-navy dark:text-cream sm:text-5xl'>
-            This site is a record, not a pitch.
-          </h1>
-          <p className='max-w-3xl pt-5 text-lg leading-8 text-gray-dark dark:text-tan'>
-            Brandon Gottshall is a software engineer and data science student
-            keeping track of software systems, research notes, visual studies,
-            and older artifacts that still explain the direction.
+          <p>
+            Since then: a software engineering immersive at General Assembly,
+            co-founding a small development agency in Brooklyn, teaching as an
+            accredited technology instructor with Nebula Academy, and now
+            technical director at Moons Out, an Ohio media studio, while
+            studying data science.
+          </p>
+          <p>
+            This site is the working record of all of that — current systems,
+            notes, and older traces, each marked with how finished it actually
+            is. Every project links to its code, docs, or live surface.
           </p>
         </div>
 
-        <section className='mt-12 grid gap-6 md:grid-cols-2'>
-          <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
-              Current threads
-            </h2>
-            <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
-              <li>Learning systems, study tools, and review flows.</li>
-              <li>
-                Structured documents, generated artifacts, and repeatable
-                publishing workflows.
-              </li>
-              <li>
-                Visual systems, interactive presentations, and object studies.
-              </li>
-            </ul>
-          </div>
-
-          <div className='rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-            <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
-              How to read it
-            </h2>
-            <ul className='mt-4 space-y-3 text-base leading-7 text-gray-dark dark:text-tan'>
-              <li>
-                Work can be active, staged, draft, archive, or early context.
-              </li>
-              <li>Unfinished areas stay marked as unfinished.</li>
-              <li>
-                The record should show direction without pretending every item
-                has the same maturity.
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section className='mt-12 rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'>
-          <h2 className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'>
-            Background
-          </h2>
-          <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
-            Military service and software instruction are supporting context:
-            they explain the preference for clear procedures, teachable systems,
-            and repeatable work. The biography stays secondary to the record.
-          </p>
-        </section>
-
-        <section
-          id='documents'
-          aria-labelledby='documents-heading'
-          className='mt-12 rounded-2xl border border-navy/10 bg-white/70 p-6 dark:border-cream/10 dark:bg-navy/40'
-        >
+        <section aria-labelledby='documents-heading' id='documents'>
           <h2
             id='documents-heading'
-            className='font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:text-red-soft'
+            className='mt-14 border-t border-navy/10 pt-10 font-code text-xs font-semibold uppercase tracking-[0.22em] text-red-deep dark:border-cream/10 dark:text-red-soft'
           >
             Resume &amp; CV
           </h2>
           {documents ? (
             <>
-              <div className='mt-4 space-y-4'>
+              <div className='mt-6 space-y-6'>
                 {documents.documents.map((document) => (
                   <div
                     key={document.type}
-                    className='flex flex-wrap items-center justify-between gap-3'
+                    className='flex flex-wrap items-center justify-between gap-4'
                   >
                     <div className='min-w-[16rem] flex-1'>
                       <p className='font-semibold text-navy dark:text-cream'>
@@ -132,11 +107,12 @@ export default async function AboutPage() {
                 ))}
               </div>
               <p className='mt-5 text-sm text-gray-dark dark:text-tan'>
-                Versioned artifacts generated from the About-Me repository.
+                Both are generated from the same source data and versioned with
+                every change.
               </p>
             </>
           ) : (
-            <p className='mt-4 text-base leading-7 text-gray-dark dark:text-tan'>
+            <p className='mt-5 text-base leading-7 text-gray-dark dark:text-tan'>
               Documents are temporarily unavailable while a new artifact set
               publishes. They are also on{' '}
               <a
@@ -152,20 +128,20 @@ export default async function AboutPage() {
           )}
         </section>
 
-        <section className='mt-12 flex flex-wrap gap-3'>
+        <div className='mt-14 flex flex-wrap gap-3 border-t border-navy/10 pt-10 dark:border-cream/10'>
           <Link
             href='/projects'
             className='inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-cream transition hover:bg-navy-light dark:bg-cream dark:text-navy dark:hover:bg-cream/90'
           >
-            Work <ArrowRight className='h-4 w-4' />
+            See the work <ArrowRight className='h-4 w-4' />
           </Link>
           <Link
-            href='/notes'
+            href='/contact'
             className='inline-flex items-center gap-2 rounded-full border border-navy/20 px-5 py-3 text-sm font-semibold text-navy transition hover:border-navy/40 hover:bg-navy/5 dark:border-cream/20 dark:text-cream dark:hover:border-cream/40 dark:hover:bg-cream/5'
           >
-            Notes
+            Get in touch
           </Link>
-        </section>
+        </div>
       </div>
     </div>
   )
