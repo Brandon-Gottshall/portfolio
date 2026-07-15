@@ -56,9 +56,11 @@ export default async function AboutPage() {
           <p>
             Since then: a software engineering immersive at General Assembly,
             co-founding a small development agency in Brooklyn, teaching as an
-            accredited technology instructor with Nebula Academy, and a run as
-            technical director at an Ohio media studio. Now I&apos;m studying
-            data science and building Scrutable, a community-education effort.
+            accredited technology instructor with Nebula Academy, and a year
+            running Moons Out Labs, the systems arm of an Ohio media studio.
+            Since March 2026 I run Scrutable&trade;, an independent software
+            product practice — turning business data and operational reality
+            into software people can actually use — while studying data science.
           </p>
           <p>
             This site is the working record of all of that — current systems,
