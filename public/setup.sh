@@ -26,7 +26,10 @@ gh auth setup-git --hostname github.com
 gh repo view Brandon-Gottshall/nix-config --json nameWithOwner >/dev/null
 echo 'GitHub connected. Installing your private Mac setup app.'
 brew tap brandon-gottshall/thin-macos-config https://github.com/Brandon-Gottshall/nix-config.git <&3
+brew update --quiet <&3
+install_action=install
+if brew list --versions brandon-gottshall/thin-macos-config/thin-macos-config >/dev/null 2>&1; then install_action=upgrade; fi
 # Keep existing Keychain credentials in memory only for Homebrew's isolated fetch.
-HOMEBREW_GIT=/usr/bin/git HOMEBREW_GITHUB_API_TOKEN="$(gh auth token --hostname github.com)" brew install --build-from-source brandon-gottshall/thin-macos-config/thin-macos-config <&3
+HOMEBREW_GIT=/usr/bin/git HOMEBREW_GITHUB_API_TOKEN="$(gh auth token --hostname github.com)" brew "$install_action" --build-from-source brandon-gottshall/thin-macos-config/thin-macos-config <&3
 thin-macos-config
 echo 'Thin Mac Setup is open. Choose apps there; complete sign-ins and macOS permissions when requested.'
